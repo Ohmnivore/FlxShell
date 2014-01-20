@@ -18,6 +18,16 @@ import flash.events.KeyboardEvent;
 
 class Console extends FlxText
 {
+	public var disk:Disk;
+	
+	public var maxHeight:Int;
+	
+	public var eraseblock:Int = 0;
+	
+	public var noinput:Bool = false;
+	
+	public var input:CaptureInput;
+	
 	/**
 	 * Set to true to show a blinking cursor at the end of the text.
 	 */
@@ -26,7 +36,7 @@ class Console extends FlxText
 	/**
 	 * The character to blink at the end of the text.
 	 */
-	public var cursorCharacter:String = "|";
+	public var cursorCharacter:String = "_";
 	
 	/**
 	 * The speed at which the cursor should blink, if shown at all.
@@ -86,16 +96,21 @@ class Console extends FlxText
 	 * @param	Size			The size of the text.
 	 * @param	EmbeddedFont	Whether this text field uses embedded fonts or not.
 	 */
-	public function new( X:Float, Y:Float, Width:Int, Text:String, Size:Int = 8, EmbeddedFont:Bool = true )
+	public function new( Ddisk:Disk, X:Float, Y:Float, Width:Int, Text:String, Size:Int = 8, EmbeddedFont:Bool = true )
 	{
 		super(X, Y, Width, "", Size, EmbeddedFont);
+		disk = Ddisk;
 		initFont();
 		Font.registerFont(DaFont);
 		font = "assets/images/Monaco.ttf";
 		size = 12;
 		_finalText = Text;
+		maxHeight = FlxG.height;
 		
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
+		
+		input = new CaptureInput();
+		input.CaptureUserInput();
 	}
 	
 	public function initFont():Void
@@ -105,24 +120,40 @@ class Console extends FlxText
 	
 	public function print( Str:String, Newline:Bool = true):Void
 	{
-		prefix = "";
-		if (Newline) _finalText += prefix + Str + "\n";
+		if (Newline) _finalText += "\n" + prefix + Str;
 		else _finalText += prefix + Str;
+		//trace(this._textField.textHeight, this._textField.height, this._textField.text);
+		//trace(frameHeight);
+	}
+	
+	public function takeControl():Void
+	{
+		prefix = "";
+		noinput = true;
 	}
 	
 	public function giveControl():Void
 	{
 		prefix = "User@LinuxBox ~\n$ ";
-		_finalText += '\n' + prefix;
+		_finalText += '\n\n' + prefix;
+		eraseblock = _finalText.length;
+		noinput = false;
 	}
 	
 	override public function update():Void
 	{
+		if (FlxG.stage.focus != input)
+		{
+			FlxG.stage.focus = input;
+		}
+		
 		// If the timer value is higher than the rate at which we should be changing letters, increase or decrease desired string length.
 		
 		// Update the helper string with what could potentially be the new text.
-		
-		helperString = prefix + _finalText;
+		if (!noinput) _finalText += input.text;
+		input.text = "";
+		//trace(input.myFirstTextBox.text);
+		helperString = _finalText;
 		
 		// Append the cursor if needed.
 		
@@ -146,26 +177,44 @@ class Console extends FlxText
 		if ( helperString != text )
 		{
 			text = helperString;
+			//trace(frameHeight);
 		}
 		
 		//switch(FlxG.keyboard.) 
 		//{
 			//case 
 		//}
+		//trace(height);
+		while ((frameHeight) > maxHeight - 30)
+		{
+			_finalText = _finalText.substring(1, text.length);
+			eraseblock -= 1;
+			calcFrame();
+			update();
+			super.update();
+		}
 		
 		super.update();
 	}
 	
 	public function handleInput(event)
 	{
-		//_typeText._finalText += String.fromCharCode(event.keyCode);
-		//trace(String.fromCharCode(event.keyCode));
+		//trace(event.keyCode);
 		switch(event.keyCode)
 		{
 			case 13:
-				
+				takeControl();
+				BashParser.parse(_finalText.substring(eraseblock, _finalText.length), this);
+				//trace("ls");
+			case 8:
+				if (text.length - 1 > eraseblock)
+					if ( _cursorTimer > cursorBlinkSpeed / 2 )
+						_finalText = _finalText.substring(0, text.length - 2);
+					else
+						_finalText = _finalText.substring(0, text.length - 1);
 			default:
-				_finalText += String.fromCharCode(event.keyCode);
+				//_finalText = input.myText;
+				//_finalText += String.fromCharCode(event.charCode);
 		}
 	}
 }

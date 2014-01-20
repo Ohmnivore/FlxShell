@@ -1,5 +1,7 @@
 package;
 
+import flash.display.Bitmap;
+import flash.utils.ByteArray;
 import flixel.addons.text.FlxTypeText;
 import Console;
 import flixel.FlxG;
@@ -12,7 +14,15 @@ import flixel.addons.text.FlxTypeText;
 import flash.display.BitmapData;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
-import flash.events.KeyboardEvent;
+import haxe.Resource;
+import hscript.*;
+import haxe.Json;
+
+@:file("assets/FlxOSjson.txt")
+class OS extends ByteArray
+{
+    
+}
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -27,6 +37,8 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
+			var filesys:Disk = new Disk(Json.parse(new OS().toString()));
+			
 			// Set a background color
 			FlxG.cameras.bgColor = 0xff131c1b;
 			
@@ -37,17 +49,30 @@ class PlayState extends FlxState
 			var square:FlxSprite = new FlxSprite( 10, 10 );
 			square.makeGraphic( FlxG.width - 20, FlxG.height - 76, 0xff333333 );
 			
-			_typeText = new Console( 15, 10, FlxG.width - 30, "Welcome!\n", 16, true );
+			_typeText = new Console( filesys, 15, 10, FlxG.width - 30, "Welcome!", 16, true );
 			
+			_typeText.maxHeight = FlxG.height - 76;
 			_typeText.showCursor = true;
 			_typeText.cursorBlinkSpeed = 1.0;
 			_typeText.prefix = "User@LinuxBox ~\n$ ";
+			_typeText.eraseblock = _typeText.prefix.length;
 			_typeText.color = 0x8811EE11;
 			//_typeText._finalText = "Hi";
 			_typeText.giveControl();
-			_typeText.print("LOL");
-			_typeText.print("LOL");
-			_typeText.print("LOL");
+			_typeText.takeControl();
+			var script:String = '
+Cons.print("Scripting");
+';
+			var parser = new hscript.Parser();
+			var program = parser.parseString(script);
+			var interp = new hscript.Interp();
+			interp.variables.set("Cons", _typeText); // share the Math class
+			//interp.variables.set("angles",[0,1,2,3]); // set the angles list
+			interp.execute(program);
+
+			_typeText.print("FlxBash");
+			_typeText.print("is");
+			_typeText.print("kewl");
 			_typeText.giveControl();
 			
 			var effect:FlxSprite = new FlxSprite( 10, 10 );

@@ -1,0 +1,15 @@
+-main ApplicationMain 
+-lib openfl
+-lib openfl-html5-dom
+-lib flixel
+-cp source
+-D tools=1.2.6
+-D html5
+-D web
+-resource C:\Users\Ohmnivore\Desktop\HAXEDEV\FlxBash\assets\images\Monaco.ttf.hash@__ASSET__assets_images_monaco_ttf
+-resource C:\Users\Ohmnivore\Desktop\HAXEDEV\FlxBash\assets\images\monof55.ttf.hash@__ASSET__assets_images_monof55_ttf
+-js export/html5/bin/FlxBash.js
+-cp export/html5/haxe
+-D html5
+-D html
+--remap flash:flash

@@ -1,0 +1,16 @@
+-main ApplicationMain 
+-lib openfl
+-lib openfl-native
+-lib flixel
+-cp source
+-D tools=1.2.6
+-D FLX_NO_DEBUG
+-D lime_native
+-D no-compilation
+-D windows
+-D desktop
+-cp export/windows/neko/haxe
+-neko export/windows/neko/obj/ApplicationMain.n
+--macro allowPackage("flash")
+--macro keep("Main")
+-debug

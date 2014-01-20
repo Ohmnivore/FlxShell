@@ -3,7 +3,7 @@
 -lib flixel
 -cp source
 -D tools=1.2.6
--D fdb
+-D FLX_NO_DEBUG
 -D web
 -swf-version 11.2
 -swf export/flash/bin/FlxBash.swf
