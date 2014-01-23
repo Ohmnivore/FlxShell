@@ -18,6 +18,23 @@ import flash.events.KeyboardEvent;
 
 class Console extends FlxText
 {
+	public var cursorPos:Int = 0;
+	
+	public var histindex:Int = 0;
+	
+	public var history:Array<String>;
+	
+	public var pathFix:String = "~";
+	
+	public var userFix:String = "User@Flinux";
+	
+	public var prompt:String = "$ ";
+	
+	/**
+	 * Text to add at the beginning, without animating.
+	 */
+	public var prefix:String = "";
+	
 	public var disk:Disk;
 	
 	public var maxHeight:Int;
@@ -36,17 +53,12 @@ class Console extends FlxText
 	/**
 	 * The character to blink at the end of the text.
 	 */
-	public var cursorCharacter:String = "_";
+	public var cursorCharacter:String = "|";
 	
 	/**
 	 * The speed at which the cursor should blink, if shown at all.
 	 */
 	public var cursorBlinkSpeed:Float = 0.5;
-	
-	/**
-	 * Text to add at the beginning, without animating.
-	 */
-	public var prefix:String = "";
 	
 	/**
 	 * Whether or not to animate the text. Set to false by start() and erase().
@@ -104,13 +116,26 @@ class Console extends FlxText
 		Font.registerFont(DaFont);
 		font = "assets/images/Monaco.ttf";
 		size = 12;
-		_finalText = Text;
+		_finalText = "";
 		maxHeight = FlxG.height;
 		
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		
 		input = new CaptureInput();
 		input.CaptureUserInput();
+		
+		giveControl();
+		history = [""];
+	}
+	
+	public function createPrefix(User:String, Path:String, Prompt:String):Void
+	{
+		prefix = User + ' ' + Path + '\n' + Prompt;
+	}
+	
+	public function refreshPrefix():Void
+	{
+		prefix = userFix + ' ' + pathFix + '\n' + prompt;
 	}
 	
 	public function initFont():Void
@@ -120,24 +145,26 @@ class Console extends FlxText
 	
 	public function print( Str:String, Newline:Bool = true):Void
 	{
-		if (Newline) _finalText += "\n" + prefix + Str;
-		else _finalText += prefix + Str;
+		if (Newline) _finalText += "\n" + Str; //prefix + Str;
+		else _finalText += Str; // prefix + Str;
 		//trace(this._textField.textHeight, this._textField.height, this._textField.text);
 		//trace(frameHeight);
 	}
 	
 	public function takeControl():Void
 	{
-		prefix = "";
+		//prefix = "";
 		noinput = true;
 	}
 	
 	public function giveControl():Void
 	{
-		prefix = "User@LinuxBox ~\n$ ";
+		//prefix = "User@LinuxBox ~\n$ ";
+		refreshPrefix();
 		_finalText += '\n\n' + prefix;
 		eraseblock = _finalText.length;
 		noinput = false;
+		cursorPos = _finalText.length;
 	}
 	
 	override public function update():Void
@@ -150,7 +177,13 @@ class Console extends FlxText
 		// If the timer value is higher than the rate at which we should be changing letters, increase or decrease desired string length.
 		
 		// Update the helper string with what could potentially be the new text.
-		if (!noinput) _finalText += input.text;
+		if (!noinput) 
+		{
+			//var result:String = _finalText + input.text;
+			var result:String = _finalText.substring(0, cursorPos) + input.text + _finalText.substring(cursorPos);
+			if (result.length > _finalText.length) cursorPos++;
+			_finalText = result;
+		}
 		input.text = "";
 		//trace(input.myFirstTextBox.text);
 		helperString = _finalText;
@@ -163,7 +196,13 @@ class Console extends FlxText
 			
 			if ( _cursorTimer > cursorBlinkSpeed / 2 )
 			{
-				helperString += cursorCharacter.charAt( 0 );
+				//helperString += cursorCharacter.charAt( 0 );
+				helperString = helperString.substring(0, cursorPos) + cursorCharacter.charAt( 0 ) + helperString.substring(cursorPos);
+			}
+			
+			else
+			{
+				helperString = helperString.substring(0, cursorPos) + " " + helperString.substring(cursorPos);
 			}
 			
 			if ( _cursorTimer > cursorBlinkSpeed )
@@ -177,6 +216,7 @@ class Console extends FlxText
 		if ( helperString != text )
 		{
 			text = helperString;
+			//cursorPos++;
 			//trace(frameHeight);
 		}
 		
@@ -202,19 +242,59 @@ class Console extends FlxText
 		//trace(event.keyCode);
 		switch(event.keyCode)
 		{
-			case 13:
-				takeControl();
-				BashParser.parse(_finalText.substring(eraseblock, _finalText.length), this);
-				//trace("ls");
-			case 8:
-				if (text.length - 1 > eraseblock)
-					if ( _cursorTimer > cursorBlinkSpeed / 2 )
-						_finalText = _finalText.substring(0, text.length - 2);
-					else
-						_finalText = _finalText.substring(0, text.length - 1);
+			case 13: //enter
+				if (!noinput)
+				{
+					var cmd:String = _finalText.substring(eraseblock, _finalText.length);
+					takeControl();
+					history.push(cmd);
+					histindex = history.length - 1;
+					BashParser.parse(cmd, this);
+				}
+			case 9: //tab
+				
+			case 8: //backspace
+				if (!noinput)
+				{
+					if (text.length - 1 > eraseblock)
+						if ( _cursorTimer > cursorBlinkSpeed / 2 )
+							_finalText = _finalText.substring(0, text.length - 2);
+						else
+							_finalText = _finalText.substring(0, text.length - 1);
+				}
+			case 37: //left arrow
+				if (!noinput)
+				{
+					if (cursorPos > eraseblock) cursorPos--;
+					//trace(cursorPos);
+					//textField.
+				}
+			case 39: //right arrow
+				if (!noinput)
+				{
+					if (cursorPos < _finalText.length) cursorPos++;
+					//trace(cursorPos);
+					//textField.
+				}
+			case 38: //up arrow
+				if (!noinput)
+				{
+					_finalText = _finalText.substring(0, eraseblock);
+					_finalText += history[histindex];
+					if (histindex > 1) histindex--; //0 is a dummy value of ""
+				}
+			case 40: //down arrow
+				if (!noinput)
+				{
+					if (histindex < history.length - 1 && history.length > 1) //eliminate history[0] 
+					{
+						histindex++; //0 is a dummy value of ""
+						_finalText = _finalText.substring(0, eraseblock);
+						_finalText += history[histindex];
+					}
+				}
 			default:
-				//_finalText = input.myText;
-				//_finalText += String.fromCharCode(event.charCode);
+				//cursorPos++;
 		}
 	}
 }

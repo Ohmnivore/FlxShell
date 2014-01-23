@@ -66,6 +66,22 @@ class ApplicationMain {
 		
 		var urlLoader:URLLoader = new URLLoader();
 		urlLoader.dataFormat = BINARY;
+		urlLoaders.set("assets/FlxOS/bin/ls", urlLoader);
+		total ++;
+		
+		
+		
+		
+		var urlLoader:URLLoader = new URLLoader();
+		urlLoader.dataFormat = BINARY;
+		urlLoaders.set("assets/FlxOSjson.txt", urlLoader);
+		total ++;
+		
+		
+		
+		
+		var urlLoader:URLLoader = new URLLoader();
+		urlLoader.dataFormat = BINARY;
 		urlLoaders.set("assets/images/images-go-here.txt", urlLoader);
 		total ++;
 		
@@ -81,6 +97,14 @@ class ApplicationMain {
 		var urlLoader:URLLoader = new URLLoader();
 		urlLoader.dataFormat = BINARY;
 		urlLoaders.set("assets/music/music-goes-here.txt", urlLoader);
+		total ++;
+		
+		
+		
+		
+		var urlLoader:URLLoader = new URLLoader();
+		urlLoader.dataFormat = BINARY;
+		urlLoaders.set("assets/parseos.py", urlLoader);
 		total ++;
 		
 		

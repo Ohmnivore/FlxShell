@@ -4,6 +4,7 @@
 -lib flixel
 -cp source
 -D tools=1.2.6
+-D FLX_NO_DEBUG
 -D html5
 -D web
 -resource C:\Users\Ohmnivore\Desktop\HAXEDEV\FlxBash\assets\images\Monaco.ttf.hash@__ASSET__assets_images_monaco_ttf

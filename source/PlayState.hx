@@ -17,6 +17,8 @@ import flash.geom.Rectangle;
 import haxe.Resource;
 import hscript.*;
 import haxe.Json;
+import flash.external.ExternalInterface;
+//import docopt;
 
 @:file("assets/FlxOSjson.txt")
 class OS extends ByteArray
@@ -37,10 +39,13 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
+			//untyped{var dis:Dynamic = __as__('new DisplayToggle("some_id")');
+			//dis.hide();}
+			
 			var filesys:Disk = new Disk(Json.parse(new OS().toString()));
 			
 			// Set a background color
-			FlxG.cameras.bgColor = 0xff131c1b;
+			FlxG.cameras.bgColor = 0xff000000;
 			
 			//#if !FLX_NO_MOUSE
 			FlxG.mouse.hide();
@@ -58,8 +63,8 @@ class PlayState extends FlxState
 			_typeText.eraseblock = _typeText.prefix.length;
 			_typeText.color = 0x8811EE11;
 			//_typeText._finalText = "Hi";
-			_typeText.giveControl();
-			_typeText.takeControl();
+			//_typeText.giveControl();
+			//_typeText.takeControl();
 			var script:String = '
 Cons.print("Scripting");
 ';
@@ -68,15 +73,17 @@ Cons.print("Scripting");
 			var interp = new hscript.Interp();
 			interp.variables.set("Cons", _typeText); // share the Math class
 			//interp.variables.set("angles",[0,1,2,3]); // set the angles list
-			interp.execute(program);
-
-			_typeText.print("FlxBash");
-			_typeText.print("is");
-			_typeText.print("kewl");
-			_typeText.giveControl();
+			//interp.execute(program);
+			//trace(_typeText.disk.getFromPath("bin"));
+			//var k:Dynamic = _typeText.disk.getFromPath("bin");
+			//trace(_typeText.disk.isFile(k));
+			//_typeText.print("FlxBash");
+			//_typeText.print("is");
+			//_typeText.print("kewl");
+			//_typeText.giveControl();
 			
 			var effect:FlxSprite = new FlxSprite( 10, 10 );
-			var bitmapdata:BitmapData = new BitmapData( FlxG.width - 20, FlxG.height - 76, true, 0x88114411 );
+			var bitmapdata:BitmapData = new BitmapData( FlxG.width - 20, FlxG.height - 20, true, 0x88114411 );
 			var scanline:BitmapData = new BitmapData( FlxG.width - 20, 1, true, 0x88001100 );
 			
 			for ( i in 0...bitmapdata.height )
