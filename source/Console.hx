@@ -18,6 +18,9 @@ import flash.events.KeyboardEvent;
 
 class Console extends FlxText
 {
+	public var version:Int = 0;
+	public var subversion:Int = 1;
+	
 	public var cursorPos:Int = 0;
 	
 	public var histindex:Int = 0;
@@ -116,7 +119,7 @@ class Console extends FlxText
 		Font.registerFont(DaFont);
 		font = "assets/images/Monaco.ttf";
 		size = 12;
-		_finalText = "";
+		_finalText = 'Shell version: $version.$subversion';
 		maxHeight = FlxG.height;
 		
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
@@ -124,6 +127,7 @@ class Console extends FlxText
 		input = new CaptureInput();
 		input.CaptureUserInput();
 		
+		//print("Shell 0.1");
 		giveControl();
 		history = [""];
 	}
