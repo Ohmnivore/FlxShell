@@ -36,24 +36,16 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		#if flash
 		
-		className.set ("assets/data/data-goes-here.txt", __ASSET__assets_data_data_goes_here_txt);
-		type.set ("assets/data/data-goes-here.txt", Reflect.field (AssetType, "text".toUpperCase ()));
 		className.set ("assets/FlxOS/bin/ls", __ASSET__assets_flxos_bin_ls);
 		type.set ("assets/FlxOS/bin/ls", Reflect.field (AssetType, "binary".toUpperCase ()));
 		className.set ("assets/FlxOSjson.txt", __ASSET__assets_flxosjson_txt);
 		type.set ("assets/FlxOSjson.txt", Reflect.field (AssetType, "text".toUpperCase ()));
-		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
-		type.set ("assets/images/images-go-here.txt", Reflect.field (AssetType, "text".toUpperCase ()));
 		className.set ("assets/images/Monaco.ttf", __ASSET__assets_images_monaco_ttf);
 		type.set ("assets/images/Monaco.ttf", Reflect.field (AssetType, "font".toUpperCase ()));
 		className.set ("assets/images/monof55.ttf", __ASSET__assets_images_monof55_ttf);
 		type.set ("assets/images/monof55.ttf", Reflect.field (AssetType, "font".toUpperCase ()));
-		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
-		type.set ("assets/music/music-goes-here.txt", Reflect.field (AssetType, "text".toUpperCase ()));
 		className.set ("assets/parseos.py", __ASSET__assets_parseos_py);
 		type.set ("assets/parseos.py", Reflect.field (AssetType, "binary".toUpperCase ()));
-		className.set ("assets/sounds/sounds-go-here.txt", __ASSET__assets_sounds_sounds_go_here_txt);
-		type.set ("assets/sounds/sounds-go-here.txt", Reflect.field (AssetType, "text".toUpperCase ()));
 		className.set ("flixel/img/debugger/buttons/console.png", __ASSET__flixel_img_debugger_buttons_console_png);
 		type.set ("flixel/img/debugger/buttons/console.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		className.set ("flixel/img/debugger/buttons/logDebug.png", __ASSET__flixel_img_debugger_buttons_logdebug_png);
@@ -90,8 +82,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("flixel/img/logo/HaxeFlixel.svg", Reflect.field (AssetType, "text".toUpperCase ()));
 		className.set ("flixel/img/logo/logo.png", __ASSET__flixel_img_logo_logo_png);
 		type.set ("flixel/img/logo/logo.png", Reflect.field (AssetType, "image".toUpperCase ()));
-		className.set ("flixel/img/napeDebug.png", __ASSET__flixel_img_napedebug_png);
-		type.set ("flixel/img/napeDebug.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		className.set ("flixel/img/preloader/corners.png", __ASSET__flixel_img_preloader_corners_png);
 		type.set ("flixel/img/preloader/corners.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		className.set ("flixel/img/preloader/light.png", __ASSET__flixel_img_preloader_light_png);
@@ -132,30 +122,20 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("flixel/snd/beep.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
 		className.set ("flixel/snd/flixel.wav", __ASSET__flixel_snd_flixel_wav);
 		type.set ("flixel/snd/flixel.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
-		className.set ("flixel/snd/typetext.wav", __ASSET__flixel_snd_typetext_wav);
-		type.set ("flixel/snd/typetext.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
 		
 		
 		#elseif html5
 		
-		path.set ("assets/data/data-goes-here.txt", "assets/data/data-goes-here.txt");
-		type.set ("assets/data/data-goes-here.txt", Reflect.field (AssetType, "text".toUpperCase ()));
 		path.set ("assets/FlxOS/bin/ls", "assets/FlxOS/bin/ls");
 		type.set ("assets/FlxOS/bin/ls", Reflect.field (AssetType, "binary".toUpperCase ()));
 		path.set ("assets/FlxOSjson.txt", "assets/FlxOSjson.txt");
 		type.set ("assets/FlxOSjson.txt", Reflect.field (AssetType, "text".toUpperCase ()));
-		path.set ("assets/images/images-go-here.txt", "assets/images/images-go-here.txt");
-		type.set ("assets/images/images-go-here.txt", Reflect.field (AssetType, "text".toUpperCase ()));
 		className.set ("assets/images/Monaco.ttf", __ASSET__assets_images_monaco_ttf);
 		type.set ("assets/images/Monaco.ttf", Reflect.field (AssetType, "font".toUpperCase ()));
 		className.set ("assets/images/monof55.ttf", __ASSET__assets_images_monof55_ttf);
 		type.set ("assets/images/monof55.ttf", Reflect.field (AssetType, "font".toUpperCase ()));
-		path.set ("assets/music/music-goes-here.txt", "assets/music/music-goes-here.txt");
-		type.set ("assets/music/music-goes-here.txt", Reflect.field (AssetType, "text".toUpperCase ()));
 		path.set ("assets/parseos.py", "assets/parseos.py");
 		type.set ("assets/parseos.py", Reflect.field (AssetType, "binary".toUpperCase ()));
-		path.set ("assets/sounds/sounds-go-here.txt", "assets/sounds/sounds-go-here.txt");
-		type.set ("assets/sounds/sounds-go-here.txt", Reflect.field (AssetType, "text".toUpperCase ()));
 		path.set ("flixel/img/debugger/buttons/console.png", "flixel/img/debugger/buttons/console.png");
 		type.set ("flixel/img/debugger/buttons/console.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		path.set ("flixel/img/debugger/buttons/logDebug.png", "flixel/img/debugger/buttons/logDebug.png");
@@ -192,8 +172,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("flixel/img/logo/HaxeFlixel.svg", Reflect.field (AssetType, "text".toUpperCase ()));
 		path.set ("flixel/img/logo/logo.png", "flixel/img/logo/logo.png");
 		type.set ("flixel/img/logo/logo.png", Reflect.field (AssetType, "image".toUpperCase ()));
-		path.set ("flixel/img/napeDebug.png", "flixel/img/napeDebug.png");
-		type.set ("flixel/img/napeDebug.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		path.set ("flixel/img/preloader/corners.png", "flixel/img/preloader/corners.png");
 		type.set ("flixel/img/preloader/corners.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		path.set ("flixel/img/preloader/light.png", "flixel/img/preloader/light.png");
@@ -234,8 +212,6 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("flixel/snd/beep.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
 		path.set ("flixel/snd/flixel.wav", "flixel/snd/flixel.wav");
 		type.set ("flixel/snd/flixel.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
-		path.set ("flixel/snd/typetext.wav", "flixel/snd/typetext.wav");
-		type.set ("flixel/snd/typetext.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
 		
 		
 		#else
@@ -679,15 +655,11 @@ class DefaultAssetLibrary extends AssetLibrary {
 #if pixi
 #elseif flash
 
-class __ASSET__assets_data_data_goes_here_txt extends flash.utils.ByteArray { }
 class __ASSET__assets_flxos_bin_ls extends flash.utils.ByteArray { }
 class __ASSET__assets_flxosjson_txt extends flash.utils.ByteArray { }
-class __ASSET__assets_images_images_go_here_txt extends flash.utils.ByteArray { }
 class __ASSET__assets_images_monaco_ttf extends flash.text.Font { }
 class __ASSET__assets_images_monof55_ttf extends flash.text.Font { }
-class __ASSET__assets_music_music_goes_here_txt extends flash.utils.ByteArray { }
 class __ASSET__assets_parseos_py extends flash.utils.ByteArray { }
-class __ASSET__assets_sounds_sounds_go_here_txt extends flash.utils.ByteArray { }
 class __ASSET__flixel_img_debugger_buttons_console_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_debugger_buttons_logdebug_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_debugger_buttons_open_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
@@ -706,7 +678,6 @@ class __ASSET__flixel_img_debugger_windowhandle_png extends flash.display.Bitmap
 class __ASSET__flixel_img_logo_default_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_logo_haxeflixel_svg extends flash.utils.ByteArray { }
 class __ASSET__flixel_img_logo_logo_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
-class __ASSET__flixel_img_napedebug_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_preloader_corners_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_preloader_light_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_tile_autotiles_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
@@ -727,21 +698,14 @@ class __ASSET__flixel_img_ui_virtualpad_x_png extends flash.display.BitmapData {
 class __ASSET__flixel_img_ui_virtualpad_y_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_snd_beep_wav extends flash.media.Sound { }
 class __ASSET__flixel_snd_flixel_wav extends flash.media.Sound { }
-class __ASSET__flixel_snd_typetext_wav extends flash.media.Sound { }
 
 
 #elseif html5
 
 
 
-
-
 class __ASSET__assets_images_monaco_ttf extends flash.text.Font { }
 class __ASSET__assets_images_monof55_ttf extends flash.text.Font { }
-
-
-
-
 
 
 

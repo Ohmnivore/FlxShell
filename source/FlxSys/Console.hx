@@ -128,8 +128,11 @@ class Console extends FlxText
 		input.CaptureUserInput();
 		
 		//print("Shell 0.1");
+		takeControl();
 		giveControl();
 		history = [""];
+		eraseblock = _finalText.length;
+		trace(eraseblock);
 	}
 	
 	public function createPrefix(User:String, Path:String, Prompt:String):Void
@@ -185,7 +188,8 @@ class Console extends FlxText
 		{
 			//var result:String = _finalText + input.text;
 			var result:String = _finalText.substring(0, cursorPos) + input.text + _finalText.substring(cursorPos);
-			if (result.length > _finalText.length) cursorPos++;
+			//if (result.length > _finalText.length) cursorPos++;
+			cursorPos += result.length - _finalText.length;
 			_finalText = result;
 		}
 		input.text = "";
@@ -256,15 +260,13 @@ class Console extends FlxText
 					BashParser.parse(cmd, this);
 				}
 			case 9: //tab
-				
+				//trace(getTabTarget());
 			case 8: //backspace
 				if (!noinput)
 				{
 					if (text.length - 1 > eraseblock)
-						if ( _cursorTimer > cursorBlinkSpeed / 2 )
-							_finalText = _finalText.substring(0, text.length - 2);
-						else
-							_finalText = _finalText.substring(0, text.length - 1);
+						//trace(eraseblock, text.length);
+						_finalText = _finalText.substring(0, text.length - 2);
 				}
 			case 37: //left arrow
 				if (!noinput)

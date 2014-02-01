@@ -7,7 +7,33 @@ package flxsys;
 class BashParser
 {
 
-	public function new() 
+	static public function getTabTarget():String
+	{
+		var cmd:String = _finalText.substring(eraseblock, _finalText.length);
+		var possibilities:Array<String> = cmd.split(" ");
+		
+		if (possibilities.length == 0)
+			possibilities.push(cmd);
+		
+		var startpos:Int = 0;
+		var curindex:Int = cursorPos - eraseblock;
+		//trace('curindex: $curindex, plength: $possibilities.length');
+		var found:String = "";
+		
+		for (t in possibilities)
+		{
+			if (startpos < curindex && curindex <= t.length + startpos)
+			{
+				found = t;
+			}
+			
+			startpos += t.length + 1;
+		}
+		
+		return found;
+	}
+	
+	static public function getTabTarget():String
 	{
 		
 	}

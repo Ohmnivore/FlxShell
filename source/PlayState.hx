@@ -18,6 +18,8 @@ import hscript.*;
 import haxe.Json;
 import flash.external.ExternalInterface;
 import flxsys.*;
+import hparse.*;
+import byte.*;
 
 @:file("assets/FlxOSjson.txt")
 class OS extends ByteArray
@@ -40,6 +42,9 @@ class PlayState extends FlxState
 	{
 			//untyped{var dis:Dynamic = __as__('new DisplayToggle("some_id")');
 			//dis.hide();}
+			
+			//var parser = new PrintfParser(byte.ByteData.ofString("Valu$$e: $-050.2f kg"));
+			//trace(parser.parse());
 			
 			var filesys:Disk = new Disk(Json.parse(new OS().toString()));
 			

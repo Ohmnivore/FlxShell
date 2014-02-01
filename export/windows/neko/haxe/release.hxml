@@ -3,10 +3,15 @@
 -lib openfl-native
 -lib flixel
 -cp source
--D tools=1.2.6
+-D nme4=1
+-D no_console=1
+-D tools=1
 -D FLX_NO_DEBUG
 -D lime_native
 -D no-compilation
+-D nme_ver=4.0.2
+-D nme
+-D nme_install_tool=1
 -D windows
 -D desktop
 -cp export/windows/neko/haxe

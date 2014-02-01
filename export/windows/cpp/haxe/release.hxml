@@ -1,6 +1,7 @@
 -main ApplicationMain 
 -lib openfl
 -lib openfl-native
+-lib hxlibc
 -lib flixel
 -cp source
 -D nme4=1
@@ -14,8 +15,8 @@
 -D nme_install_tool=1
 -D windows
 -D desktop
--cp export/windows/neko/haxe
--neko export/windows/neko/obj/ApplicationMain.n
+-cp export/windows/cpp/haxe
+-cpp export/windows/cpp/obj
 --macro allowPackage("flash")
 --macro keep("Main")
--debug
+-D no-compilation
