@@ -28,7 +28,6 @@ Shell tab completion
 Command line args parsing (docopt style)
 Add shell redirection/pipes (<, >, |)
 Simulated network protocol
-Gather all classes into an FlxSys package
 Threading/processes
 
 Implement useful linux commands using

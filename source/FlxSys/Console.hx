@@ -1,4 +1,4 @@
-package;
+package flxsys;
 
 import flixel.FlxG;
 import flixel.text.FlxText;

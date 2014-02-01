@@ -1,4 +1,4 @@
-package;
+package flxsys;
 
 import flash.display.Sprite;
 import flash.display.Stage;

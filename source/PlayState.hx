@@ -3,7 +3,6 @@ package;
 import flash.display.Bitmap;
 import flash.utils.ByteArray;
 import flixel.addons.text.FlxTypeText;
-import Console;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -18,7 +17,7 @@ import haxe.Resource;
 import hscript.*;
 import haxe.Json;
 import flash.external.ExternalInterface;
-//import docopt;
+import flxsys.*;
 
 @:file("assets/FlxOSjson.txt")
 class OS extends ByteArray
