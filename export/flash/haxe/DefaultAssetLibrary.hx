@@ -82,6 +82,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("flixel/img/logo/HaxeFlixel.svg", Reflect.field (AssetType, "text".toUpperCase ()));
 		className.set ("flixel/img/logo/logo.png", __ASSET__flixel_img_logo_logo_png);
 		type.set ("flixel/img/logo/logo.png", Reflect.field (AssetType, "image".toUpperCase ()));
+		className.set ("flixel/img/napeDebug.png", __ASSET__flixel_img_napedebug_png);
+		type.set ("flixel/img/napeDebug.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		className.set ("flixel/img/preloader/corners.png", __ASSET__flixel_img_preloader_corners_png);
 		type.set ("flixel/img/preloader/corners.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		className.set ("flixel/img/preloader/light.png", __ASSET__flixel_img_preloader_light_png);
@@ -122,6 +124,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("flixel/snd/beep.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
 		className.set ("flixel/snd/flixel.wav", __ASSET__flixel_snd_flixel_wav);
 		type.set ("flixel/snd/flixel.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
+		className.set ("flixel/snd/typetext.wav", __ASSET__flixel_snd_typetext_wav);
+		type.set ("flixel/snd/typetext.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
 		
 		
 		#elseif html5
@@ -172,6 +176,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("flixel/img/logo/HaxeFlixel.svg", Reflect.field (AssetType, "text".toUpperCase ()));
 		path.set ("flixel/img/logo/logo.png", "flixel/img/logo/logo.png");
 		type.set ("flixel/img/logo/logo.png", Reflect.field (AssetType, "image".toUpperCase ()));
+		path.set ("flixel/img/napeDebug.png", "flixel/img/napeDebug.png");
+		type.set ("flixel/img/napeDebug.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		path.set ("flixel/img/preloader/corners.png", "flixel/img/preloader/corners.png");
 		type.set ("flixel/img/preloader/corners.png", Reflect.field (AssetType, "image".toUpperCase ()));
 		path.set ("flixel/img/preloader/light.png", "flixel/img/preloader/light.png");
@@ -212,6 +218,8 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("flixel/snd/beep.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
 		path.set ("flixel/snd/flixel.wav", "flixel/snd/flixel.wav");
 		type.set ("flixel/snd/flixel.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
+		path.set ("flixel/snd/typetext.wav", "flixel/snd/typetext.wav");
+		type.set ("flixel/snd/typetext.wav", Reflect.field (AssetType, "sound".toUpperCase ()));
 		
 		
 		#else
@@ -678,6 +686,7 @@ class __ASSET__flixel_img_debugger_windowhandle_png extends flash.display.Bitmap
 class __ASSET__flixel_img_logo_default_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_logo_haxeflixel_svg extends flash.utils.ByteArray { }
 class __ASSET__flixel_img_logo_logo_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
+class __ASSET__flixel_img_napedebug_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_preloader_corners_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_preloader_light_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_img_tile_autotiles_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
@@ -698,6 +707,7 @@ class __ASSET__flixel_img_ui_virtualpad_x_png extends flash.display.BitmapData {
 class __ASSET__flixel_img_ui_virtualpad_y_png extends flash.display.BitmapData { public function new () { super (0, 0); } }
 class __ASSET__flixel_snd_beep_wav extends flash.media.Sound { }
 class __ASSET__flixel_snd_flixel_wav extends flash.media.Sound { }
+class __ASSET__flixel_snd_typetext_wav extends flash.media.Sound { }
 
 
 #elseif html5
@@ -706,6 +716,8 @@ class __ASSET__flixel_snd_flixel_wav extends flash.media.Sound { }
 
 class __ASSET__assets_images_monaco_ttf extends flash.text.Font { }
 class __ASSET__assets_images_monof55_ttf extends flash.text.Font { }
+
+
 
 
 

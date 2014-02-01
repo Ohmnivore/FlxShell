@@ -119,7 +119,8 @@ class Console extends FlxText
 		Font.registerFont(DaFont);
 		font = "assets/images/Monaco.ttf";
 		size = 12;
-		_finalText = 'Shell version: $version.$subversion';
+		//_finalText = 'Shell version: $version.$subversion';
+		_finalText = '';
 		maxHeight = FlxG.height;
 		
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
@@ -132,7 +133,7 @@ class Console extends FlxText
 		giveControl();
 		history = [""];
 		eraseblock = _finalText.length;
-		trace(eraseblock);
+		//trace(eraseblock);
 	}
 	
 	public function createPrefix(User:String, Path:String, Prompt:String):Void
@@ -260,13 +261,28 @@ class Console extends FlxText
 					BashParser.parse(cmd, this);
 				}
 			case 9: //tab
-				//trace(getTabTarget());
+				if (!noinput)
+				{
+					try
+					{
+						BashParser.tabComplete(this);
+					}
+					
+					catch (e: Dynamic)
+					{
+						
+					}
+				}
 			case 8: //backspace
 				if (!noinput)
 				{
 					if (text.length - 1 > eraseblock)
+					{
 						//trace(eraseblock, text.length);
-						_finalText = _finalText.substring(0, text.length - 2);
+						//_finalText = _finalText.substring(0, text.length - 2);
+						_finalText = _finalText.substring(0, cursorPos - 1) + _finalText.substring(cursorPos, _finalText.length);
+						cursorPos -= 1;
+					}
 				}
 			case 37: //left arrow
 				if (!noinput)
@@ -288,6 +304,7 @@ class Console extends FlxText
 					_finalText = _finalText.substring(0, eraseblock);
 					_finalText += history[histindex];
 					if (histindex > 1) histindex--; //0 is a dummy value of ""
+					cursorPos = _finalText.length;
 				}
 			case 40: //down arrow
 				if (!noinput)
@@ -297,6 +314,7 @@ class Console extends FlxText
 						histindex++; //0 is a dummy value of ""
 						_finalText = _finalText.substring(0, eraseblock);
 						_finalText += history[histindex];
+						cursorPos = _finalText.length;
 					}
 				}
 			default:

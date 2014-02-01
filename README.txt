@@ -22,9 +22,10 @@ Done:
 JSONed file system (directories + files)
 Shell
 Shell history
+Moved to package flxsys
+Shell tab completion
 
 TODO:
-Shell tab completion
 Command line args parsing (docopt style)
 Add shell redirection/pipes (<, >, |)
 Simulated network protocol

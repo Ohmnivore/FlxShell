@@ -20,6 +20,8 @@ import flash.external.ExternalInterface;
 import flxsys.*;
 import hparse.*;
 import byte.*;
+import flxsys.Disk;
+import flxsys.BashParser;
 
 @:file("assets/FlxOSjson.txt")
 class OS extends ByteArray
@@ -58,7 +60,7 @@ class PlayState extends FlxState
 			var square:FlxSprite = new FlxSprite( 10, 10 );
 			square.makeGraphic( FlxG.width - 20, FlxG.height - 76, 0xff333333 );
 			
-			_typeText = new Console( filesys, 15, 10, FlxG.width - 30, "Welcome!", 16, true );
+			_typeText = new Console( filesys, 15, -16, FlxG.width - 30, "Welcome!", 16, true );
 			
 			_typeText.maxHeight = FlxG.height - 76;
 			_typeText.showCursor = true;
@@ -117,5 +119,10 @@ Cons.print("Scripting");
 			add(effect);
 			add(_typeText);
 			super.create();
+			
+			//trace(Disk.findFromRoot("/bin/ls", filesys));
+			//trace(Disk.findFromRelative("ls", "/bin", filesys));
+			//BashParser.getTabParent("bin/l", filesys);
+			
 	}
 }
