@@ -3,7 +3,7 @@ package flxsys;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.system.FlxSound;
-import flixel.util.FlxRandom;
+import flixel.math.FlxRandom;
 import flash.text.Font;
 import flixel.FlxG;
 import flash.events.KeyboardEvent;
