@@ -8,7 +8,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
-import flixel.util.FlxMath;
+import flixel.math.FlxMath;
 import flixel.addons.text.FlxTypeText;
 import flash.display.BitmapData;
 import flash.geom.Matrix;
@@ -54,7 +54,7 @@ class PlayState extends FlxState
 			FlxG.cameras.bgColor = 0xff000000;
 			
 			//#if !FLX_NO_MOUSE
-			FlxG.mouse.hide();
+			FlxG.mouse.visible = false;
 			//#end
 			
 			var square:FlxSprite = new FlxSprite( 10, 10 );

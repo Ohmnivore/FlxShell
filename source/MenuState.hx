@@ -5,7 +5,6 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
-import flixel.util.FlxMath;
 
 /**
  * A FlxState which can be used for the game's menu.
@@ -21,7 +20,7 @@ class MenuState extends FlxState
 		FlxG.cameras.bgColor = 0xff131c1b;
 		// Show the mouse (in case it hasn't been disabled)
 		#if !FLX_NO_MOUSE
-		FlxG.mouse.show();
+		FlxG.mouse.visible = true;
 		#end
 		
 		super.create();
