@@ -1,5 +1,5 @@
-import flash.display.Sprite;
-import flash.events.Event;
+import openfl.display.Sprite;
+import openfl.events.Event;
 
 
 class NMEPreloader extends Sprite
@@ -51,7 +51,7 @@ class NMEPreloader extends Sprite
 	
 	public function getBackgroundColor():Int
 	{
-		return 16777215;
+		return 0;
 	}
 	
 	

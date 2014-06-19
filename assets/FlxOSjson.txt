@@ -1,1 +1,0 @@
-{"bin": {"ls": "Cons.print(\"LS HERE NOW\");"}, "home": {}, "FlxOS": {}}
