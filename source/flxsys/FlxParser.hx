@@ -1,9 +1,14 @@
 package flxsys;
 
+import hscript.Parser;
+import hscript.Interp;
+import hscript.Expr.Error;
+
 /**
  * ...
- * @author ...
+ * @author Ohmnivore
  */
+
 class FlxParser
 {
 	public var shell:FlxShell;
@@ -39,7 +44,9 @@ class FlxParser
 	{
 		_history.push(Input);
 		_hist_index = _history.length;
-		shell.print("shell: " + Input.split(" ")[0] + " not found", true);
+		
+		ShellParse.parseLine(shell, StringTools.trim(Input));
+		
 		shell.printPrompt();
 	}
 }

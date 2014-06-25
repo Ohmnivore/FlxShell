@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
+import openfl.Assets;
 import openfl.geom.Matrix;
 import openfl.geom.Rectangle;
 import flash.display.BitmapData;
@@ -20,6 +21,9 @@ import openfl.events.KeyboardEvent;
  */
 class FlxShell extends FlxState
 {
+	public var drive:Drive;
+	public var curDir:Folder;
+	
 	//Prompt vars
 	public var userName:String;
 	public var sysName:String;
@@ -34,6 +38,7 @@ class FlxShell extends FlxState
 	private var _cursorPos:Int = 0;
 	private var _eraseblock:Int = 0;
 	private var _cap:FlxCaptureInput;
+	private var _frame:FlxSprite;
 	
 	//Cursor vars
 	private var _cursorCharacter:String = "|";
@@ -64,6 +69,10 @@ class FlxShell extends FlxState
 		userName = UserName;
 		sysName = SysName;
 		
+		drive = new Drive();
+		drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
+		curDir = drive.root;
+		
 		super();
 	}
 	
@@ -92,6 +101,14 @@ class FlxShell extends FlxState
 	override public function update():Void 
 	{
 		super.update();
+		
+		if (_t.frameHeight + _t.y >= _frame.height - 10)
+		{
+			var ind:Int = _realtext.indexOf(" ", 1);
+			_realtext = _realtext.substr(ind, _realtext.length);
+			_cursorPos -= ind;
+			_eraseblock -= ind;
+		}
 		
 		if (_inputTime)
 		{
@@ -132,18 +149,18 @@ class FlxShell extends FlxState
 		if (NewLine)
 			pre = Util.NEWLINE;
 		
-		_realtext += pre + prompt.getPrompt("/");
+		_realtext += pre + prompt.getPrompt(curDir.path);
 		allowInput = true;
 	}
 	
-	public function print(ToPrint:String, NewLine:Bool = false):Void
+	public function print(ToPrint:Dynamic, NewLine:Bool = false):Void
 	{
 		var post:String = "";
 		
 		if (NewLine)
 			post = Util.NEWLINE;
 		
-		_realtext += ToPrint + post;
+		_realtext += Std.string(ToPrint) + post;
 	}
 	
 	public function handleInput(event)
@@ -249,5 +266,7 @@ class FlxShell extends FlxState
 		_t.font = "assets/images/Monaco.ttf";
 		_t.color = 0x8811EE11;
 		add(_t);
+		
+		_frame = square;
 	}
 }
