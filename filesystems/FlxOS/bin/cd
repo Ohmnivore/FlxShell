@@ -1,0 +1,2 @@
+Shell.curDir = Shell.drive.readFolder(Args[1], Shell.curDir.path);
+return null;

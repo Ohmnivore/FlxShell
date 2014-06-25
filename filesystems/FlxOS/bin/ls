@@ -1,4 +1,23 @@
-for (x in Shell.curDir.children)
+if (piped)
 {
-    Shell.print(x.name, true);
+    return Shell.curDir.children;
+}
+
+else
+{
+    ret = "";
+
+    for (x in Shell.curDir.children)
+    {
+        if (x.isDirectory)
+        {
+            ret += "[" + x.name + "]" + "\n";
+        }
+        else
+        {
+            ret += x.name + "\n";
+        }
+    }
+    
+    return ret;
 }

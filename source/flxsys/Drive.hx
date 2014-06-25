@@ -14,9 +14,9 @@ class Drive
 		
 	}
 	
-	public function readFolder(P:String):Folder
+	public function readFolder(P:String, Relative:String = null):Folder
 	{
-		var item:FileBase = readItem(P);
+		var item:FileBase = readItem(P, Relative);
 		
 		if (!item.isDirectory)
 		{
@@ -26,9 +26,9 @@ class Drive
 		return cast (item, Folder);
 	}
 	
-	public function readFile(P:String):File
+	public function readFile(P:String, Relative:String = null):File
 	{
-		var item:FileBase = readItem(P);
+		var item:FileBase = readItem(P, Relative);
 		
 		if (item.isDirectory)
 		{
@@ -38,9 +38,25 @@ class Drive
 		return cast (item, File);
 	}
 	
-	public function readItem(P:String):FileBase
+	public function readItem(P:String, Relative:String = null):FileBase
 	{
 		var par:Folder = root;
+		
+		if (P.charAt(0) == "/")
+		{
+			par = root;
+		}
+		else
+		{
+			if (Relative != null)
+			{
+				P = Relative + "/" + P;
+			}
+			else
+			{
+				throw(Error.INCORRECT_PATH);
+			}
+		}
 		
 		var paths:Array<String> = P.split("/");
 		
@@ -62,18 +78,26 @@ class Drive
 		{
 			var subpath:String = paths[i];
 			
-			if (par.children.exists(subpath))
+			if (i < paths.length - 1 && paths[i + 1] != "..")
 			{
-				var item:FileBase = par.children.get(subpath);
-				
-				if (item.isDirectory)
+				if (par.children.exists(subpath))
 				{
-					par = cast item;
+					var item:FileBase = par.children.get(subpath);
+					
+					if (item.isDirectory)
+					{
+						par = cast item;
+					}
+					else
+					{
+						throw(Error.INCORRECT_PATH);
+					}
 				}
-				else
-				{
-					throw(Error.INCORRECT_PATH);
-				}
+			}
+			else
+			{
+				if (i == paths.length - 2)
+					return par;
 			}
 			
 			i++;
@@ -127,6 +151,14 @@ class Drive
 		{
 			Parent.addChild(ret);
 		}
+		
+		//for (x in ret.children.keys())
+		//{
+			//if (ret.children.get(x).name == null)
+			//{
+				//ret.children.remove(x);
+			//}
+		//}
 		
 		return ret;
 	}

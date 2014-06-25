@@ -155,12 +155,15 @@ class FlxShell extends FlxState
 	
 	public function print(ToPrint:Dynamic, NewLine:Bool = false):Void
 	{
-		var post:String = "";
-		
-		if (NewLine)
-			post = Util.NEWLINE;
-		
-		_realtext += Std.string(ToPrint) + post;
+		if (ToPrint != null)
+		{
+			var post:String = "";
+			
+			if (NewLine)
+				post = Util.NEWLINE;
+			
+			_realtext += Std.string(ToPrint) + post;
+		}
 	}
 	
 	public function handleInput(event)
