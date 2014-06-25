@@ -102,6 +102,8 @@ class FlxShell extends FlxState
 	{
 		super.update();
 		
+		_cap.fetchFocus();
+		
 		if (_t.frameHeight + _t.y >= _frame.height - 10)
 		{
 			var ind:Int = _realtext.indexOf(" ", 1);

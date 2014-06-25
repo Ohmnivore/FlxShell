@@ -17,6 +17,11 @@ class FlxCaptureInput
 		FlxG.stage.addChild(_t);
 		FlxG.stage.focus = _t;
 	}
+	
+	public function fetchFocus():Void
+	{
+		FlxG.stage.focus = _t;
+	}
 
 	public function getNewInput():String
 	{
