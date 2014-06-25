@@ -6,6 +6,7 @@ For now, I've implemented the basic editing functionalities (writing, erasing wi
 I also wrote a command line argument parser (HxCLAP). There's still tons of work to do.
 
 [DEMO](http://ohmnivore.elementfx.com/wp-content/uploads/2014/06/FlxShell2.swf)
+
 Try ls and cd, no other commands are available at the moment.
 
 ## Powered by:
