@@ -74,6 +74,10 @@ class FlxShell extends FlxSubState
 		curDir = drive.root;
 		
 		super();
+		
+		var l1:ScriptLexer = new ScriptLexer("bash -new lol -test | trace -now");
+		var l2:ScriptLexer = new ScriptLexer("bash -new lol -test | trace -now > TESTFILE.txt");
+		var l3:ScriptLexer = new ScriptLexer("TESTFILE.txt < bash -new lol -test | trace -now");
 	}
 	
 	override public function create():Void
