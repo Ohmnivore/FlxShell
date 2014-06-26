@@ -39,6 +39,18 @@ class FlxParser
 		
 		return _history[_hist_index];
 	}
+	
+	public function getHistFirst():String
+	{
+		if (_history.length < 2)
+			return "";
+		return _history[1];
+	}
+	
+	public function getHistLast():String
+	{
+		return _history[_history.length - 1];
+	}
 
 	public function parseStringInput(Input:String):Void
 	{
@@ -48,5 +60,18 @@ class FlxParser
 		ShellParse.parseLine(shell, StringTools.trim(Input));
 		
 		shell.printPrompt();
+	}
+	
+	public function tabComplete(Shell:FlxShell, Word:String):String
+	{
+		for (c in Shell.curDir.children.keys())
+		{
+			if (c.indexOf(Word) >= 0)
+			{
+				return c;
+			}
+		}
+		
+		return null;
 	}
 }

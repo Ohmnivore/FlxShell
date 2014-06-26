@@ -2,7 +2,7 @@ package flxsys;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxState;
+import flixel.FlxSubState;
 import flixel.text.FlxText;
 import openfl.Assets;
 import openfl.geom.Matrix;
@@ -19,7 +19,7 @@ import openfl.events.KeyboardEvent;
  * https://github.com/HaxeFlixel/flixel-demos/blob/master/User%20Interface/FlxTypeText/source/MenuState.hx
  * @author Ohmnivore
  */
-class FlxShell extends FlxState
+class FlxShell extends FlxSubState
 {
 	public var drive:Drive;
 	public var curDir:Folder;
@@ -170,63 +170,204 @@ class FlxShell extends FlxState
 	
 	public function handleInput(event)
 	{
-		switch(event.keyCode)
+		if (event.ctrlKey)
 		{
-			case 13: //enter
-				if (_inputTime)
+			switch(event.keyCode)
+			{
+				case 37: //left arrow
+					handleCtrlLeft();
+				case 39: //right arrow
+					handleCtrlRight();
+			}
+		}
+		
+		else
+		{
+			switch(event.keyCode)
+			{
+				case 13: //enter
+					handleEnter();
+				case 9: //tab
+					handleTab();
+				case 8: //backspace
+					handleBackSpace();
+				case 37: //left arrow
+					handleLeftArrow();
+				case 39: //right arrow
+					handleRightArrow();
+				case 38: //up arrow
+					handleUpArrow();
+				case 40: //down arrow
+					handleDownArrow();
+				case 33: //page up
+					handlePageUp();
+				case 34: //page down
+					handlePageDown();
+				case 35: //end
+					handleEnd();
+				case 36: //home
+					handleHome();
+			}
+		}
+	}
+	
+	//Key handler functions
+	private function handleEnter():Void
+	{
+		if (_inputTime)
+		{
+			var cmd:String = _realtext.substring(_eraseblock, _realtext.length);
+			_realtext += Util.NEWLINE;
+			_parser.parseStringInput(cmd);
+		}
+	}
+	
+	private function handleTab():Void
+	{
+		if (_inputTime)
+		{
+			try
+			{
+				var until_cursor:String = _realtext.substring(0, _cursorPos);
+				var word_start:Int = until_cursor.lastIndexOf(" ");
+				if (word_start < _eraseblock)
+					word_start = _eraseblock;
+				var word_end:Int = _realtext.indexOf(" ", _cursorPos);
+				if (word_end < 0)
+					word_end = _realtext.length;
+				
+				var res:String = _parser.tabComplete(
+						this,
+						StringTools.trim(_realtext.substring(word_start, word_end))
+					);
+				
+				if (res != null)
 				{
-					var cmd:String = _realtext.substring(_eraseblock, _realtext.length);
-					_realtext += Util.NEWLINE;
-					_parser.parseStringInput(cmd);
+					var prepre:String = " ";
+					
+					var pre:String = _realtext.substr(0, word_start);
+					if (_realtext.substring(_eraseblock, word_start).length < 1)
+						prepre = "";
+					
+					_realtext = pre + prepre +
+						res + _realtext.substring(word_end, _realtext.length);
+					
+					_cursorPos = word_start + res.length + 1;
 				}
-			case 9: //tab
-				if (_inputTime)
-				{
-					try
-					{
-						//BashParser.tabComplete(this);
-					}
-
-					catch (e: Dynamic)
-					{
-
-					}
-				}
-			case 8: //backspace
-				if (_inputTime)
-				{
-					if (_cursorPos > _eraseblock)
-					{
-						_realtext = _realtext.substring(0, _cursorPos - 1) + _realtext.substring(_cursorPos, _realtext.length);
-						_cursorPos -= 1;
-					}
-				}
-			case 37: //left arrow
-				if (_inputTime)
-				{
-					if (_cursorPos > _eraseblock) _cursorPos--;
-				}
-			case 39: //right arrow
-				if (_inputTime)
-				{
-					if (_cursorPos < _realtext.length) _cursorPos++;
-				}
-			case 38: //up arrow
-				if (_inputTime)
-				{
-					_realtext = _realtext.substring(0, _eraseblock);
-					_realtext += _parser.getHistNext();
-					_cursorPos = _realtext.length;
-				}
-			case 40: //down arrow
-				if (_inputTime)
-				{
-					_realtext = _realtext.substring(0, _eraseblock);
-					_realtext += _parser.getHistPrevious();
-					_cursorPos = _realtext.length;
-				}
-			default:
-				//cursorPos++;
+			}
+			
+			catch (e: Dynamic)
+			{
+				
+			}
+		}
+	}
+	
+	private function handleBackSpace():Void
+	{
+		if (_inputTime)
+		{
+			if (_cursorPos > _eraseblock)
+			{
+				_realtext = _realtext.substring(0, _cursorPos - 1) +
+					_realtext.substring(_cursorPos, _realtext.length);
+				_cursorPos -= 1;
+			}
+		}
+	}
+	
+	private function handleLeftArrow():Void
+	{
+		if (_inputTime)
+		{
+			if (_cursorPos > _eraseblock) _cursorPos--;
+		}
+	}
+	
+	private function handleRightArrow():Void
+	{
+		if (_inputTime)
+		{
+			if (_cursorPos < _realtext.length) _cursorPos++;
+		}
+	}
+	
+	private function handleUpArrow():Void
+	{
+		if (_inputTime)
+		{
+			_realtext = _realtext.substring(0, _eraseblock);
+			_realtext += _parser.getHistNext();
+			_cursorPos = _realtext.length;
+		}
+	}
+	
+	private function handleDownArrow():Void
+	{
+		if (_inputTime)
+		{
+			_realtext = _realtext.substring(0, _eraseblock);
+			_realtext += _parser.getHistPrevious();
+			_cursorPos = _realtext.length;
+		}
+	}
+	
+	private function handlePageUp():Void
+	{
+		if (_inputTime)
+		{
+			_realtext = _realtext.substring(0, _eraseblock);
+			_realtext += _parser.getHistFirst();
+			_cursorPos = _realtext.length;
+		}
+	}
+	
+	private function handlePageDown():Void
+	{
+		if (_inputTime)
+		{
+			_realtext = _realtext.substring(0, _eraseblock);
+			_realtext += _parser.getHistLast();
+			_cursorPos = _realtext.length;
+		}
+	}
+	
+	private function handleEnd():Void
+	{
+		if (_inputTime)
+		{
+			_cursorPos = _realtext.length;
+		}
+	}
+	
+	private function handleHome():Void
+	{
+		if (_inputTime)
+		{
+			_cursorPos = _eraseblock;
+		}
+	}
+	
+	private function handleCtrlLeft():Void
+	{
+		if (_inputTime)
+		{
+			var until_cursor:String = _realtext.substring(0, _cursorPos);
+			var word_start:Int = until_cursor.lastIndexOf(" ");
+			if (word_start < _eraseblock)
+				word_start = _eraseblock;
+			_cursorPos = word_start;
+		}
+	}
+	
+	private function handleCtrlRight():Void
+	{
+		if (_inputTime)
+		{
+			var word_end:Int = _realtext.indexOf(" ", _cursorPos + 1);
+			if (word_end < 0)
+				word_end = _realtext.length;
+			_cursorPos = word_end;
 		}
 	}
 	
@@ -234,11 +375,11 @@ class FlxShell extends FlxState
 	{
 		var square:FlxSprite = new FlxSprite(10, 10);
 		square.makeGraphic(FlxG.width - 20, FlxG.height - 20, 0xff333333);
-
+		
 		var effect:FlxSprite = new FlxSprite(10, 10);
 		var bitmapdata:BitmapData = new BitmapData(FlxG.width - 20, FlxG.height - 20, true, 0x88114411);
 		var scanline:BitmapData = new BitmapData(FlxG.width - 20, 1, true, 0x88001100);
-
+		
 		for (i in 0...bitmapdata.height)
 		{
 			if (i % 2 == 0)
@@ -246,14 +387,14 @@ class FlxShell extends FlxState
 				bitmapdata.draw(scanline, new Matrix(1, 0, 0, 1, 0, i));
 			}
 		}
-
+		
 		// round corners
-
+		
 		var cX:Array<Int> = [5, 3, 2, 2, 1];
 		var cY:Array<Int> = [1, 2, 2, 3, 5];
 		var w:Int = bitmapdata.width;
 		var h:Int = bitmapdata.height;
-
+		
 		for (i in 0...5)
 		{
 			bitmapdata.fillRect(new Rectangle(0, 0, cX[i], cY[i]), 0xff131c1b);
@@ -261,9 +402,9 @@ class FlxShell extends FlxState
 			bitmapdata.fillRect(new Rectangle(0, h-cY[i], cX[i], cY[i]), 0xff131c1b);
 			bitmapdata.fillRect(new Rectangle(w-cX[i], h-cY[i], cX[i], cY[i]), 0xff131c1b);
 		}
-
+		
 		effect.loadGraphic(bitmapdata);
-
+		
 		add(square);
 		add(effect);
 		

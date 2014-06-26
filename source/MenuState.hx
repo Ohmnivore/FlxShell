@@ -19,7 +19,7 @@ class MenuState extends FlxState
 	override public function create():Void
 	{
 		super.create();
-		FlxG.switchState(new FlxShell("User"));
+		FlxG.switchState(new PlayState());
 	}
 	
 	/**
