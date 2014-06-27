@@ -74,10 +74,6 @@ class FlxShell extends FlxSubState
 		curDir = drive.root;
 		
 		super();
-		
-		var l1:ScriptLexer = new ScriptLexer("bash -new lol -test | trace -now");
-		var l2:ScriptLexer = new ScriptLexer("bash -new lol -test | trace -now > TESTFILE.txt");
-		var l3:ScriptLexer = new ScriptLexer("TESTFILE.txt < bash -new lol -test | trace -now");
 	}
 	
 	override public function create():Void
@@ -172,6 +168,21 @@ class FlxShell extends FlxSubState
 		}
 	}
 	
+	public function parse(Line:String):Void
+	{
+		try
+		{
+			_parser.parseStringInput(Line);
+		}
+		
+		catch (E:Dynamic)
+		{
+			print(E, true);
+		}
+		
+		printPrompt();
+	}
+	
 	public function handleInput(event)
 	{
 		if (event.ctrlKey)
@@ -222,7 +233,7 @@ class FlxShell extends FlxSubState
 		{
 			var cmd:String = _realtext.substring(_eraseblock, _realtext.length);
 			_realtext += Util.NEWLINE;
-			_parser.parseStringInput(cmd);
+			parse(cmd);
 		}
 	}
 	

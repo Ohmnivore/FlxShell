@@ -14,6 +14,25 @@ class Drive
 		
 	}
 	
+	public function newFileAt(ParentString:String, Name:String):File
+	{
+		var f:File = new File("", Name);
+		
+		var parent:Folder = readFolder(ParentString);
+		parent.addChild(f);
+		
+		return f;
+	}
+	
+	public function newFile(Parent:Folder, Name:String):File
+	{
+		var f:File = new File("", Name);
+		
+		Parent.addChild(f);
+		
+		return f;
+	}
+	
 	public function readFolder(P:String, Relative:String = null):Folder
 	{
 		var item:FileBase = readItem(P, Relative);
@@ -41,6 +60,9 @@ class Drive
 	public function readItem(P:String, Relative:String = null):FileBase
 	{
 		var par:Folder = root;
+		
+		if (P == "/")
+			return root;
 		
 		if (P.charAt(0) == "/")
 		{

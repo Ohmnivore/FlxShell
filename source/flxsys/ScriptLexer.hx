@@ -17,6 +17,8 @@ enum Token
 	COMMAND(content:String);
 	
 	IGNORE;
+	
+	VALUE(content:Dynamic);
 }
 
 enum Mode
@@ -27,11 +29,16 @@ enum Mode
 
 class ScriptLexer
 {
-	public var mode:Mode = OUTCOMMAND;
-	public var last_cmd:String = "";
+	public var shell:FlxShell;
+	public var stream:Array<Token>;
 	
-	public function new(Inp:String) 
+	private var mode:Mode = OUTCOMMAND;
+	private var last_cmd:String = "";
+	
+	public function new(Inp:String, Shell:FlxShell) 
 	{
+		shell = Shell;
+		
 		var tokens:Array<String> = Inp.split(" ");
 		var tokenized:Array<Token> = [];
 		
@@ -87,10 +94,10 @@ class ScriptLexer
 			i++;
 		}
 		
-		trace(tokenized);
+		stream = tokenized;
 	}
 	
-	public function retrieve(T:String):Token
+	private function retrieve(T:String):Token
 	{
 		if (T == "|")
 		{
@@ -127,6 +134,6 @@ class ScriptLexer
 			last_cmd += " " + T;
 		}
 		
-		return COMMAND(last_cmd);
+		return COMMAND(StringTools.trim(last_cmd));
 	}
 }

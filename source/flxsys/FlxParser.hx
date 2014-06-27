@@ -57,9 +57,8 @@ class FlxParser
 		_history.push(Input);
 		_hist_index = _history.length;
 		
-		ShellParse.parseLine(shell, StringTools.trim(Input));
-		
-		shell.printPrompt();
+		var stream = new ScriptLexer(Input, shell).stream;
+		new ScriptParser(stream, shell);
 	}
 	
 	public function tabComplete(Shell:FlxShell, Word:String):String

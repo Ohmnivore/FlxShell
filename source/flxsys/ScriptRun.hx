@@ -11,30 +11,29 @@ import flxsys.Drive;
  * @author Ohmnivore
  */
 
-class ShellParse
+class ScriptRun
 {
-	static public var bins:Array<String> = ["cd", "ls"];
-	static var modules:Map<String,Dynamic>;
+	static private var bins:Array<String> = ["cd", "ls"];
+	static private var modules:Map<String,Dynamic>;
 	
-	static public function parseLine(Shell:FlxShell, Line:String) 
+	static public function parseLine(Shell:FlxShell, Line:String, Piped:Bool = false, Input:Dynamic = null, FileInput = null):Dynamic
 	{
 		var args:Array<String> = Line.split(" ");
 		
 		var name:String = args[0];
-		//args = args.splice(0, 1);
+		
+		var ret:Dynamic = "shell: " + name + " not found";
 		
 		if (Lambda.has(bins, name))
 		{
-			parseScript(Shell, "/bin/" + name, args); //Must get file content from bin
+			ret = parseScript(Shell, "/bin/" + name, args, Piped, Input, FileInput); //Must get file content from bin
 		}
-		else
-		{
-			//Not an executable command
-			Shell.print("shell: " + name + " not found", true);
-		}
+		
+		return ret;
 	}
 	
-	static public function parseScript(Shell:FlxShell, Script:String, Args:Array<String>):Void
+	static private function parseScript(Shell:FlxShell, Script:String, Args:Array<String>,
+		Piped:Bool = false, Input:Dynamic = null, FileInput = null):Dynamic
 	{
 		Script = Shell.drive.readFile(Script).content;
 		
@@ -45,40 +44,38 @@ class ShellParse
 			var interp = new hscript.Interp();
 			interp.variables.set("Args", Args);
 			interp.variables.set("Shell", Shell);
-			interp.variables.set("piped", false);
+			interp.variables.set("piped", Piped);
+			interp.variables.set("input", Input);
+			interp.variables.set("fileInput", FileInput);
 			try
 			{
 				parseImports(Script, interp);
 			}
 			catch (E:Dynamic)
 			{
-				Shell.print(E, true);
-				return;
+				return E;
 			}
 			try 
 			{
 				var value:Dynamic = interp.execute(ast);
-				Shell.print(value, false);
+				return value;
 			}
 			catch (E:Dynamic)
 			{
-				Shell.print(E, true);
-				return;
+				return E;
 			}
 		}
 		catch (E:Error)
 		{
-			Shell.print(
+			return
 				"Error on line " + Std.string(parser.line) + 
 				" [Index:" + Std.string(E.getIndex()) + 
 				" Name:" + E.getName() + 
-				" Params:" + Std.string(E.getParameters()) + "]", 
-				true);
-			return;
+				" Params:" + Std.string(E.getParameters()) + "]";
 		}
 	}
 	
-	static public function parseImports(script:String, interp:Interp)
+	static private function parseImports(script:String, interp:Interp)
 	{
 		var lines:Array<String> = script.split(";");
 		
@@ -106,7 +103,7 @@ class ShellParse
 	 * @param	path
 	 * @return
 	 */
-	static public function getClass(path:String):Dynamic
+	static private function getClass(path:String):Dynamic
 	{
 		if (modules.exists(path))
 		{
