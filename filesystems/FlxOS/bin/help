@@ -15,24 +15,22 @@ cmdline = new FlxCmdLine("help", [bin]);
 status = cmdline.getParseReturn(Args);
 if (status != FlxCmdLine.OK)
 {
-    return status;
-}
-
-if (help._v == true)
-{
-    return cmdline.getUsageString();
+    return [status, "", ""];
 }
 
 if (bin._v == true)
 {
-    ret = "";
+    arr = [];
     
     for (x in Shell.drive.readFolder("/bin").children)
     {
-        ret += x.name + "\n";
+        if (!x.isDirectory)
+        {
+            arr.push(x);
+        }
     }
     
-    return ret.substr(0, ret.length - 1);
+    return [arr, "name", ""];
 }
 
-return "Try 'help -help' to see a list of options. You can use the '-h'/'-help' arguments for any command to obtain its usage info.";
+return ["Try 'help -help' to see a list of options. You can use the '-h'/'-help' arguments for any command to obtain its usage info.", "", ""];

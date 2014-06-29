@@ -1,12 +1,12 @@
 if (Args.length < 1)
 {
-    return "cd usage: cd <directory path, relative or absolute (starting with '/')>";
+    return ["cd usage: cd <directory path, relative or absolute (starting with '/')>", "", ""];
 }
 
 if (Args[0] == "-h" || Args[0] == "-help")
 {
-    return "cd usage: cd <directory path, relative or absolute (starting with '/')>";
+    return ["cd usage: cd <directory path, relative or absolute (starting with '/')>", "", ""];
 }
 
 Shell.curDir = Shell.drive.readFolder(Args[0], Shell.curDir.path);
-return null;
+return [null, "", ""];

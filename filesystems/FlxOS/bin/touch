@@ -28,7 +28,7 @@ cmdline = new FlxCmdLine("touch", [n, d]);
 status = cmdline.getParseReturn(Args);
 if (status != FlxCmdLine.OK)
 {
-    return status;
+    return [status, "", ""];
 }
 
 dir = Shell.curDir;
@@ -48,4 +48,4 @@ while (i < n._list.length)
     i++;
 }
 
-return null;
+return [null, "", ""];

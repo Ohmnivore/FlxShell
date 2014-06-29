@@ -17,7 +17,7 @@ cmdline = new FlxCmdLine("ls", [d]);
 status = cmdline.getParseReturn(Args);
 if (status != FlxCmdLine.OK)
 {
-    return status;
+    return [status, "", ""];
 }
 
 dir = Shell.curDir;
@@ -30,26 +30,4 @@ else
     dir = Shell.drive.readFolder(d._v, Shell.curDir.path);
 }
 
-if (piped)
-{
-    return dir.children;
-}
-
-else
-{
-    ret = "";
-
-    for (x in dir.children)
-    {
-        if (x.isDirectory)
-        {
-            ret += "[" + x.name + "]" + "\n";
-        }
-        else
-        {
-            ret += x.name + "\n";
-        }
-    }
-    
-    return ret.substr(0, ret.length - 1);
-}
+return [dir.children, "name", "isDirectory"];

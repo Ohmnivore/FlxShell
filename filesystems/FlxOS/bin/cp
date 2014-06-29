@@ -25,7 +25,7 @@ cmdline = new FlxCmdLine("cp", [s, d]);
 status = cmdline.getParseReturn(Args);
 if (status != FlxCmdLine.OK)
 {
-    return status;
+    return [status, "", ""];
 }
 
 i = 0;
@@ -36,4 +36,4 @@ while (i < s._list.length)
     i++;
 }
 
-return null;
+return [null, "", ""];
