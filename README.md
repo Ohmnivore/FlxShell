@@ -9,7 +9,7 @@ I also wrote a command line argument parser (HxCLAP). There's still tons of work
 
 Try ls and cd, no other commands are available at the moment.
 
-In the shell you can use >, >>, <, and | redirection operators. Interpreted haxe should be used for more complex needs (I'll make a tutorial later).
+The shell features |, >, >>, and < operators, but commands don't yet support it.
 
 ## Powered by:
 * HaxeFlixel
@@ -37,4 +37,4 @@ In the shell you can use >, >>, <, and | redirection operators. Interpreted haxe
 * Process layer -> kill/start processes
 * Permissions -> chmod and such
 * Networking protocol between systems (static network handler)
-* Port some more Linux commands to interpreted Haxe (ex: touch, makedir, etc)
+* Rethink shell print for arrays
