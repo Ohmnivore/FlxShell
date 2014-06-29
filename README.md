@@ -16,6 +16,21 @@ In the shell you can use >, >>, <, and | redirection operators. Interpreted haxe
 * HxCLAP
 * hscript
 
+## Available commands:
+* cd -> done
+* cp -> done
+* find
+* grep
+* help -> done
+* ls -> done
+* mkdir
+* more
+* mv
+* pwd -> done
+* rm
+* rmdir
+* touch -> done
+
 ## TODO:
 * Simulated file system (saves and loads from JSON) -> almost done
 * Threading/multiple consoles open at the same time
