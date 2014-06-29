@@ -144,7 +144,7 @@ class FlxShell extends FlxSubState
 		}
 	}
 	
-	public function printPrompt(NewLine:Bool = true):Void
+	private function printPrompt(NewLine:Bool = true):Void
 	{
 		var pre:String = "";
 		
@@ -183,7 +183,7 @@ class FlxShell extends FlxSubState
 		printPrompt();
 	}
 	
-	public function handleInput(event)
+	private function handleInput(event)
 	{
 		if (event.ctrlKey)
 		{

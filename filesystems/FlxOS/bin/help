@@ -1,0 +1,38 @@
+import flxsys.Folder;
+import hxclap.subarg.CmdArgBool;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+
+bin = new CmdArgBool(
+        "b",
+        "bin",
+        "Outputs a list of available commands",
+        (E_CmdArgSyntax.isOPT) //Flag is set to optional
+        );
+
+cmdline = new FlxCmdLine("help", [bin]);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return status;
+}
+
+if (help._v == true)
+{
+    return cmdline.getUsageString();
+}
+
+if (bin._v == true)
+{
+    ret = "";
+    
+    for (x in Shell.drive.readFolder("/bin").children)
+    {
+        ret += x.name + "\n";
+    }
+    
+    return ret.substr(0, ret.length - 1);
+}
+
+return "Try 'help -help' to see a list of options.";

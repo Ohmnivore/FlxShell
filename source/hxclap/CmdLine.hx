@@ -1,17 +1,17 @@
 package hxclap;
 
-import hxclap.CmdArg.E_CmdArgSyntax;
+import hxclap.E_CmdArgSyntax;
 
-import hxclap.CmdArg.CmdArgBool;
-import hxclap.CmdArg.CmdArgInt;
-import hxclap.CmdArg.CmdArgFloat;
-import hxclap.CmdArg.CmdArgStr;
-import hxclap.CmdArg.CmdArgChar;
+import hxclap.subarg.CmdArgBool;
+import hxclap.subarg.CmdArgInt;
+import hxclap.subarg.CmdArgFloat;
+import hxclap.subarg.CmdArgStr;
+import hxclap.subarg.CmdArgChar;
 
-import hxclap.CmdArg.CmdArgIntList;
-import hxclap.CmdArg.CmdArgFloatList;
-import hxclap.CmdArg.CmdArgStrList;
-import hxclap.CmdArg.CmdArgCharList;
+import hxclap.subarg.CmdArgIntList;
+import hxclap.subarg.CmdArgFloatList;
+import hxclap.subarg.CmdArgStrList;
+import hxclap.subarg.CmdArgCharList;
 
 /**
  * ...
@@ -68,26 +68,29 @@ class CmdLine
 	/**
 	 * Traces this function's usage using default trace()
 	 */
-	public function defaultTraceUsage():Void
+	public function getUsageString():String
 	{
 		var u:UsageInfo = usage();
+		var ret:String = "";
 		
-		trace("Usage: " + u.name);
+		ret += "Usage: " + u.name + "\n";
 		
 		for (cmd in u.args)
 		{
 			if (cmd.type < 5)
 			{
-				_traceSimple(cmd);
+				ret += _traceSimple(cmd) + "\n";
 			}
 			else
 			{
-				_traceList(cmd);
+				ret += _traceList(cmd) + "\n";
 			}
 		}
+		
+		return ret;
 	}
 	
-	private function _traceSimple(cmd:ArgInfo):Void
+	private function _traceSimple(cmd:ArgInfo):String
 	{
 		var longName:String = cmd.longName;
 		var shortName:String = cmd.shortName;
@@ -103,10 +106,10 @@ class CmdLine
 			expects = '[$expects]';
 		}
 		
-		trace('-$longName (-$shortName) -> $description -> expects: $expects');
+		return '-$longName (-$shortName) -> $description -> expects: $expects';
 	}
 	
-	private function _traceList(cmd:ArgInfo):Void
+	private function _traceList(cmd:ArgInfo):String
 	{
 		var longName:String = cmd.longName;
 		var shortName:String = cmd.shortName;
@@ -122,7 +125,7 @@ class CmdLine
 			expects = '[$expects]';
 		}
 		
-		trace('-$longName (-$shortName) -> $description -> expects: $expects');
+		return '-$longName (-$shortName) -> $description -> expects: $expects';
 	}
 	
 	private function setUpDefaultCallbacks():Void
@@ -260,160 +263,4 @@ class CmdLine
 			}
 		}
 	}
-}
-
-class UsageInfo
-{
-	/**
-	 * Program's name as passed when the CmdLine object was constructed
-	 */
-	public var name:String;
-	/**
-	 * List of all CmdArgs added to the CmdLine object that don't have the HIDDEN flag set to true
-	 */
-	public var args:Array<ArgInfo>;
-	
-	public function new(Name:String)
-	{
-		name = Name;
-		args = [];
-	}
-}
-
-class ArgInfo
-{
-	/**
-	 * ex: test-arg
-	 */
-	public var longName:String;
-	/**
-	 * ex: t
-	 */
-	public var shortName:String;
-	
-	public var description:String;
-	/**
-	 * Describes what sort of argument is expected for this switch
-	 */
-	public var expects:String;
-	/**
-	 * Minimum amount of arguments to be passed for this switch.
-	 * Only applies to list command arguments.
-	 */
-	public var min:Int = 0;
-	/**
-	 * Maximum amount of arguments to be passed for this switch.
-	 * Only applies to list command arguments.
-	 */
-	public var max:Int = 100;
-	/**
-	 * The type of this argument, as defined in ArgType
-	 */
-	public var type:Int;
-	
-	/**
-	 * Whether this argument is optional
-	 */
-	public var isOPT:Bool = false;
-	/**
-	 * Wether this argument is required
-	 */
-	public var isREQ:Bool = false;
-	/**
-	 * Wether an argument for this switch is optional
-	 */
-	public var isVALOPT:Bool = false;
-	/**
-	 * Wether an argument is required for this switch
-	 */
-	public var isVALREQ:Bool = false;
-	
-	public function new(Arg:CmdArg)
-	{
-		longName = Arg._keyword;
-		shortName = Arg._optChar;
-		description = Arg._description;
-		expects = Arg._valueName;
-		
-		if ((Arg._syntaxFlags & E_CmdArgSyntax.isOPT) > 0)
-		{
-			isOPT = true;
-		}
-		if ((Arg._syntaxFlags & E_CmdArgSyntax.isREQ) > 0)
-		{
-			isREQ = true;
-		}
-		if ((Arg._syntaxFlags & E_CmdArgSyntax.isVALOPT) > 0)
-		{
-			isVALOPT = true;
-		}
-		if ((Arg._syntaxFlags & E_CmdArgSyntax.isVALREQ) > 0)
-		{
-			isVALREQ = true;
-		}
-		
-		//Simple
-		if (Std.is(Arg, CmdArgBool))
-		{
-			type = ArgType.ARG_BOOL;
-		}
-		if (Std.is(Arg, CmdArgInt))
-		{
-			type = ArgType.ARG_INT;
-		}
-		if (Std.is(Arg, CmdArgFloat))
-		{
-			type = ArgType.ARG_FLOAT;
-		}
-		if (Std.is(Arg, CmdArgStr))
-		{
-			type = ArgType.ARG_STRING;
-		}
-		if (Std.is(Arg, CmdArgChar))
-		{
-			type = ArgType.ARG_CHAR;
-		}
-		
-		//Lists
-		if (Std.is(Arg, CmdArgIntList))
-		{
-			type = ArgType.ARG_LIST_INT;
-			initList(Arg);
-		}
-		if (Std.is(Arg, CmdArgFloatList))
-		{
-			type = ArgType.ARG_LIST_FLOAT;
-			initList(Arg);
-		}
-		if (Std.is(Arg, CmdArgStrList))
-		{
-			type = ArgType.ARG_LIST_STRING;
-			initList(Arg);
-		}
-		if (Std.is(Arg, CmdArgCharList))
-		{
-			type = ArgType.ARG_LIST_CHAR;
-			initList(Arg);
-		}
-	}
-	
-	private function initList(Arg:CmdArg):Void
-	{
-		min = Reflect.field(Arg, "_min");
-		max = Reflect.field(Arg, "_max");
-	}
-}
-
-class ArgType
-{
-	public static inline var ARG_BOOL:Int = 0;
-	public static inline var ARG_INT:Int = 1;
-	public static inline var ARG_FLOAT:Int = 2;
-	public static inline var ARG_STRING:Int = 3;
-	public static inline var ARG_CHAR:Int = 4;
-	
-	public static inline var ARG_LIST_INT:Int = 5;
-	public static inline var ARG_LIST_FLOAT:Int = 6;
-	public static inline var ARG_LIST_STRING:Int = 7;
-	public static inline var ARG_LIST_CHAR:Int = 8;
 }

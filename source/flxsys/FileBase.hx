@@ -71,4 +71,9 @@ class FileBase
 			path = "/" + name;
 		}
 	}
+	
+	public function copy(NewPath:String, Shell:FlxShell):Void
+	{
+		
+	}
 }

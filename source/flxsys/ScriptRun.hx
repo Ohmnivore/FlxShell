@@ -6,6 +6,9 @@ import hscript.Interp;
 
 import flxsys.Drive;
 
+import hxclap.subarg.CmdArgBool;
+import flxsys.FlxCmdLine;
+
 /**
  * ...
  * @author Ohmnivore
@@ -13,8 +16,14 @@ import flxsys.Drive;
 
 class ScriptRun
 {
-	static private var bins:Array<String> = ["cd", "ls"];
 	static private var modules:Map<String,Dynamic>;
+	static private var toImport:Map<String, String>;
+	
+	static private function ensureCompilation():Void
+	{
+		FlxCmdLine;
+		CmdArgBool;
+	}
 	
 	static public function parseLine(Shell:FlxShell, Line:String, Piped:Bool = false, Input:Dynamic = null, FileInput = null):Dynamic
 	{
@@ -24,7 +33,9 @@ class ScriptRun
 		
 		var ret:Dynamic = "shell: " + name + " not found";
 		
-		if (Lambda.has(bins, name))
+		var bin:Folder = Shell.drive.readFolder("/bin");
+		
+		if (bin.children.exists(name))
 		{
 			ret = parseScript(Shell, "/bin/" + name, args, Piped, Input, FileInput); //Must get file content from bin
 		}
@@ -38,18 +49,23 @@ class ScriptRun
 		Script = Shell.drive.readFile(Script).content;
 		
 		var parser = new hscript.Parser();
+		parser.allowTypes = true;
+		toImport = new Map<String, String>();
+		Script = popImports(Script);
 		try
 		{
 			var ast = parser.parseString(Script);
 			var interp = new hscript.Interp();
+			Args.shift();
 			interp.variables.set("Args", Args);
 			interp.variables.set("Shell", Shell);
 			interp.variables.set("piped", Piped);
 			interp.variables.set("input", Input);
 			interp.variables.set("fileInput", FileInput);
+			
 			try
 			{
-				parseImports(Script, interp);
+				parseImports(interp);
 			}
 			catch (E:Dynamic)
 			{
@@ -75,9 +91,9 @@ class ScriptRun
 		}
 	}
 	
-	static private function parseImports(script:String, interp:Interp)
+	static private function popImports(Script:String):String
 	{
-		var lines:Array<String> = script.split(";");
+		var lines:Array<String> = Script.split(";");
 		
 		for (l in lines)
 		{
@@ -87,9 +103,20 @@ class ScriptRun
 			{
 				var className:String = l.substring(7, l.length);
 				var name = className.split(".").pop();
-				var c:Dynamic = getClass(className);
-				interp.variables.set(name, c);
+				toImport.set(name, className);
+				
+				Script = StringTools.replace(Script, l + ";", "");
 			}
+		}
+		
+		return Script;
+	}
+	
+	static private function parseImports(interp:Interp):Void
+	{
+		for (name in toImport.keys())
+		{
+			interp.variables.set(name, getClass(toImport.get(name)));
 		}
 	}
 	
@@ -119,7 +146,7 @@ class ScriptRun
 			}
 			else
 			{
-				throw "expose attempt failed";
+				throw 'Import of class $path failed.';
 			}
 		}
 	}

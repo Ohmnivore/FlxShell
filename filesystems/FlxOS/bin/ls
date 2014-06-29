@@ -19,5 +19,5 @@ else
         }
     }
     
-    return ret;
+    return ret.substr(0, ret.length - 1);
 }
