@@ -25,7 +25,7 @@ class ScriptRun
 		CmdArgBool;
 	}
 	
-	static public function parseLine(Shell:FlxShell, Line:String, Piped:Bool = false, Input:Dynamic = null, FileInput = null):Dynamic
+	static public function parseLine(Shell:FlxShell, Line:String, Input:Dynamic = null, FileInput = null):Dynamic
 	{
 		var args:Array<String> = Line.split(" ");
 		
@@ -37,14 +37,14 @@ class ScriptRun
 		
 		if (bin.children.exists(name))
 		{
-			ret = parseScript(Shell, "/bin/" + name, args, Piped, Input, FileInput); //Must get file content from bin
+			ret = parseScript(Shell, "/bin/" + name, args, Input, FileInput); //Must get file content from bin
 		}
 		
 		return ret;
 	}
 	
 	static private function parseScript(Shell:FlxShell, Script:String, Args:Array<String>,
-		Piped:Bool = false, Input:Dynamic = null, FileInput = null):Dynamic
+		Input:Dynamic = null, FileInput = null):Dynamic
 	{
 		Script = Shell.drive.readFile(Script).content;
 		
@@ -59,7 +59,6 @@ class ScriptRun
 			Args.shift();
 			interp.variables.set("Args", Args);
 			interp.variables.set("Shell", Shell);
-			interp.variables.set("piped", Piped);
 			interp.variables.set("input", Input);
 			interp.variables.set("fileInput", FileInput);
 			

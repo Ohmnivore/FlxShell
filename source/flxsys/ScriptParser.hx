@@ -63,12 +63,14 @@ class ScriptParser
 	
 	public function parseSimpleCmd(C:Token):Void
 	{
-		shell.print(ScriptRun.parseLine(shell, StringTools.trim(C.getParameters()[0])), true);
+		var params:Array<Dynamic> = cast ScriptRun.parseLine(shell, StringTools.trim(C.getParameters()[0]));
+		shell.print(params[0], true, params[1], params[2]);
 	}
 	
 	private function printValue(C:Token):Void
 	{
-		shell.print(C.getParameters()[0], true);
+		var params:Array<Dynamic> = cast C.getParameters()[0];
+		shell.print(params[0], true, params[1], params[2]);
 	}
 	
 	private function parseOperator(Operator:Token, Left:Token, Right:Token):Void
@@ -102,10 +104,7 @@ class ScriptParser
 			val = Left.getParameters()[0];
 		}
 		
-		var piped:Bool = false;
-		if (i + 2 < stream.length)
-			piped = true;
-		var final:Dynamic = ScriptRun.parseLine(shell, Right.getParameters()[0], piped, val);
+		var final:Dynamic = ScriptRun.parseLine(shell, Right.getParameters()[0], val);
 		
 		stream[i - 1] = VALUE(final);
 		adjustStream(Operator, Left, Right);
@@ -168,10 +167,7 @@ class ScriptParser
 			var path:String = Left.getParameters()[0];
 			var f:File = shell.drive.readFile(path, shell.curDir.path);
 			
-			var piped:Bool = false;
-			if (i + 2 < stream.length)
-				piped = true;
-			var final:Dynamic = ScriptRun.parseLine(shell, Right.getParameters()[0], piped, null, f);
+			var final:Dynamic = ScriptRun.parseLine(shell, Right.getParameters()[0], null, f);
 			
 			stream[i - 1] = VALUE(final);
 			adjustStream(Operator, Left, Right);

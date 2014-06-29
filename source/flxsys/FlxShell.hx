@@ -21,6 +21,9 @@ import openfl.events.KeyboardEvent;
  */
 class FlxShell extends FlxSubState
 {
+	//static public var STRING_MAP:Map<String, Dynamic>;
+	//static public var ARR:Array<Dynamic>;
+	
 	public var drive:Drive;
 	public var curDir:Folder;
 	
@@ -155,7 +158,8 @@ class FlxShell extends FlxSubState
 		allowInput = true;
 	}
 	
-	public function print(ToPrint:Dynamic, NewLine:Bool = false):Void
+	public function print(ToPrint:Dynamic, NewLine:Bool = false,
+		Property:String = "name", Emphasis = "isDirectory"):Void
 	{
 		if (ToPrint != null)
 		{
@@ -164,7 +168,41 @@ class FlxShell extends FlxSubState
 			if (NewLine)
 				post = Util.NEWLINE;
 			
-			_realtext += Std.string(ToPrint) + post;
+			var type:String = Std.string(Type.getClass(ToPrint));
+			
+			if (type.indexOf("Map") > -1 || type.indexOf("Array") > -1)
+			{
+				for (e in Lambda.list(ToPrint))
+				{
+					var s:String = "";
+					if (Property == "")
+						s = Std.string(e);
+					else
+						s = cast Reflect.getProperty(e, Property);
+					
+					var emph:Bool = false;
+					if (Emphasis != "")
+					{
+						if (Reflect.getProperty(e, Emphasis) == true)
+						{
+							emph = true;
+						}
+					}
+					
+					if (emph)
+					{
+						_realtext += "[" + s + "]\n";
+					}
+					else
+					{
+						_realtext += s + "\n";
+					}
+				}
+			}
+			else
+			{
+				_realtext += Std.string(ToPrint) + post;
+			}
 		}
 	}
 	

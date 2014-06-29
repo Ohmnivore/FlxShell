@@ -9,7 +9,7 @@ I also wrote a command line argument parser (HxCLAP). There's still tons of work
 
 Try ls and cd, no other commands are available at the moment.
 
-The shell features |, >, >>, and < operators, but commands don't yet support it.
+The shell features |, >, >>, and < operators, but commands don't yet support it. Commands return objects, not strings, so redirection has huge potential.
 
 ## Powered by:
 * HaxeFlixel
