@@ -35,4 +35,4 @@ if (bin._v == true)
     return ret.substr(0, ret.length - 1);
 }
 
-return "Try 'help -help' to see a list of options.";
+return "Try 'help -help' to see a list of options. You can use the '-h'/'-help' arguments for any command to obtain its usage info.";

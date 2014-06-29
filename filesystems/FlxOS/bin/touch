@@ -1,7 +1,18 @@
+import hxclap.subarg.CmdArgStrList;
 import hxclap.subarg.CmdArgStr;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
+import flxsys.File;
 import StringTools;
+
+n = new CmdArgStrList(
+        "n",
+        "names",
+        "New file name",
+        "New file names",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
+        );
+n._delimiters = ",";
 
 d = new CmdArgStr(
         "d",
@@ -12,7 +23,7 @@ d = new CmdArgStr(
         Shell.curDir.path
         );
 
-cmdline = new FlxCmdLine("ls", [d]);
+cmdline = new FlxCmdLine("touch", [n, d]);
 
 status = cmdline.getParseReturn(Args);
 if (status != FlxCmdLine.OK)
@@ -30,26 +41,11 @@ else
     dir = Shell.drive.readFolder(d._v, Shell.curDir.path);
 }
 
-if (piped)
+i = 0;
+while (i < n._list.length)
 {
-    return dir.children;
+    dir.addChild(new File("", n._list[i]));
+    i++;
 }
 
-else
-{
-    ret = "";
-
-    for (x in dir.children)
-    {
-        if (x.isDirectory)
-        {
-            ret += "[" + x.name + "]" + "\n";
-        }
-        else
-        {
-            ret += x.name + "\n";
-        }
-    }
-    
-    return ret.substr(0, ret.length - 1);
-}
+return null;

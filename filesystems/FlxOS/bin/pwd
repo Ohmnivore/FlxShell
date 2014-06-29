@@ -1,0 +1,11 @@
+if (Args.length > 0)
+{
+    return "pwd usage: pwd returns the shell's current working directory which can be modified by the cd command";
+}
+
+if (piped)
+{
+    return Shell.curDir;
+}
+
+return Shell.curDir.path;

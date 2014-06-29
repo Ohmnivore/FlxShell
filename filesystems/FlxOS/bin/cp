@@ -28,14 +28,12 @@ if (status != FlxCmdLine.OK)
     return status;
 }
 
-r = "";
 i = 0;
 while (i < s._list.length)
 {
-    //r += s._list[i] + d._list[i] + '\n';
     f = Shell.drive.readItem(s._list[i], Shell.curDir.path);
     f.copy(d._list[i], Shell);
     i++;
 }
 
-return r;
+return null;
