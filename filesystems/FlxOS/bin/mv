@@ -1,0 +1,41 @@
+import hxclap.subarg.CmdArgStrList;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+
+s = new CmdArgStrList(
+        "s",
+        "source",
+        "Path (relative or absolute)",
+        "Files/Directories to be moved",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
+        );
+s._delimiters = ",";
+
+d = new CmdArgStrList(
+        "d",
+        "destination",
+        "Path (relative or absolute)",
+        "New parent directories' paths",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
+        );
+d._delimiters = ",";
+
+cmdline = new FlxCmdLine("mv", [s, d]);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+i = 0;
+while (i < s._list.length)
+{
+    f = Shell.drive.readItem(s._list[i], Shell.curDir.path);
+    parent = Shell.drive.readFolder(d._list[i], Shell.curDir.path);
+    f.parent.children.remove(f.name);
+    parent.addChild(f);
+    i++;
+}
+
+return [null, "", ""];

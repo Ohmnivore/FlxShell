@@ -23,10 +23,11 @@ The shell features |, >, >>, and < operators, but commands don't yet support it.
 * grep
 * help -> done
 * ls -> done
-* mkdir
+* mkdir -> done
 * more
-* mv
+* mv -> done
 * pwd -> done
+* rename -> done
 * rm -> done
 * rmdir -> done
 * touch -> done

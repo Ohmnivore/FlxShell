@@ -1,0 +1,51 @@
+import hxclap.subarg.CmdArgStrList;
+import hxclap.subarg.CmdArgStr;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+import flxsys.Folder;
+import StringTools;
+
+n = new CmdArgStrList(
+        "n",
+        "names",
+        "New folder name",
+        "New folder names",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
+        );
+n._delimiters = ",";
+
+d = new CmdArgStr(
+        "d",
+        "directory",
+        "Directory path (relative or absolute)",
+        "Destinations",
+        (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALREQ),
+        Shell.curDir.path
+        );
+
+cmdline = new FlxCmdLine("mkdir", [n, d]);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+dir = Shell.curDir;
+if (StringTools.trim(d._v).length < 1)
+{
+    dir = Shell.curDir;
+}
+else
+{
+    dir = Shell.drive.readFolder(d._v, Shell.curDir.path);
+}
+
+i = 0;
+while (i < n._list.length)
+{
+    dir.addChild(new Folder([], n._list[i]));
+    i++;
+}
+
+return [null, "", ""];
