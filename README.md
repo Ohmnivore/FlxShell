@@ -5,9 +5,9 @@ So FlxShell is like a simulated Linux-like mini-OS where the sole interface is a
 For now, I've implemented the basic editing functionalities (writing, erasing with backspace, left/right arrow keys, command history with up/down keys, enter key to parse, tab, ctrl-left, ctrl-right, page up, page down, home, end), a part of the file system and a few linux commands. Also I'm done making the shell language parser and hscript integration.
 I also wrote a command line argument parser (HxCLAP). There's still tons of work to do.
 
-[DEMO](http://ohmnivore.elementfx.com/wp-content/uploads/2014/06/FlxShell2.swf) -> Out of date
+[DEMO](http://ohmnivore.elementfx.com/FlxShell.swf)
 
-Try ls and cd, no other commands are available at the moment.
+Try the help command to get started.
 
 The shell features |, >, >>, and < operators, but commands don't yet support it. Commands return objects, not strings, so redirection has huge potential.
 
