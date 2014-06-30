@@ -68,7 +68,7 @@ class ScriptRun
 			}
 			catch (E:Dynamic)
 			{
-				return E;
+				return [E, "", ""];
 			}
 			try 
 			{
@@ -77,16 +77,16 @@ class ScriptRun
 			}
 			catch (E:Dynamic)
 			{
-				return E;
+				return [E, "", ""];
 			}
 		}
 		catch (E:Error)
 		{
-			return
+			return [
 				"Error on line " + Std.string(parser.line) + 
 				" [Index:" + Std.string(E.getIndex()) + 
 				" Name:" + E.getName() + 
-				" Params:" + Std.string(E.getParameters()) + "]";
+				" Params:" + Std.string(E.getParameters()) + "]", "", ""];
 		}
 	}
 	

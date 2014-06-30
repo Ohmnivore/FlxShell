@@ -27,8 +27,8 @@ The shell features |, >, >>, and < operators, but commands don't yet support it.
 * more
 * mv
 * pwd -> done
-* rm
-* rmdir
+* rm -> done
+* rmdir -> done
 * touch -> done
 
 ## TODO:
