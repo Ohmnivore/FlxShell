@@ -1,0 +1,31 @@
+import hxclap.subarg.CmdArgStrList;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+import StringTools;
+
+p = new CmdArgStrList(
+        "p",
+        "paths",
+        "Path (relative or absolute)",
+        "Paths to folders to delete",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
+        );
+p._delimiters = ",";
+
+cmdline = new FlxCmdLine("rmdir", [p]);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+i = 0;
+while (i < p._list.length)
+{
+    folder = Shell.drive.readFolder(p._list[i], Shell.curDir.path);
+    folder.delete();
+    i++;
+}
+
+return [null, "", ""];
