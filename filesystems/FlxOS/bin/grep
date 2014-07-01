@@ -1,0 +1,77 @@
+import hxclap.subarg.CmdArgStr;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+import StringTools;
+import hxclap.subarg.CmdArgStrList;
+import EReg;
+
+s = new CmdArgStrList(
+        "s",
+        "source",
+        "Path (relative or absolute)",
+        "Files to search within",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
+        );
+s._delimiters = ",";
+
+f = new CmdArgStr(
+        "f",
+        "find",
+        "Regex",
+        "Search for lines matching this regex (NOT WORKING AT THE MOMENT)",
+        (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALREQ),
+        "."
+        );
+
+w = new CmdArgStr(
+        "w",
+        "word",
+        "String",
+        "Search for lines containing this string",
+        (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALREQ),
+        ""
+        );
+
+cmdline = new FlxCmdLine("find", [w, s]);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+ret = [];
+//ereg = new EReg(f._v, "m");
+word_search = w._v;
+
+function findMatches(arr, regex, file)
+{
+    if (regex.match(file.content))
+    {
+        //resstring = regex.matched(0);
+        
+        //if (resstring != null)
+            //arr.push(resstring);
+    }
+};
+
+function findMatchesWord(arr, w, file)
+{
+    res = file.content.indexOf(w);
+    
+    if (res > -1)
+    {
+        interm = file.content.substrng(res, file.content.length);
+        arr.push(file.content.substring(res, interm.indexOf("/n")));
+    }
+};
+
+i = 0;
+while (i < s._list.length)
+{
+    f = Shell.drive.readFile(s._list[i], Shell.curDir.path);
+    findMatchesWord(ret, word_search, f);
+    i++;
+}
+
+return [ret, "", ""];
