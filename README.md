@@ -16,7 +16,7 @@ The shell features |, >, >>, and < operators, but commands don't yet support it.
 ## Available commands:
 * cd -> done
 * cp -> done
-* find
+* find -> done
 * grep
 * help -> done
 * ls -> done
