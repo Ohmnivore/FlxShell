@@ -21,8 +21,7 @@ import openfl.events.KeyboardEvent;
  */
 class FlxShell extends FlxSubState
 {
-	//static public var STRING_MAP:Map<String, Dynamic>;
-	//static public var ARR:Array<Dynamic>;
+	static public inline var charWidth:Float = 7.2727;
 	
 	public var drive:Drive;
 	public var curDir:Folder;
@@ -36,7 +35,7 @@ class FlxShell extends FlxSubState
 	
 	//Text display vars
 	public var _inputTime:Bool = false;
-	private var _t:FlxText;
+	private var _t:CharWrapText;
 	private var _realtext:String = "";
 	private var _cursorPos:Int = 0;
 	private var _eraseblock:Int = 0;
@@ -119,8 +118,17 @@ class FlxShell extends FlxSubState
 		{
 			var inp:String = _cap.getNewInput();
 			_cursorPos += inp.length;
+			//_charWrap += inp.length;
 			_realtext = _realtext.substr(0, _cursorPos - 1) + inp + _realtext.substring(_cursorPos - 1, _realtext.length);
 		}
+		
+		//var lastnewline:Int = _realtext.lastIndexOf("\n");
+		//if (_realtext.length - 1 - lastnewline >= Std.int((_frame.width - 10) / charWidth))
+		//{
+			//trace(_realtext.length - 1 - lastnewline);
+			//_realtext += "\n";
+			//_cursorPos++;
+		//}
 		
 		if (_inputTime)
 		{
@@ -461,9 +469,12 @@ class FlxShell extends FlxSubState
 		add(square);
 		add(effect);
 		
-		_t = new FlxText(square.x + 5, square.y + 5, square.width - 10, "", 12, false);
+		_t = new CharWrapText(square.x + 5, square.y + 5, square.width - 10, "", 12, false);
 		_t.font = "assets/images/Monaco.ttf";
 		_t.color = 0x8811EE11;
+		_t.textField.wordWrap = false;
+		_t.charWidth = charWidth;
+		_t.widthLimit = square.width - 10;
 		add(_t);
 		
 		_frame = square;
