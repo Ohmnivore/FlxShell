@@ -1,0 +1,78 @@
+import hxclap.subarg.CmdArgStr;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+import StringTools;
+
+d = new CmdArgStr(
+        "d",
+        "directory",
+        "Path (relative or absolute)",
+        "Directory from which to start the search",
+        (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALREQ),
+        Shell.curDir.path
+        );
+
+n = new CmdArgStr(
+        "n",
+        "name",
+        "Name of file/folder",
+        "Searches for file/folder",
+        (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALREQ),
+        Shell.curDir.path
+        );
+
+cmdline = new FlxCmdLine("find", [d, n]);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+dir = Shell.curDir;
+if (StringTools.trim(d._v).length < 1)
+{
+    dir = Shell.curDir;
+}
+else
+{
+    dir = Shell.drive.readFolder(d._v, Shell.curDir.path);
+}
+
+function searchItem(arr, item, name)
+{
+    if (item.isDirectory)
+    {
+        searchFolder(arr, item, name);
+    }
+    else
+    {
+        searchFile(arr, item, name);
+    }
+};
+
+function searchFile(arr, item, name)
+{
+    if (item.name.indexOf(name) > -1)
+    {
+        arr.push(item);
+    }
+};
+
+function searchFolder(arr, item, name)
+{
+    if (item.name.indexOf(name) > -1)
+    {
+        arr.push(item);
+    }
+    
+    for (c in item.children)
+    {
+        searchItem(arr, c, name);
+    }
+};
+
+results = [];
+searchFolder(results, dir, n._v);
+
+return [results, "name", "isDirectory"];
