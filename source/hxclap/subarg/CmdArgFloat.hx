@@ -2,6 +2,7 @@ package hxclap.subarg;
 
 import hxclap.ArgError;
 import hxclap.CmdArg;
+import hxclap.E_CmdArgSyntax;
 
 //Definition of class CmdArgFloat
 class CmdArgFloat extends CmdArg
@@ -9,7 +10,7 @@ class CmdArgFloat extends CmdArg
 	public var _v:Float;
 	
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ), def:Float = 0)
+		syntaxFlags:Int = E_CmdArgSyntax.isDefault, def:Float = 0)
 	{
 		super(optChar, keyword, valueName, description, syntaxFlags);
 		

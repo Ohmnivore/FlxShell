@@ -27,13 +27,21 @@ enum Mode
 	OUTCOMMAND;
 }
 
+enum StringMode
+{
+	INSTRING;
+	OUTSTRING;
+}
+
 class ScriptLexer
 {
 	public var shell:FlxShell;
 	public var stream:Array<Token>;
 	
 	private var mode:Mode = OUTCOMMAND;
+	private var stringMode:StringMode = OUTSTRING;
 	private var last_cmd:String = "";
+	private var string_buffer:String = "";
 	
 	public function new(Inp:String, Shell:FlxShell) 
 	{
@@ -78,7 +86,7 @@ class ScriptLexer
 			i++;
 		}
 		
-		//Remove phantom COMMANDs (last step)
+		//Remove phantom COMMANDs and VALUEs (last step)
 		i = 0;
 		while (i < tokenized.length - 1)
 		{
@@ -94,44 +102,78 @@ class ScriptLexer
 			i++;
 		}
 		
+		for (x in tokenized)
+		{
+			if (x.getName() == "VALUE")
+			{
+				x.getParameters()[0] = [x.getParameters()[0], "", ""];
+			}
+		}
+		
 		stream = tokenized;
 	}
 	
 	private function retrieve(T:String):Token
 	{
-		if (T == "|")
+		if (T.length > 0)
 		{
-			mode = OUTCOMMAND;
-			return PIPE;
+			if (T.charAt(0) == "'")
+			{
+				stringMode = INSTRING;
+				string_buffer = "";
+				T = T.substr(1, T.length);
+			}
+			
+			if (T.charAt(T.length - 1) == "'")
+			{
+				stringMode = OUTSTRING;
+				T = T.substr(0, T.length - 1);
+				string_buffer += " " + T;
+				return VALUE(string_buffer);
+			}
 		}
 		
-		if (T == ">")
+		if (stringMode == INSTRING)
 		{
-			mode = OUTCOMMAND;
-			return OUTPUT;
+			string_buffer += " " + T;
+			return VALUE(string_buffer);
 		}
-		
-		if (T == ">>")
+		else
 		{
-			mode = OUTCOMMAND;
-			return OUTPUTAPPEND;
-		}
-		
-		if (T == "<")
-		{
-			mode = OUTCOMMAND;
-			return INPUT;
-		}
-		
-		if (mode == OUTCOMMAND)
-		{
-			mode = INCOMMAND;
-			last_cmd = "";
-		}
-		
-		if (mode == INCOMMAND)
-		{
-			last_cmd += " " + T;
+			if (T == "|")
+			{
+				mode = OUTCOMMAND;
+				return PIPE;
+			}
+			
+			if (T == ">")
+			{
+				mode = OUTCOMMAND;
+				return OUTPUT;
+			}
+			
+			if (T == ">>")
+			{
+				mode = OUTCOMMAND;
+				return OUTPUTAPPEND;
+			}
+			
+			if (T == "<")
+			{
+				mode = OUTCOMMAND;
+				return INPUT;
+			}
+			
+			if (mode == OUTCOMMAND)
+			{
+				mode = INCOMMAND;
+				last_cmd = "";
+			}
+			
+			if (mode == INCOMMAND)
+			{
+				last_cmd += " " + T;
+			}
 		}
 		
 		return COMMAND(StringTools.trim(last_cmd));

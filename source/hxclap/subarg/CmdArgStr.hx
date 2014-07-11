@@ -9,7 +9,7 @@ class CmdArgStr extends CmdArg
 	public var _v:String;
 	
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ), def:String)
+		syntaxFlags:Int = E_CmdArgSyntax.isDefault, def:String)
 	{
 		super(optChar, keyword, valueName, description, syntaxFlags);
 		

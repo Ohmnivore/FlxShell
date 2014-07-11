@@ -6,27 +6,32 @@ So FlxShell is like a simulated Linux-like mini-OS where the sole interface is a
 
 Try the 'help' command to get started.
 
-The shell features |, >, >>, and < operators, but commands don't yet support it. Commands return objects, not strings, so redirection has huge potential.
+The shell features |, >, >>, and < operators, but not all commands support it yet. Commands return objects, not strings, so redirection has huge potential.
+Also the shell allows you to use strings (ex: 'this is a string'). They can be used with <, >, and | operators, but not yet as command arguments.
 
 ## Powered by:
 * HaxeFlixel
 * HxCLAP
 * hscript
 
-## Available commands:
+## Available commands (Not all commands support redirection operators yet, even if they are marked as done):
+* cat -> done
 * cd -> done
+* clip -> done
 * cp -> done
+* echo -> done
+* edit (minimalistic text editor)
 * find -> done
 * grep
 * help -> done
 * ls -> done
 * mkdir -> done
-* more
 * mv -> done
 * pwd -> done
 * rename -> done
 * rm -> done
 * rmdir -> done
+* send
 * touch -> done
 
 ## Keyboard shortcuts:
@@ -36,12 +41,10 @@ The shell features |, >, >>, and < operators, but commands don't yet support it.
 * Move cursor one word: ctrl + left arrow / ctrl + right arrow
 * First/last command in command history: page up / page down
 * Skip to beginning/end of line: home/end
+* Copy on-screen text: ctrl + 1
 
 ## TODO:
 * Simulated file system (saves and loads from JSON) -> almost done
-* Threading/multiple consoles open at the same time
 * Permissions -> chmod and such
-* Networking protocol between systems (static network handler)
 * Wired communication protocol between systems
-* Shell prompt for input
-* Shell copy & paste support (especially paste)
+* Fix weird newline bug (happens when you hit enter)

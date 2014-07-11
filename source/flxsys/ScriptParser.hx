@@ -115,11 +115,11 @@ class ScriptParser
 		var val:Dynamic = null;
 		if (Left.getName() == "COMMAND")
 		{
-			val = ScriptRun.parseLine(shell, Left.getParameters()[0], false);
+			val = ScriptRun.parseLine(shell, Left.getParameters()[0], false)[0];
 		}
 		else
 		{
-			val = Left.getParameters()[0];
+			val = Left.getParameters()[0][0];
 		}
 		
 		var path:String = Right.getParameters()[0];
@@ -164,10 +164,21 @@ class ScriptParser
 	{
 		try
 		{
-			var path:String = Left.getParameters()[0];
-			var f:File = shell.drive.readFile(path, shell.curDir.path);
+			var final:Dynamic = null;
 			
-			var final:Dynamic = ScriptRun.parseLine(shell, Right.getParameters()[0], null, f);
+			if (Left.getName() == "FILE")
+			{
+				var path:String = Left.getParameters()[0];
+				var f:File = shell.drive.readFile(path, shell.curDir.path);
+				
+				final = ScriptRun.parseLine(shell, Right.getParameters()[0], null, f);
+			}
+			if (Left.getName() == "VALUE")
+			{
+				var val:Dynamic = Left.getParameters()[0];
+				
+				final = ScriptRun.parseLine(shell, Right.getParameters()[0], val, null);
+			}
 			
 			stream[i - 1] = VALUE(final);
 			adjustStream(Operator, Left, Right);

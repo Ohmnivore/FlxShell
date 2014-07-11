@@ -12,7 +12,7 @@ import hxclap.E_CmdArgSyntax;
 
 class FlxCmdLine extends CmdLine
 {
-	static public inline var OK:String = "ok";
+	static public var OK:String = "ok";
 	private var status:String;
 	
 	public function new(progName:String, cmds:Array<CmdArg>, ignoreRequired:Bool = false) 

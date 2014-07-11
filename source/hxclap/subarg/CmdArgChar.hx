@@ -2,6 +2,7 @@ package hxclap.subarg;
 
 import hxclap.ArgError;
 import hxclap.CmdArg;
+import hxclap.E_CmdArgSyntax;
 
 //Definition of class CmdArgChar
 class CmdArgChar extends CmdArg
@@ -9,7 +10,7 @@ class CmdArgChar extends CmdArg
 	public var _v:String;
 	
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ), def:String)
+		syntaxFlags:Int = E_CmdArgSyntax.isDefault, def:String)
 	{
 		super(optChar, keyword, valueName, description, syntaxFlags);
 		

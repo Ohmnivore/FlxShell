@@ -91,7 +91,7 @@ class CmdArg
 	}
 	
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)) 
+		syntaxFlags:Int = E_CmdArgSyntax.isDefault)
 	{
 		_optChar = optChar;
 		_keyword = keyword;
@@ -330,7 +330,7 @@ class CmdArgTypeList<T> extends CmdArg
 	public var _min:Int;
 	
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ),
+		syntaxFlags:Int = E_CmdArgSyntax.isDefault,
 		minSize:Int = 1,
 		maxSize:Int = 100,
 		delim:String = ",-~/.")

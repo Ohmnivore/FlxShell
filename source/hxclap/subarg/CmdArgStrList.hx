@@ -1,12 +1,13 @@
 package hxclap.subarg;
 
 import hxclap.CmdArg;
+import hxclap.E_CmdArgSyntax;
 
 //Definition of class CmdArgStrList
 class CmdArgStrList extends CmdArgTypeList<String>
 {
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ), minSize:Int = 1,
+		syntaxFlags:Int = E_CmdArgSyntax.isDefault, minSize:Int = 1,
 		maxSize:Int = 100, delim:String = ",~/")
 	{
 		super(optChar, keyword, valueName, description, syntaxFlags, minSize, maxSize, delim);

@@ -16,16 +16,16 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="C:\HaxeToolkit\haxe\lib\flixel\3,3,4" />
-    <class path="C:\HaxeToolkit\haxe\lib\lime\1,0,0" />
-    <class path="C:\HaxeToolkit\haxe\lib\openfl\2,0,0" />
+    <class path="C:\HaxeToolkit\haxe\lib\lime\1,0,1" />
+    <class path="C:\HaxeToolkit\haxe\lib\openfl\2,0,1" />
     <class path="C:\HaxeToolkit\haxe\lib\hscript\2,0,1" />
     <class path="source" />
-    <class path="C:\HaxeToolkit\haxe\lib\openfl\2,0,0\backends\flash" />
+    <class path="C:\HaxeToolkit\haxe\lib\openfl\2,0,1\backends\flash" />
     <class path="export\flash\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="flixel=3.3.4&#xA;lime=1.0.0&#xA;openfl=2.0.0&#xA;hscript=2.0.1&#xA;tools=1.5.4&#xA;FLX_NO_DEBUG&#xA;NAPE_RELEASE_BUILD&#xA;openfl-flash&#xA;FLX_RENDER_BLIT&#xA;FLX_NO_SOUND_TRAY&#xA;display&#xA;web" />
+    <option directives="flixel=3.3.4&#xA;lime=1.0.1&#xA;openfl=2.0.1&#xA;hscript=2.0.1&#xA;tools=1.5.4&#xA;FLX_NO_DEBUG&#xA;NAPE_RELEASE_BUILD&#xA;openfl-flash&#xA;FLX_RENDER_BLIT&#xA;FLX_NO_SOUND_TRAY&#xA;display&#xA;web" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />

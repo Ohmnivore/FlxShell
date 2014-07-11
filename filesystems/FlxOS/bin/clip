@@ -1,0 +1,38 @@
+import flash.system.System;
+import flxsys.File;
+import Std;
+
+usage = ["clip usage: [filepath < clip] or [command | clip]", "", ""];
+
+if (fileInput == null && input == null)
+{
+    return usage;
+}
+
+if (Args.length > 0)
+{
+    if (Args[0] == "-h" || Args[0] == "-help")
+    {
+        return usage;
+    }
+}
+
+if (fileInput != null)
+{
+    ret = fileInput.content;
+}
+else
+{
+    if (Std.is(input[0], File))
+    {
+        ret = input[0].content;
+    }
+    else
+    {
+        ret = input[0];
+    }
+}
+
+System.setClipboard(ret);
+
+return [null, "", ""];

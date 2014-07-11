@@ -2,13 +2,14 @@ package hxclap.subarg;
 
 import hxclap.ArgError;
 import hxclap.CmdArg;
+import hxclap.E_CmdArgSyntax;
 
 //Definition of class CmdArgBool
 class CmdArgBool extends CmdArg
 {
 	public var _v:Bool;
 	
-	public function new(optChar:String, keyword:String, description:String, syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ))
+	public function new(optChar:String, keyword:String, description:String, syntaxFlags:Int = E_CmdArgSyntax.isDefault)
 	{
 		super(optChar, keyword, "", description, syntaxFlags);
 		

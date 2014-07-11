@@ -5,9 +5,10 @@ import hscript.Parser;
 import hscript.Interp;
 
 import flxsys.Drive;
-
+import openfl.system.System;
 import hxclap.subarg.CmdArgBool;
 import flxsys.FlxCmdLine;
+import flxsys.frontends.BusFront;
 
 /**
  * ...
@@ -23,6 +24,7 @@ class ScriptRun
 	{
 		FlxCmdLine;
 		CmdArgBool;
+		System;
 	}
 	
 	static public function parseLine(Shell:FlxShell, Line:String, Input:Dynamic = null, FileInput = null):Dynamic
@@ -31,7 +33,7 @@ class ScriptRun
 		
 		var name:String = args[0];
 		
-		var ret:Dynamic = "shell: " + name + " not found";
+		var ret:Dynamic = ["shell: " + name + " not found", "", ""];
 		
 		var bin:Folder = Shell.drive.readFolder("/bin");
 		
@@ -59,6 +61,7 @@ class ScriptRun
 			Args.shift();
 			interp.variables.set("Args", Args);
 			interp.variables.set("Shell", Shell);
+			interp.variables.set("Bus", BusFront);
 			interp.variables.set("input", Input);
 			interp.variables.set("fileInput", FileInput);
 			
@@ -73,7 +76,22 @@ class ScriptRun
 			try 
 			{
 				var value:Dynamic = interp.execute(ast);
-				return value;
+				
+				if (interp.variables.get("update") != null)
+				{
+					if (interp.variables.get("update") == true)
+					{
+						Shell.inScript = true;
+						Shell.allowInput = false;
+					}
+					
+					return [null, "", ""];
+				}
+				
+				else
+				{
+					return value;
+				}
 			}
 			catch (E:Dynamic)
 			{

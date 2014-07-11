@@ -1,5 +1,6 @@
 package flxsys;
 
+//import cpp.vm.Thread;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -10,6 +11,12 @@ import openfl.geom.Rectangle;
 import flash.display.BitmapData;
 import flash.text.Font;
 import openfl.events.KeyboardEvent;
+import openfl.system.System;
+
+#if flash
+import flash.desktop.Clipboard;
+import flash.desktop.ClipboardFormats;
+#end
 
 //Monaco font
 @:font("assets/images/Monaco.ttf") private class ShellFont extends Font { }
@@ -48,6 +55,7 @@ class FlxShell extends FlxSubState
 	private var _cursorTimer:Float = 0.0;
 	
 	public var allowInput(get, set):Bool;
+	public var inScript:Bool = false;
 	
 	public function get_allowInput():Bool
 	{
@@ -108,7 +116,7 @@ class FlxShell extends FlxSubState
 		
 		if (_t.frameHeight + _t.y >= _frame.height - 10)
 		{
-			var ind:Int = _realtext.indexOf(" ", 1);
+			var ind:Int = _realtext.indexOf(Util.NEWLINE, 1);
 			_realtext = _realtext.substr(ind, _realtext.length);
 			_cursorPos -= ind;
 			_eraseblock -= ind;
@@ -118,17 +126,8 @@ class FlxShell extends FlxSubState
 		{
 			var inp:String = _cap.getNewInput();
 			_cursorPos += inp.length;
-			//_charWrap += inp.length;
 			_realtext = _realtext.substr(0, _cursorPos - 1) + inp + _realtext.substring(_cursorPos - 1, _realtext.length);
 		}
-		
-		//var lastnewline:Int = _realtext.lastIndexOf("\n");
-		//if (_realtext.length - 1 - lastnewline >= Std.int((_frame.width - 10) / charWidth))
-		//{
-			//trace(_realtext.length - 1 - lastnewline);
-			//_realtext += "\n";
-			//_cursorPos++;
-		//}
 		
 		if (_inputTime)
 		{
@@ -167,7 +166,7 @@ class FlxShell extends FlxSubState
 	}
 	
 	public function print(ToPrint:Dynamic, NewLine:Bool = false,
-		Property:String = "name", Emphasis = "isDirectory"):Void
+		Property:String = "", Emphasis = ""):Void
 	{
 		if (ToPrint != null)
 		{
@@ -203,7 +202,7 @@ class FlxShell extends FlxSubState
 					}
 					else
 					{
-						_realtext += s + "\n";
+						_realtext += s + Util.NEWLINE;
 					}
 				}
 			}
@@ -226,7 +225,17 @@ class FlxShell extends FlxSubState
 			print(E, true);
 		}
 		
-		printPrompt();
+		if (inScript)
+		{
+			_realtext += Util.NEWLINE;
+			_inputTime = false;
+		}
+		else
+		{
+			printPrompt();
+		}
+		
+		inScript = false;
 	}
 	
 	private function handleInput(event)
@@ -239,6 +248,12 @@ class FlxShell extends FlxSubState
 					handleCtrlLeft();
 				case 39: //right arrow
 					handleCtrlRight();
+				case 49: //1
+					handleCtrl1();
+				case 50: //2
+					handleCtrl2();
+				case 88: //X
+					handleCtrlX();
 			}
 		}
 		
@@ -279,6 +294,7 @@ class FlxShell extends FlxSubState
 		{
 			var cmd:String = _realtext.substring(_eraseblock, _realtext.length);
 			_realtext += Util.NEWLINE;
+			//Thread.create(function(){parse(cmd);});
 			parse(cmd);
 		}
 	}
@@ -432,12 +448,48 @@ class FlxShell extends FlxSubState
 		}
 	}
 	
+	private function handleCtrl1():Void
+	{
+		if (_inputTime)
+		{
+			#if flash
+			System.setClipboard(_realtext);
+			#end
+		}
+	}
+	
+	private function handleCtrl2():Void
+	{
+		if (_inputTime)
+		{
+			//trace("lol");
+			//if(Clipboard.generalClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT))
+			//{
+				//trace("lol2");
+				//_realtext += Std.string(Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT));
+			//}
+			//_cap.signalPaste();
+		}
+	}
+	
+	private function handleCtrlX():Void
+	{
+		//if (doScriptUpdate)
+		//{
+			//printPrompt();
+		//}
+		//
+		//doScriptUpdate = false;
+	}
+	
 	private function makeScreen():Void
 	{
 		var square:FlxSprite = new FlxSprite(10, 10);
 		square.makeGraphic(FlxG.width - 20, FlxG.height - 20, 0xff333333);
+		square.scrollFactor.set();
 		
 		var effect:FlxSprite = new FlxSprite(10, 10);
+		effect.scrollFactor.set();
 		var bitmapdata:BitmapData = new BitmapData(FlxG.width - 20, FlxG.height - 20, true, 0x88114411);
 		var scanline:BitmapData = new BitmapData(FlxG.width - 20, 1, true, 0x88001100);
 		
@@ -475,6 +527,7 @@ class FlxShell extends FlxSubState
 		_t.textField.wordWrap = false;
 		_t.charWidth = charWidth;
 		_t.widthLimit = square.width - 10;
+		_t.scrollFactor.set();
 		add(_t);
 		
 		_frame = square;

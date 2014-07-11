@@ -1,0 +1,25 @@
+usage = ["echo usage: [filepath < echo] or [command | echo]", "", ""];
+
+if (fileInput == null && input == null)
+{
+    return usage;
+}
+
+if (Args.length > 0)
+{
+    if (Args[0] == "-h" || Args[0] == "-help")
+    {
+        return usage;
+    }
+}
+
+if (fileInput != null)
+{
+    ret = fileInput.content;
+}
+else
+{
+    ret = input[0];
+}
+
+return [ret, "", ""];
