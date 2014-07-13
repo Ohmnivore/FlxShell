@@ -21,7 +21,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * cp -> done
 * echo -> done
 * edit (minimalistic text editor) -> done
-* find -> done
+* find
 * grep
 * help -> done
 * ls -> done

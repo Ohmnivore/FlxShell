@@ -3,6 +3,8 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.scaleModes.FixedScaleMode;
+import flixel.system.scaleModes.RatioScaleMode;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
@@ -19,6 +21,9 @@ class MenuState extends FlxState
 	override public function create():Void
 	{
 		super.create();
+		
+		FlxG.scaleMode = new FixedScaleMode();
+		
 		FlxG.switchState(new PlayState());
 	}
 	

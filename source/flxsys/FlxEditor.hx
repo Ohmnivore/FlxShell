@@ -100,10 +100,10 @@ class FlxEditor extends FlxSubState
 	{
 		_inp = new TextField();
 		
-		_inp.x = 10;
-		_inp.y = 10;
-		_inp.width = FlxG.width - 20;
-		_inp.height = FlxG.height - 20;
+		_inp.x = 10 * (FlxG.stage.stageWidth / FlxG.width) * (FlxG.stage.stageWidth / FlxG.width);
+		_inp.y = 10 * (FlxG.stage.stageHeight / FlxG.height) * (FlxG.stage.stageHeight / FlxG.height);
+		_inp.width = (FlxG.width - 20) * FlxG.stage.stageWidth / FlxG.width;
+		_inp.height = (FlxG.height - 40) * FlxG.stage.stageHeight / FlxG.height;
 		
 		_inp.multiline = true;
 		_inp.wordWrap = true;
@@ -118,6 +118,19 @@ class FlxEditor extends FlxSubState
 		
 		FlxG.stage.addChild(_inp);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
+	}
+	
+	override public function onResize(Width:Int, Height:Int):Void 
+	{
+		_inp.x = 10 * Width / FlxG.width;
+		_inp.y = 10 * Height / FlxG.height;
+		
+		_inp.width = FlxG.width - (20 * FlxG.scaleMode.scale.x);
+		_inp.height = FlxG.height - (20 * FlxG.scaleMode.scale.y);
+		_inp.width = (FlxG.width - 20) * FlxG.stage.stageWidth / FlxG.width;
+		_inp.height = (FlxG.height - 20) * FlxG.stage.stageHeight / FlxG.height;
+		
+		super.onResize(Width, Height);
 	}
 	
 	private function makeScreen():Void
