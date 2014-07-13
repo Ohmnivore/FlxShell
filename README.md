@@ -51,6 +51,5 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 ## TODO:
 * Simulated file system (saves and loads from JSON) -> almost done
 * Wired communication protocol between systems
-* Fix weird newline bug (happens when you hit enter)
 * Add more keyboard shortcuts to text editor
 * Make every command work with redirection operators
