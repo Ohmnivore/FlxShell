@@ -2,7 +2,7 @@
 I'm planning to make a game that will allow players to interact with consoles/shells/command lines/whatever you wanna call them.
 So FlxShell is like a simulated Linux-like mini-OS where the sole interface is a shell and where the two scripting languages are an interpreted version of Haxe and a very basic implementation of the Linux shell language.
 
-[DEMO](http://ohmnivore.elementfx.com/FlxShell.swf) -> Out of date by a few commits
+[DEMO](http://ohmnivore.elementfx.com/FlxShell.swf) -> Out of date by a lot of commits
 
 Try the 'help' command to get started.
 
@@ -20,7 +20,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * clip -> done
 * cp -> done
 * echo -> done
-* edit (minimalistic text editor)
+* edit (minimalistic text editor) -> done
 * find -> done
 * grep
 * help -> done
@@ -45,6 +45,5 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 
 ## TODO:
 * Simulated file system (saves and loads from JSON) -> almost done
-* Permissions -> chmod and such
 * Wired communication protocol between systems
 * Fix weird newline bug (happens when you hit enter)

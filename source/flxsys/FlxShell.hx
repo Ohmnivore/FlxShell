@@ -240,6 +240,8 @@ class FlxShell extends FlxSubState
 	
 	private function handleInput(event)
 	{
+		if (subState == null)
+		{
 		if (event.ctrlKey)
 		{
 			switch(event.keyCode)
@@ -284,6 +286,7 @@ class FlxShell extends FlxSubState
 				case 36: //home
 					handleHome();
 			}
+		}
 		}
 	}
 	

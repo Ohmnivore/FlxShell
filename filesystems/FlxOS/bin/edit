@@ -1,1 +1,39 @@
-return ["In constructions.", "", ""];
+import hxclap.subarg.CmdArgStr;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+import flxsys.Folder;
+import flxsys.File;
+import StringTools;
+import flixel.FlxG;
+import flxsys.FlxEditor;
+
+s = new CmdArgStr(
+        "s",
+        "source",
+        "File path (relative or absolute)",
+        "Source file to read",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ),
+        ""
+        );
+
+cmdline = new FlxCmdLine("edit", [s]);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+f = Shell.curDir;
+if (StringTools.trim(s._v).length < 1)
+{
+    f = Shell.curDir;
+}
+else
+{
+    f = Shell.drive.readFile(s._v, Shell.curDir.path);
+}
+
+Shell.openSubState(new FlxEditor(f, Shell));
+
+return [null, "", ""];

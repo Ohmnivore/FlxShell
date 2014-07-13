@@ -6,6 +6,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import flxsys.FlxEditor;
 import flxsys.FlxShell;
 //import flash.text.Font;
 
@@ -32,6 +33,7 @@ class PlayState extends FlxState
 		//add(char);
 		
 		openSubState(new FlxShell("User"));
+		//openSubState(new FlxEditor());
 	}
 	
 	/**
