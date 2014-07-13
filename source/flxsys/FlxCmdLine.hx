@@ -13,6 +13,9 @@ import hxclap.E_CmdArgSyntax;
 class FlxCmdLine extends CmdLine
 {
 	static public var OK:String = "ok";
+	
+	public var addHelp:String = null;
+	
 	private var status:String;
 	
 	public function new(progName:String, cmds:Array<CmdArg>, ignoreRequired:Bool = false) 
@@ -27,6 +30,32 @@ class FlxCmdLine extends CmdLine
 		}
 		
 		super(progName, cmds);
+	}
+	
+	override public function getUsageString():String 
+	{
+		var u:UsageInfo = usage();
+		var ret:String = "";
+		
+		ret += "Usage: " + u.name + "\n";
+		if (addHelp != null)
+		{
+			ret += addHelp + "\n";
+		}
+		
+		for (cmd in u.args)
+		{
+			if (cmd.type < 5)
+			{
+				ret += _traceSimple(cmd) + "\n";
+			}
+			else
+			{
+				ret += _traceList(cmd) + "\n";
+			}
+		}
+		
+		return ret;
 	}
 	
 	public function getParseReturn(Args:Array<String>):String

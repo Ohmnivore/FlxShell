@@ -17,6 +17,7 @@ s = new CmdArgStr(
         );
 
 cmdline = new FlxCmdLine("edit", [s]);
+cmdline.addHelp = "Ctrl-s to save, and Ctrl-d to quit.";
 
 status = cmdline.getParseReturn(Args);
 if (status != FlxCmdLine.OK)
