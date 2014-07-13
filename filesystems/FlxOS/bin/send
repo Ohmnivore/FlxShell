@@ -1,0 +1,70 @@
+import hxclap.subarg.CmdArgStr;
+import hxclap.subarg.CmdArgInt;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+import flxsys.Folder;
+import flxsys.File;
+import StringTools;
+import Std;
+import flixel.FlxG;
+import flxsys.FlxEditor;
+import flxsys.net.Msg;
+
+ignoreRequired = false;
+if (fileInput != null || input != null)
+{
+    ignoreRequired = true;
+}
+
+m = new CmdArgStr(
+        "m",
+        "message",
+        "String",
+        "The message to send",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ),
+        ""
+        );
+
+s = new CmdArgInt(
+        "s",
+        "source",
+        "Address (int)",
+        "The sender's address",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ),
+        0
+        );
+
+d = new CmdArgInt(
+        "d",
+        "dest",
+        "Destination (int)",
+        "The recipient's address",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ),
+        0
+        );
+
+cmdline = new FlxCmdLine("edit", [m, s, d], ignoreRequired);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+msg = null;
+if (fileInput != null)
+{
+    msg = fileInput.content;
+}
+if (input != null)
+{
+    msg = Std.string(input[0]);
+}
+if (msg == null)
+{
+    msg = m._v;
+}
+
+Bus.sendMsg(new Msg(s._v, d._v, msg));
+
+return [null, "", ""];

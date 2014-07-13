@@ -27,14 +27,15 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * ls -> done
 * mkdir -> done
 * mv -> done
+* netstat -> done
 * pwd -> done
 * rename -> done
 * rm -> done
 * rmdir -> done
-* send
+* send -> done
 * touch -> done
 
-## Keyboard shortcuts:
+## Keyboard shortcuts for shell:
 * Command history: up arrow/down arrow
 * Enter command: enter
 * Auto-complete file names: tab
@@ -43,7 +44,13 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * Skip to beginning/end of line: home/end
 * Copy on-screen text: ctrl + 1
 
+## Keyboard shortcuts for text editor:
+* Save: ctrl + s
+* Quit: ctrl + d
+
 ## TODO:
 * Simulated file system (saves and loads from JSON) -> almost done
 * Wired communication protocol between systems
 * Fix weird newline bug (happens when you hit enter)
+* Add more keyboard shortcuts to text editor
+* Make every command work with redirection operators

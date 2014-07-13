@@ -1,0 +1,13 @@
+usage = ["netstat usage: netstat", "", ""];
+
+if (Args.length < 1)
+{
+    return usage;
+}
+
+if (Args[0] == "-h" || Args[0] == "-help")
+{
+    return usage;
+}
+
+return [Bus.listDevices(), "", ""];

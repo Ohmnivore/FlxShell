@@ -4,6 +4,12 @@ import flxsys.FlxCmdLine;
 import flxsys.Folder;
 import StringTools;
 
+ignoreRequired = false;
+if (fileInput != null || input != null)
+{
+    ignoreRequired = true;
+}
+
 s = new CmdArgStr(
         "s",
         "source",
@@ -13,7 +19,7 @@ s = new CmdArgStr(
         ""
         );
 
-cmdline = new FlxCmdLine("cat", [s]);
+cmdline = new FlxCmdLine("cat", [s], ignoreRequired);
 
 status = cmdline.getParseReturn(Args);
 if (status != FlxCmdLine.OK)
