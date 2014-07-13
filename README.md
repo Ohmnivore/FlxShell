@@ -47,9 +47,13 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 ## Keyboard shortcuts for text editor:
 * Save: ctrl + s
 * Quit: ctrl + d
+* Move cursor one word: ctrl + left arrow / ctrl + right arrow
+* Move cursor to end or beginning of file: ctrl + down arrow / ctrl + up arrow
+* Move cursor to end or beginning of line: ctrl + end / ctrl + home
+* Auto-scroll down / up: page down / page up
+This is a regular AS3 input TextField so most editing tricks on your OS should work, the ones I listed are just the ones I found, there's most likely more.
 
 ## TODO:
 * Simulated file system (saves and loads from JSON) -> almost done
 * Wired communication protocol between systems
-* Add more keyboard shortcuts to text editor
 * Make every command work with redirection operators
