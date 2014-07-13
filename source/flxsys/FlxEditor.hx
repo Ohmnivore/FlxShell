@@ -100,10 +100,10 @@ class FlxEditor extends FlxSubState
 	{
 		_inp = new TextField();
 		
-		_inp.x = 10 * (FlxG.stage.stageWidth / FlxG.width) * (FlxG.stage.stageWidth / FlxG.width);
-		_inp.y = 10 * (FlxG.stage.stageHeight / FlxG.height) * (FlxG.stage.stageHeight / FlxG.height);
-		_inp.width = (FlxG.width - 20) * FlxG.stage.stageWidth / FlxG.width;
-		_inp.height = (FlxG.height - 40) * FlxG.stage.stageHeight / FlxG.height;
+		_inp.x = 10 * (FlxG.game.width / FlxG.width) * (FlxG.game.width / FlxG.width) + FlxG.game.x;
+		_inp.y = 10 * (FlxG.game.width / FlxG.height) * (FlxG.game.height / FlxG.height) + FlxG.game.y;
+		_inp.width = (FlxG.width - 20) * FlxG.game.width / FlxG.width;
+		_inp.height = (FlxG.height - 40) * FlxG.game.height / FlxG.height;
 		
 		_inp.multiline = true;
 		_inp.wordWrap = true;
