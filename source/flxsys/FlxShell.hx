@@ -167,6 +167,16 @@ class FlxShell extends FlxGroup
 		}
 	}
 	
+	public function openEditor(F:File):Void
+	{
+		//close();
+		toggle();
+		//active = true;
+		//trace(draw);
+		//add(new FlxEditor(F, this));
+		FlxG.state.add(new FlxEditor(F, this));
+	}
+	
 	public function connectDevice(?Dev:IWired, ?D:Drive):Void
 	{
 		disconnectDevice();

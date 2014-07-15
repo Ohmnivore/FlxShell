@@ -4,7 +4,7 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxSubState;
+import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import openfl.Assets;
 import openfl.geom.Matrix;
@@ -21,7 +21,7 @@ import flash.events.KeyboardEvent;
  * ...
  * @author Ohmnivore
  */
-class FlxEditor extends FlxSubState
+class FlxEditor extends FlxGroup
 {
 	static public inline var charWidth:Float = 7.2727;
 	
@@ -37,11 +37,8 @@ class FlxEditor extends FlxSubState
 		_file = F;
 		_shell = Shell;
 		
-		Shell.allowInput = false;
-	}
-	
-	override public function create():Void
-	{
+		_shell.allowInput = false;
+		
 		// Set a background color
 		FlxG.cameras.bgColor = 0x00000000;
 		//Hide cursor
@@ -51,7 +48,6 @@ class FlxEditor extends FlxSubState
 		//Register font
 		Font.registerFont(ShellFont);
 		
-		super.create();
 		makeScreen();
 		setUpText();
 		
@@ -75,6 +71,8 @@ class FlxEditor extends FlxSubState
 					handleCtrlD();
 				case 83: //S
 					handleCtrlS();
+				//case 27: //ESC
+					//handleEscape();
 			}
 		}
 	}
@@ -88,13 +86,59 @@ class FlxEditor extends FlxSubState
 		FlxG.mouse.visible = false;
 		#end
 		
-		close();
+		//close();
 	}
 	
 	private function handleCtrlS():Void
 	{
 		_file.content = _inp.text;
 	}
+	
+	//private function handleEscape():Void
+	//{
+		//toggle();
+	//}
+	//
+	//private var _open:Bool = true;
+	//
+	//public function toggle():Void
+	//{
+		//if (_open)
+		//{
+			//close();
+		//}
+		//else
+		//{
+			//open();
+		//}
+	//}
+	//
+	//public function open():Void
+	//{
+		//if (!_open)
+		//{
+			//active = true;
+			//visible = true;
+			//_inputTime = true;
+			//_cap.active = true;
+			//_cap.resetText();
+			//
+			//_open = true;
+		//}
+	//}
+	//
+	//public function close():Void
+	//{
+		//if (_open)
+		//{
+			//active = false;
+			//visible = false;
+			//_inputTime = false;
+			//_cap.active = false;
+			//
+			//_open = false;
+		//}
+	//}
 	
 	private function setUpText():Void
 	{
@@ -118,19 +162,6 @@ class FlxEditor extends FlxSubState
 		
 		FlxG.stage.addChild(_inp);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
-	}
-	
-	override public function onResize(Width:Int, Height:Int):Void 
-	{
-		_inp.x = 10 * Width / FlxG.width;
-		_inp.y = 10 * Height / FlxG.height;
-		
-		_inp.width = FlxG.width - (20 * FlxG.scaleMode.scale.x);
-		_inp.height = FlxG.height - (20 * FlxG.scaleMode.scale.y);
-		_inp.width = (FlxG.width - 20) * FlxG.stage.stageWidth / FlxG.width;
-		_inp.height = (FlxG.height - 20) * FlxG.stage.stageHeight / FlxG.height;
-		
-		super.onResize(Width, Height);
 	}
 	
 	private function makeScreen():Void
