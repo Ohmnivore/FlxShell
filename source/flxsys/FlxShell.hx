@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
+import flixel.util.FlxSave;
 import flxsys.save.Stringer;
 import flxsys.wire.IWired;
 import openfl.Assets;
@@ -94,7 +95,13 @@ class FlxShell extends FlxSubState
 		sysName = SysName;
 		
 		drive = new Drive();
+		
+		#if DEBUG
 		drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
+		#else
+		loadSave();
+		#end
+		
 		curDir = drive.root;
 		
 		super();
@@ -138,6 +145,38 @@ class FlxShell extends FlxSubState
 			
 			device = null;
 		}
+	}
+	
+	public function loadSave():Void
+	{
+		var save:FlxSave = new FlxSave();
+		if (save.bind("FlxOS"))
+		{
+			if (save.data.json != null)
+			{
+				drive.loadJSON(save.data.json);
+			}
+			else
+			{
+				drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
+			}
+		}
+	}
+	
+	public function save():Void
+	{
+		var save:FlxSave = new FlxSave();
+		if (save.bind("FlxOS"))
+		{
+			save.data.json = Stringer.stringify(drive.root);
+		}
+	}
+	
+	override public function close():Void 
+	{
+		save();
+		
+		super.close();
 	}
 	
 	public function exportBackup():Void
@@ -390,6 +429,8 @@ class FlxShell extends FlxSubState
 					handleEnd();
 				case 36: //home
 					handleHome();
+				case 112: //F1
+					handleF1();
 			}
 		}
 		}
@@ -588,6 +629,11 @@ class FlxShell extends FlxSubState
 		//}
 		//
 		//doScriptUpdate = false;
+	}
+	
+	private function handleF1():Void
+	{
+		save();
 	}
 	
 	private function makeScreen():Void

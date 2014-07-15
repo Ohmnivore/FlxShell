@@ -44,6 +44,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * First/last command in command history: page up / page down
 * Skip to beginning/end of line: home/end
 * Copy on-screen text: ctrl + 1
+* Save drive: F1
 
 ## Keyboard shortcuts for text editor:
 * Save: ctrl + s
@@ -52,8 +53,17 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * Move cursor to end or beginning of file: ctrl + down arrow / ctrl + up arrow
 * Move cursor to end or beginning of line: ctrl + end / ctrl + home
 * Auto-scroll down / up: page down / page up
-This is a regular AS3 input TextField so most editing tricks on your OS should work, the ones I listed are just the ones I found, there's most likely more.
+* This is a regular AS3 input TextField so most editing tricks on your OS should work, the ones I listed are just the ones I found, there's most likely more.
+
+## Saving
+* Export your drive as a JSON file with "backup -s"
+* Load a JSON file into your drive with "backup -l"
+
+Now this is where it gets complicated. In debug mode, FlxShell will initially load the "assets/data/FlxOS.txt" file.
+In release mode, it loads your last saved drive. To save your drive, hit F1 while in the shell.
+This save/load mechanism is not the same as the above export/load mechanism.
+It's not the best idea to leave saving entirely up to the user, so in your implementation call <FlxShell object>.save() when appropriate.
 
 ## TODO:
-* Save/load silently from flixel save
+* Turn FlxShell into FlxGroup instead of FlxSubState
 * Make every command work with redirection operators
