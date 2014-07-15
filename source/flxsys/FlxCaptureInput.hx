@@ -16,10 +16,13 @@ import flash.events.TextEvent;
 
 class FlxCaptureInput
 {
+	public var active:Bool;
 	private var _t:TextField;
 	
 	public function new():Void
 	{
+		active = true;
+		
 		_t = new TextField();
 		_t.type = TextFieldType.INPUT;
 		_t.multiline = true;
@@ -43,10 +46,20 @@ class FlxCaptureInput
 	{
 		FlxG.stage.focus = _t;
 	}
-
+	
+	public function resetText():Void
+	{
+		_t.text = "";
+	}
+	
 	public function getNewInput():String
 	{
-		var ret:String = _t.text;
+		var ret:String = "";
+		
+		if (active)
+		{
+			ret = _t.text;
+		}
 		
 		_t.text = "";
 		

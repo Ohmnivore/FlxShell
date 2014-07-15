@@ -18,7 +18,7 @@ import flxsys.FlxShell;
  */
 class PlayState extends FlxState
 {
-	public var char:CharWidthFinder;
+	var shell:FlxShell;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -33,7 +33,8 @@ class PlayState extends FlxState
 		//add(char);
 		
 		//openSubState(new FlxShell("User"));
-		add(new FlxShell("User"));
+		shell = new FlxShell("User");
+		add(shell);
 	}
 	
 	/**
@@ -43,6 +44,11 @@ class PlayState extends FlxState
 	override public function destroy():Void
 	{
 		super.destroy();
+		
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			shell.toggle();
+		}
 	}
 
 	/**
@@ -51,10 +57,5 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-		
-		if (FlxG.keys.justPressed.ENTER)
-		{
-			trace(char.curChar);
-		}
 	}	
 }

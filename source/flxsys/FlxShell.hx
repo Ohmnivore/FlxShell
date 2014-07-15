@@ -116,7 +116,6 @@ class FlxShell extends FlxGroup
 		//Register font
 		Font.registerFont(ShellFont);
 
-		//super.create();
 		makeScreen();
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		
@@ -125,6 +124,47 @@ class FlxShell extends FlxGroup
 		
 		prompt = new FlxPrompt(userName);
 		printPrompt(false);
+	}
+	
+	private var _open:Bool = true;
+	
+	public function toggle():Void
+	{
+		if (_open)
+		{
+			close();
+		}
+		else
+		{
+			open();
+		}
+	}
+	
+	public function open():Void
+	{
+		if (!_open)
+		{
+			active = true;
+			visible = true;
+			_inputTime = true;
+			_cap.active = true;
+			_cap.resetText();
+			
+			_open = true;
+		}
+	}
+	
+	public function close():Void
+	{
+		if (_open)
+		{
+			active = false;
+			visible = false;
+			_inputTime = false;
+			_cap.active = false;
+			
+			_open = false;
+		}
 	}
 	
 	public function connectDevice(?Dev:IWired, ?D:Drive):Void
@@ -192,12 +232,12 @@ class FlxShell extends FlxGroup
 		}
 	}
 	
-	//override public function close():Void 
-	//{
-		//save();
-		//
-		//super.close();
-	//}
+	override public function destroy():Void 
+	{
+		save();
+		
+		super.destroy();
+	}
 	
 	public function exportBackup():Void
 	{
@@ -249,28 +289,6 @@ class FlxShell extends FlxGroup
 		drive.loadJSON(inp);
 		#end
 	}
-	
-	//override public function create():Void
-	//{
-		// Set a background color
-		//FlxG.cameras.bgColor = 0x00000000;
-		//Hide cursor
-		//#if (!FLX_NO_MOUSE || !mobile)
-		//FlxG.mouse.visible = false;
-		//#end
-		//Register font
-		//Font.registerFont(ShellFont);
-//
-		//super.create();
-		//makeScreen();
-		//FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
-		//
-		//_cap = new FlxCaptureInput();
-		//_parser = new FlxParser(this);
-		//
-		//prompt = new FlxPrompt(userName);
-		//printPrompt(false);
-	//}
 	
 	override public function update():Void 
 	{
@@ -451,6 +469,8 @@ class FlxShell extends FlxGroup
 					handleHome();
 				case 112: //F1
 					handleF1();
+				case 27: //ESC
+					handleEscape();
 			}
 		}
 		//}
@@ -654,6 +674,11 @@ class FlxShell extends FlxGroup
 	private function handleF1():Void
 	{
 		save();
+	}
+	
+	private function handleEscape():Void
+	{
+		toggle();
 	}
 	
 	private function makeScreen():Void
