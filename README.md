@@ -62,7 +62,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 Now this is where it gets complicated. In debug mode, FlxShell will initially load the "assets/data/FlxOS.txt" file.
 In release mode, it loads your last saved drive. To save your drive, hit F1 while in the shell.
 This save/load mechanism is not the same as the above export/load mechanism.
-It's not the best idea to leave saving entirely up to the user, so in your implementation call <FlxShell object>.save() when appropriate.
+It's not the best idea to leave saving entirely up to the user, so in your implementation call FlxShell object.save() when appropriate.
 
 ## TODO:
 * Turn FlxShell into FlxGroup instead of FlxSubState
