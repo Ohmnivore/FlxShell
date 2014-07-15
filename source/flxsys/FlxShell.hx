@@ -169,6 +169,8 @@ class FlxShell extends FlxSubState
 		if (save.bind("FlxOS"))
 		{
 			save.data.json = Stringer.stringify(drive.root);
+			
+			save.close();
 		}
 	}
 	
