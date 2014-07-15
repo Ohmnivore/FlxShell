@@ -32,8 +32,8 @@ class PlayState extends FlxState
 		//char.font = "assets/images/Monaco.ttf";
 		//add(char);
 		
-		openSubState(new FlxShell("User"));
-		//openSubState(new FlxEditor());
+		//openSubState(new FlxShell("User"));
+		add(new FlxShell("User"));
 	}
 	
 	/**
