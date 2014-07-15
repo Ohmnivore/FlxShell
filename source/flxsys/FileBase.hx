@@ -72,7 +72,7 @@ class FileBase
 		}
 	}
 	
-	public function copy(NewPath:String, Shell:FlxShell):Void
+	public function copy(NewPath:String, Shell:FlxShell, ?Source:Drive):Void
 	{
 		
 	}

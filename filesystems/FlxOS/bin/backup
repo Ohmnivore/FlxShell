@@ -1,0 +1,37 @@
+import hxclap.subarg.CmdArgBool;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+
+l = new CmdArgBool(
+        "l",
+        "load",
+        "load a backup file",
+        (E_CmdArgSyntax.isOPT)
+        );
+
+s = new CmdArgBool(
+        "s",
+        "save",
+        "export/save a backup file",
+        (E_CmdArgSyntax.isOPT)
+        );
+
+cmdline = new FlxCmdLine("backup", [s, l]);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+if (l._v == true)
+{
+    Shell.importBackup();
+}
+
+if (s._v == true)
+{
+    Shell.exportBackup();
+}
+
+return [null, "", ""];

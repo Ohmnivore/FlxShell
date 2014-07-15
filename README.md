@@ -15,6 +15,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * hscript
 
 ## Available commands (Not all commands support redirection operators yet, even if they are marked as done):
+* backup -> done
 * cat -> done
 * cd -> done
 * clip -> done
@@ -54,6 +55,5 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 This is a regular AS3 input TextField so most editing tricks on your OS should work, the ones I listed are just the ones I found, there's most likely more.
 
 ## TODO:
-* Simulated file system (saves and loads from JSON) -> almost done
-* Wired communication protocol between systems
+* Save/load silently from flixel save
 * Make every command work with redirection operators

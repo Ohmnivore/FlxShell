@@ -5,6 +5,8 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
+import flxsys.save.Stringer;
+import flxsys.wire.IWired;
 import openfl.Assets;
 import openfl.geom.Matrix;
 import openfl.geom.Rectangle;
@@ -16,6 +18,17 @@ import openfl.system.System;
 #if flash
 import flash.desktop.Clipboard;
 import flash.desktop.ClipboardFormats;
+import flash.net.FileReference;
+import flash.net.FileReferenceList;
+import flash.events.Event;
+import flash.net.FileFilter;
+#else
+import systools.Dialogs;
+import sys.FileStat;
+import sys.FileSystem;
+import sys.io.File;
+import sys.io.FileInput;
+import haxe.io.Path;
 #end
 
 //Monaco font
@@ -30,6 +43,7 @@ class FlxShell extends FlxSubState
 {
 	static public inline var charWidth:Float = 7.2727;
 	
+	public var device:IWired;
 	public var drive:Drive;
 	public var curDir:Folder;
 	
@@ -84,6 +98,97 @@ class FlxShell extends FlxSubState
 		curDir = drive.root;
 		
 		super();
+	}
+	
+	public function connectDevice(?Dev:IWired, ?D:Drive):Void
+	{
+		disconnectDevice();
+		
+		device = Dev;
+		
+		var par:Folder = drive.readFolder("/dev/");
+		if (Dev != null)
+		{
+			for (c in device.drive.root.children.iterator())
+			{
+				par.addChild(c);
+			}
+		}
+		else
+		{
+			for (c in D.root.children.iterator())
+			{
+				par.addChild(c);
+			}
+		}
+	}
+	
+	public function disconnectDevice():Void
+	{
+		if (device != null)
+		{
+			var par:Folder = drive.readFolder("/dev/");
+			
+			for (c in par.children.iterator())
+			{
+				device.drive.root.addChild(c);
+			}
+			
+			par.children = new Map<String, FileBase>();
+			
+			device = null;
+		}
+	}
+	
+	public function exportBackup():Void
+	{
+		#if flash
+		var ref:FileReference = new FileReference();
+		ref.save(Stringer.stringify(drive.root), "FlxOS.json");
+		#else
+		var opts:FILEFILTERS = { count: 1, descriptions: ["FlxOS backup"], extensions: ["*.json"] };
+		var path:String = Path.withExtension(Dialogs.saveFile("Backup your drive", "", "", opts), "json");
+		File.saveContent(path, Stringer.stringify(drive.root));
+		#end
+	}
+	
+	public function importBackup():Void
+	{
+		var FileRef:FileReference = new FileReference();
+		
+		#if flash
+		FileRef.addEventListener(Event.SELECT, onSelect);
+		FileRef.browse([new FileFilter("FlxOS backup", "*.*")]);
+		#else
+		var opts:FILEFILTERS = { count: 1, descriptions: ["FlxOS backup"], extensions: ["*.*"] };
+		var selected:Array<String> = Dialogs.openFile("Open backup file", "", opts);
+		if (selected.length > 0)
+		{
+			var path:String = selected[0];
+			var inp:String = cast File.getContent(path);
+			
+			drive.loadJSON(inp);
+		}
+		#end
+	}
+	
+	private function onSelect(e:Event):Void
+	{
+		#if flash
+		var f:FileReference = cast e.target;
+		f.load();
+		f.addEventListener(Event.COMPLETE, onComplete);
+		#end
+	}
+	
+	private function onComplete(e:Dynamic):Void
+	{
+		#if flash
+		var f:FileReference = cast e.target;
+		var inp:String = f.data.readMultiByte(f.data.length, "iso-8859-01");
+		
+		drive.loadJSON(inp);
+		#end
 	}
 	
 	override public function create():Void

@@ -126,7 +126,6 @@ class Drive
 		}
 		
 		var name:String = paths.pop();
-		
 		if (!par.children.exists(name))
 		{
 			throw(Error.INCORRECT_PATH);

@@ -18,14 +18,18 @@ class File extends FileBase
 		content = Content;
 	}
 	
-	override public function copy(NewPath:String, Shell:FlxShell):Void 
+	override public function copy(NewPath:String, Shell:FlxShell, ?Source:Drive):Void 
 	{
 		super.copy(NewPath, Shell);
 		
 		var newName:String = Path.withoutDirectory(NewPath);
 		var par:String = Path.directory(NewPath);
 		
-		var folder:Folder = Shell.drive.readFolder(par, Shell.curDir.path);
+		var folder:Folder;
+		if (Source == null)
+			folder = Shell.drive.readFolder(par, Shell.curDir.path);
+		else
+			folder = Source.readFolder(par, Shell.curDir.path);
 		
 		var newFile:File = new File(content, newName, execute, read, write);
 		folder.addChild(newFile);

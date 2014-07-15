@@ -35,6 +35,7 @@
 
 	<haxelib name="flixel"/>
 	<haxelib name="hscript"/>
+	<haxelib name="systools"/>
 	
 	<!--In case you want to use the addons package-->
 	<!--haxelib name="flixel-addons" /-->
