@@ -44,11 +44,6 @@ class PlayState extends FlxState
 	override public function destroy():Void
 	{
 		super.destroy();
-		
-		if (FlxG.keys.justPressed.ESCAPE)
-		{
-			shell.toggle();
-		}
 	}
 
 	/**
@@ -57,5 +52,10 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			shell.toggle();
+		}
 	}	
 }

@@ -45,6 +45,8 @@ class FlxShell extends FlxGroup
 {
 	static public inline var charWidth:Float = 7.2727;
 	
+	public var editor:FlxEditor;
+	
 	public var device:IWired;
 	public var drive:Drive;
 	public var curDir:Folder;
@@ -95,9 +97,11 @@ class FlxShell extends FlxGroup
 		userName = UserName;
 		sysName = SysName;
 		
+		editor = null;
+		
 		drive = new Drive();
 		
-		#if DEBUG
+		#if debug
 		drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
 		#else
 		loadSave();
@@ -130,51 +134,47 @@ class FlxShell extends FlxGroup
 	
 	public function toggle():Void
 	{
-		if (_open)
+		if (editor == null)
 		{
-			close();
+			if (_open)
+			{
+				close();
+			}
+			else
+			{
+				open();
+			}
 		}
 		else
 		{
-			open();
+			editor.toggle();
 		}
 	}
 	
 	public function open():Void
 	{
-		if (!_open)
-		{
-			active = true;
-			visible = true;
-			_inputTime = true;
-			_cap.active = true;
-			_cap.resetText();
-			
-			_open = true;
-		}
+		active = true;
+		visible = true;
+		_inputTime = true;
+		_cap.active = true;
+		_cap.resetText();
+		_open = true;
 	}
 	
 	public function close():Void
 	{
-		if (_open)
-		{
-			active = false;
-			visible = false;
-			_inputTime = false;
-			_cap.active = false;
-			
-			_open = false;
-		}
+		active = false;
+		visible = false;
+		_inputTime = false;
+		_cap.active = false;
+		_open = false;
 	}
 	
 	public function openEditor(F:File):Void
 	{
-		//close();
 		toggle();
-		//active = true;
-		//trace(draw);
-		//add(new FlxEditor(F, this));
-		FlxG.state.add(new FlxEditor(F, this));
+		editor = new FlxEditor(F, this);
+		FlxG.state.add(editor);
 	}
 	
 	public function connectDevice(?Dev:IWired, ?D:Drive):Void
@@ -407,15 +407,15 @@ class FlxShell extends FlxGroup
 	
 	public function parse(Line:String):Void
 	{
-		try
-		{
+		//try
+		//{
 			_parser.parseStringInput(Line);
-		}
+		//}
 		
-		catch (E:Dynamic)
-		{
-			print(E, true);
-		}
+		//catch (E:Dynamic)
+		//{
+			//print(E, true);
+		//}
 		
 		if (inScript)
 		{
@@ -432,8 +432,6 @@ class FlxShell extends FlxGroup
 	
 	private function handleInput(event)
 	{
-		//if (subState == null)
-		//{
 		if (event.ctrlKey)
 		{
 			switch(event.keyCode)
@@ -479,11 +477,8 @@ class FlxShell extends FlxGroup
 					handleHome();
 				case 112: //F1
 					handleF1();
-				case 27: //ESC
-					handleEscape();
 			}
 		}
-		//}
 	}
 	
 	//Key handler functions
@@ -684,11 +679,6 @@ class FlxShell extends FlxGroup
 	private function handleF1():Void
 	{
 		save();
-	}
-	
-	private function handleEscape():Void
-	{
-		toggle();
 	}
 	
 	private function makeScreen():Void

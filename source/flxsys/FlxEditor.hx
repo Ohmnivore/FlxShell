@@ -71,8 +71,6 @@ class FlxEditor extends FlxGroup
 					handleCtrlD();
 				case 83: //S
 					handleCtrlS();
-				//case 27: //ESC
-					//handleEscape();
 			}
 		}
 	}
@@ -86,7 +84,10 @@ class FlxEditor extends FlxGroup
 		FlxG.mouse.visible = false;
 		#end
 		
-		//close();
+		_shell.editor = null;
+		_shell.open();
+		
+		destroy();
 	}
 	
 	private function handleCtrlS():Void
@@ -94,51 +95,41 @@ class FlxEditor extends FlxGroup
 		_file.content = _inp.text;
 	}
 	
-	//private function handleEscape():Void
-	//{
-		//toggle();
-	//}
-	//
-	//private var _open:Bool = true;
-	//
-	//public function toggle():Void
-	//{
-		//if (_open)
-		//{
-			//close();
-		//}
-		//else
-		//{
-			//open();
-		//}
-	//}
-	//
-	//public function open():Void
-	//{
-		//if (!_open)
-		//{
-			//active = true;
-			//visible = true;
-			//_inputTime = true;
-			//_cap.active = true;
-			//_cap.resetText();
-			//
-			//_open = true;
-		//}
-	//}
-	//
-	//public function close():Void
-	//{
-		//if (_open)
-		//{
-			//active = false;
-			//visible = false;
-			//_inputTime = false;
-			//_cap.active = false;
-			//
-			//_open = false;
-		//}
-	//}
+	private var _open:Bool = true;
+	
+	public function toggle():Void
+	{
+		if (_open)
+		{
+			close();
+		}
+		else
+		{
+			open();
+		}
+	}
+	
+	public function open():Void
+	{
+		active = true;
+		visible = true;
+		_inp.visible = true;
+		_inp.type = TextFieldType.INPUT;
+		_inp.selectable = true;
+		
+		_open = true;
+	}
+	
+	public function close():Void
+	{
+		active = false;
+		visible = false;
+		_inp.visible = false;
+		_inp.type = TextFieldType.DYNAMIC;
+		_inp.selectable = false;
+		
+		_open = false;
+	}
 	
 	private function setUpText():Void
 	{
