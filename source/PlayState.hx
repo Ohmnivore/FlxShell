@@ -18,7 +18,7 @@ import flxsys.FlxShell;
  */
 class PlayState extends FlxState
 {
-	public var char:CharWidthFinder;
+	var shell:FlxShell;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -32,8 +32,9 @@ class PlayState extends FlxState
 		//char.font = "assets/images/Monaco.ttf";
 		//add(char);
 		
-		openSubState(new FlxShell("User"));
-		//openSubState(new FlxEditor());
+		//openSubState(new FlxShell("User"));
+		shell = new FlxShell("User");
+		add(shell);
 	}
 	
 	/**
@@ -52,9 +53,9 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
-		if (FlxG.keys.justPressed.ENTER)
+		if (FlxG.keys.justPressed.ESCAPE)
 		{
-			trace(char.curChar);
+			shell.toggle();
 		}
 	}	
 }

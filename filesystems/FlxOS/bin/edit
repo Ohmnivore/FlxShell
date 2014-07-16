@@ -41,6 +41,6 @@ else
     f = Shell.drive.readFile(s._v, Shell.curDir.path);
 }
 
-Shell.openSubState(new FlxEditor(f, Shell));
+Shell.openEditor(f);
 
 return [null, "", ""];

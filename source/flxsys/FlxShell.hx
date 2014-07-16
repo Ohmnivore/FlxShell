@@ -4,6 +4,7 @@ package flxsys;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
+import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxSave;
 import flxsys.save.Stringer;
@@ -40,9 +41,11 @@ import haxe.io.Path;
  * https://github.com/HaxeFlixel/flixel-demos/blob/master/User%20Interface/FlxTypeText/source/MenuState.hx
  * @author Ohmnivore
  */
-class FlxShell extends FlxSubState
+class FlxShell extends FlxGroup
 {
 	static public inline var charWidth:Float = 7.2727;
+	
+	public var editor:FlxEditor;
 	
 	public var device:IWired;
 	public var drive:Drive;
@@ -94,9 +97,11 @@ class FlxShell extends FlxSubState
 		userName = UserName;
 		sysName = SysName;
 		
+		editor = null;
+		
 		drive = new Drive();
 		
-		#if DEBUG
+		#if debug
 		drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
 		#else
 		loadSave();
@@ -105,6 +110,71 @@ class FlxShell extends FlxSubState
 		curDir = drive.root;
 		
 		super();
+		
+		// Set a background color
+		FlxG.cameras.bgColor = 0x00000000;
+		//Hide cursor
+		#if (!FLX_NO_MOUSE || !mobile)
+		FlxG.mouse.visible = false;
+		#end
+		//Register font
+		Font.registerFont(ShellFont);
+
+		makeScreen();
+		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
+		
+		_cap = new FlxCaptureInput();
+		_parser = new FlxParser(this);
+		
+		prompt = new FlxPrompt(userName);
+		printPrompt(false);
+	}
+	
+	private var _open:Bool = true;
+	
+	public function toggle():Void
+	{
+		if (editor == null)
+		{
+			if (_open)
+			{
+				close();
+			}
+			else
+			{
+				open();
+			}
+		}
+		else
+		{
+			editor.toggle();
+		}
+	}
+	
+	public function open():Void
+	{
+		active = true;
+		visible = true;
+		_inputTime = true;
+		_cap.active = true;
+		_cap.resetText();
+		_open = true;
+	}
+	
+	public function close():Void
+	{
+		active = false;
+		visible = false;
+		_inputTime = false;
+		_cap.active = false;
+		_open = false;
+	}
+	
+	public function openEditor(F:File):Void
+	{
+		toggle();
+		editor = new FlxEditor(F, this);
+		FlxG.state.add(editor);
 	}
 	
 	public function connectDevice(?Dev:IWired, ?D:Drive):Void
@@ -174,11 +244,11 @@ class FlxShell extends FlxSubState
 		}
 	}
 	
-	override public function close():Void 
+	override public function destroy():Void 
 	{
 		save();
 		
-		super.close();
+		super.destroy();
 	}
 	
 	public function exportBackup():Void
@@ -230,28 +300,6 @@ class FlxShell extends FlxSubState
 		
 		drive.loadJSON(inp);
 		#end
-	}
-	
-	override public function create():Void
-	{
-		// Set a background color
-		FlxG.cameras.bgColor = 0x00000000;
-		//Hide cursor
-		#if (!FLX_NO_MOUSE || !mobile)
-		FlxG.mouse.visible = false;
-		#end
-		//Register font
-		Font.registerFont(ShellFont);
-
-		super.create();
-		makeScreen();
-		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
-		
-		_cap = new FlxCaptureInput();
-		_parser = new FlxParser(this);
-		
-		prompt = new FlxPrompt(userName);
-		printPrompt(false);
 	}
 	
 	override public function update():Void 
@@ -361,15 +409,15 @@ class FlxShell extends FlxSubState
 	
 	public function parse(Line:String):Void
 	{
-		try
-		{
+		//try
+		//{
 			_parser.parseStringInput(Line);
-		}
+		//}
 		
-		catch (E:Dynamic)
-		{
-			print(E, true);
-		}
+		//catch (E:Dynamic)
+		//{
+			//print(E, true);
+		//}
 		
 		if (inScript)
 		{
@@ -386,8 +434,6 @@ class FlxShell extends FlxSubState
 	
 	private function handleInput(event)
 	{
-		if (subState == null)
-		{
 		if (event.ctrlKey)
 		{
 			switch(event.keyCode)
@@ -434,7 +480,6 @@ class FlxShell extends FlxSubState
 				case 112: //F1
 					handleF1();
 			}
-		}
 		}
 	}
 	
