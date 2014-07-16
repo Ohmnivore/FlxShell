@@ -45,6 +45,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * Skip to beginning/end of line: home/end
 * Copy on-screen text: ctrl + 1
 * Save drive: F1
+* Toggle shell: escape
 
 ## Keyboard shortcuts for text editor:
 * Save: ctrl + s
@@ -53,6 +54,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * Move cursor to end or beginning of file: ctrl + down arrow / ctrl + up arrow
 * Move cursor to end or beginning of line: ctrl + end / ctrl + home
 * Auto-scroll down / up: page down / page up
+* Toggle editor: escape
 * This is a regular AS3 input TextField so most editing tricks on your OS should work, the ones I listed are just the ones I found, there's most likely more.
 
 ## Saving
