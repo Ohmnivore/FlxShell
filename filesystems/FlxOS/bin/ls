@@ -1,7 +1,15 @@
 import hxclap.subarg.CmdArgStr;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
+import flxsys.Folder;
 import StringTools;
+import Std;
+
+ignoreRequired = false;
+if (fileInput != null || input != null)
+{
+    ignoreRequired = true;
+}
 
 d = new CmdArgStr(
         "d",
@@ -12,7 +20,7 @@ d = new CmdArgStr(
         Shell.curDir.path
         );
 
-cmdline = new FlxCmdLine("ls", [d]);
+cmdline = new FlxCmdLine("ls", [d], ignoreRequired);
 
 status = cmdline.getParseReturn(Args);
 if (status != FlxCmdLine.OK)
@@ -20,14 +28,34 @@ if (status != FlxCmdLine.OK)
     return [status, "", ""];
 }
 
-dir = Shell.curDir;
-if (StringTools.trim(d._v).length < 1)
+if (input != null)
+{
+    if (Std.is(input[0], Folder))
+    {
+        dir = input[0];
+    }
+    else
+    {
+        dir = Shell.drive.readFolder(input[0], Shell.curDir.path);
+    }
+}
+
+if (fileInput != null)
+{
+    dir = Shell.drive.readFolder(StringTools.trim(fileInput.content), Shell.curDir.path);
+}
+
+if (fileInput == null && input == null)
 {
     dir = Shell.curDir;
-}
-else
-{
-    dir = Shell.drive.readFolder(d._v, Shell.curDir.path);
+    if (StringTools.trim(d._v).length < 1)
+    {
+        dir = Shell.curDir;
+    }
+    else
+    {
+        dir = Shell.drive.readFolder(d._v, Shell.curDir.path);
+    }
 }
 
 return [dir.children, "name", "isDirectory"];
