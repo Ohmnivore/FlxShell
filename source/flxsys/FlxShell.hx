@@ -369,42 +369,62 @@ class FlxShell extends FlxGroup
 			if (NewLine)
 				post = Util.NEWLINE;
 			
-			var type:String = Std.string(Type.getClass(ToPrint));
-			
-			if (type.indexOf("Map") > -1 || type.indexOf("Array") > -1)
+			_realtext += getPrintString(ToPrint, Property, Emphasis) + post;
+		}
+	}
+	
+	public function getPrintString(ToPrint:Dynamic, Property:String = "", Emphasis = "",
+		UseEmphasis:Bool = true):String
+	{
+		var type:String = Std.string(Type.getClass(ToPrint));
+		
+		var ret:String = "";
+		
+		if (type.indexOf("Map") > -1 || type.indexOf("Array") > -1)
+		{
+			var arr = Lambda.list(ToPrint);
+			var i:Int = 0;
+			for (e in arr)
 			{
-				for (e in Lambda.list(ToPrint))
+				var s:String = "";
+				if (Property == "")
+					s = Std.string(e);
+				else
+					s = cast Reflect.getProperty(e, Property);
+				
+				var emph:Bool = false;
+				if (Emphasis != "")
 				{
-					var s:String = "";
-					if (Property == "")
-						s = Std.string(e);
-					else
-						s = cast Reflect.getProperty(e, Property);
-					
-					var emph:Bool = false;
-					if (Emphasis != "")
+					if (Reflect.getProperty(e, Emphasis) == true)
 					{
-						if (Reflect.getProperty(e, Emphasis) == true)
-						{
-							emph = true;
-						}
-					}
-					
-					if (emph)
-					{
-						_realtext += "[" + s + "]\n";
-					}
-					else
-					{
-						_realtext += s + Util.NEWLINE;
+						emph = true;
 					}
 				}
-			}
-			else
-			{
-				_realtext += Std.string(ToPrint) + post;
+				
+				if (emph && UseEmphasis)
+				{
+					if (i < arr.length - 1)
+						ret += "[" + s + "]\n";
+					else
+						ret += "[" + s + "]";
+				}
+				else
+				{
+					if (i < arr.length - 1)
+						ret += s + Util.NEWLINE;
+					else
+						ret += s;
+				}
+				
+				i++;
 			}
 		}
+		else
+		{
+			ret = Std.string(ToPrint);
+		}
+		
+		return ret;
 	}
 	
 	public function parse(Line:String):Void

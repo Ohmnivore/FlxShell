@@ -97,7 +97,7 @@ class ScriptParser
 		var val:Dynamic = null;
 		if (Left.getName() == "COMMAND")
 		{
-			val = ScriptRun.parseLine(shell, Left.getParameters()[0], true);
+			val = ScriptRun.parseLine(shell, Left.getParameters()[0]);
 		}
 		else
 		{
@@ -115,16 +115,20 @@ class ScriptParser
 		var val:Dynamic = null;
 		if (Left.getName() == "COMMAND")
 		{
-			val = ScriptRun.parseLine(shell, Left.getParameters()[0], false)[0];
+			val = ScriptRun.parseLine(shell, Left.getParameters()[0]);
 		}
 		else
 		{
-			val = Left.getParameters()[0][0];
+			val = Left.getParameters()[0];
 		}
 		
 		var path:String = Right.getParameters()[0];
 		var name:String = Path.withoutDirectory(path);
-		var parpath:String = Path.directory(path);
+		var parpath:String = "/";
+		if (StringTools.trim(Path.directory(path)).length > 0)
+		{
+			parpath= Path.directory(path);
+		}
 		
 		try
 		{
@@ -135,18 +139,15 @@ class ScriptParser
 				var f:File = cast fold.children.get(name);
 				
 				if (!Append)
-					f.content = Std.string(val);
+					f.content = valToString(val);
 				else
-					f.content += Std.string(val);
+					f.content += valToString(val);
 			}
 			else
 			{
 				var f:File = shell.drive.newFile(fold, name);
 				
-				if (!Append)
-					f.content = Std.string(val);
-				else
-					f.content += Std.string(val);
+				f.content = valToString(val);
 			}
 		}
 		
@@ -158,6 +159,13 @@ class ScriptParser
 		
 		stream.remove(Left);
 		adjustStream(Operator, Left, Right);
+	}
+	
+	private function valToString(Val:Dynamic):String
+	{
+		var valArr:Array<Dynamic> = cast Val;
+		
+		return shell.getPrintString(valArr[0], valArr[1], valArr[2], false);
 	}
 	
 	private function handleOpInput(Operator:Token, Left:Token, Right:Token):Void

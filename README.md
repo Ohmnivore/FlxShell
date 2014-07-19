@@ -1,4 +1,4 @@
-# Work in progress
+# There are probably features I can add, but otherwise this is complete
 I'm planning to make a game that will allow players to interact with consoles/shells/command lines/whatever you wanna call them.
 So FlxShell is like a simulated Linux-like mini-OS where the sole interface is a shell and where the two scripting languages are an interpreted version of Haxe and a very basic implementation of the Linux shell language.
 
@@ -27,7 +27,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * find
 * grep
 * help -> done
-* ls -> done
+* ls -> done |<
 * mkdir -> done
 * mv -> done
 * netstat -> done
@@ -35,7 +35,7 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * rename -> done
 * rm -> done
 * rmdir -> done
-* send -> done
+* send -> done |<
 * touch -> done
 
 ## Keyboard shortcuts for shell:
@@ -69,4 +69,4 @@ This save/load mechanism is not the same as the above export/load mechanism.
 It's not the best idea to leave saving entirely up to the user, so in your implementation call FlxShell object.save() when appropriate.
 
 ## TODO:
-* Make every command work with redirection operators
+* Startup script
