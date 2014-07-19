@@ -93,4 +93,4 @@ pwd | echo | echo | echo | echo | echo | echo
 Take a look at the scripts in the bin folder:
 * cd bin -> navigate to the bin directory which contains all the commands
 * ls -> list all available commands
-* bin/<command name> < edit -> open the command source code in the editor (notice how I use bin/ls, otherwise the shell would execute the ls command instead of opening the file)
+* bin/command name < edit -> open the command source code in the editor (notice how I use bin/ls, otherwise the shell would execute the ls command instead of opening the file)
