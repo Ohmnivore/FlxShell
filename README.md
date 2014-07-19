@@ -15,9 +15,9 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * hscript
 
 ## Available commands (Not all commands support redirection operators yet, even if they are marked as done):
-**Commands marked with "|" support the | operator as input**
-**Commands marked with "<" support the < operator as input**
-**All commands can output to a file with the ">" operator**
+**Commands marked with "|" support the | operator as input.**
+**Commands marked with "<" support the < operator as input.**
+**All commands can output to a file with the ">" operator.**
 * backup -> done
 * cat -> done |<
 * cd -> done |<
