@@ -106,7 +106,9 @@ class ScriptLexer
 		{
 			if (x.getName() == "VALUE")
 			{
-				x.getParameters()[0] = [x.getParameters()[0], "", ""];
+				var text:String = cast x.getParameters()[0];
+				text = text.substr(1, text.length);
+				x.getParameters()[0] = [text, "", ""];
 			}
 		}
 		
