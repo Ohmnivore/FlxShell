@@ -27,14 +27,29 @@ if (status != FlxCmdLine.OK)
     return [status, "", ""];
 }
 
-f = Shell.curDir;
-if (StringTools.trim(s._v).length < 1)
+if (input != null)
 {
-    f = Shell.curDir;
-}
-else
-{
-    f = Shell.drive.readFile(s._v, Shell.curDir.path);
+    ret = input;
 }
 
-return [f.content, "", ""];
+if (fileInput != null)
+{
+    ret = [fileInput.content, "", ""];
+}
+
+if (fileInput == null && input == null)
+{
+    f = Shell.curDir;
+    if (StringTools.trim(s._v).length < 1)
+    {
+        f = Shell.curDir;
+    }
+    else
+    {
+        f = Shell.drive.readFile(s._v, Shell.curDir.path);
+    }
+    
+    ret = [f.content, "", ""];
+}
+
+return ret;

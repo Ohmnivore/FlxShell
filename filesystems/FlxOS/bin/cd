@@ -1,14 +1,26 @@
-usage = ["cd usage: cd <directory path, relative or absolute (starting with '/')>", "", ""];
+import StringTools;
 
-if (Args.length < 1)
-{
-    return usage;
-}
+usage = ["cd usage: cd <directory path, relative or absolute (starting with '/')>", "", ""];
 
 if (Args[0] == "-h" || Args[0] == "-help")
 {
     return usage;
 }
 
-Shell.curDir = Shell.drive.readFolder(Args[0], Shell.curDir.path);
+if (input != null)
+{
+    ret = StringTools.trim(input[0]);
+}
+
+if (fileInput != null)
+{
+    ret = StringTools.trim(fileInput.content);
+}
+
+if (fileInput == null && input == null)
+{
+    ret = Args[0];
+}
+
+Shell.curDir = Shell.drive.readFolder(ret, Shell.curDir.path);
 return [null, "", ""];

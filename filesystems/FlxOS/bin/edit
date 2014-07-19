@@ -31,14 +31,34 @@ if (status != FlxCmdLine.OK)
     return [status, "", ""];
 }
 
-f = Shell.curDir;
-if (StringTools.trim(s._v).length < 1)
+if (input != null)
+{
+    if (Std.is(input[0], File))
+    {
+        f = input[0].content;
+    }
+    else
+    {
+        f = Shell.drive.readFile(input[0], Shell.curDir.path);
+    }
+}
+
+if (fileInput != null)
+{
+    f = fileInput;
+}
+
+if (fileInput == null && input == null)
 {
     f = Shell.curDir;
-}
-else
-{
-    f = Shell.drive.readFile(s._v, Shell.curDir.path);
+    if (StringTools.trim(s._v).length < 1)
+    {
+        f = Shell.curDir;
+    }
+    else
+    {
+        f = Shell.drive.readFile(s._v, Shell.curDir.path);
+    }
 }
 
 Shell.openEditor(f);

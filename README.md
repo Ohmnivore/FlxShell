@@ -15,13 +15,15 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * hscript
 
 ## Available commands (Not all commands support redirection operators yet, even if they are marked as done):
+## Commands marked with "|" support the | operator as input
+## Commands marked with "<" support the < operator as input
 * backup -> done
-* cat -> done
-* cd -> done
-* clip -> done
+* cat -> done |<
+* cd -> done |<
+* clip -> done |<
 * cp -> done
-* echo -> done
-* edit (minimalistic text editor) -> done
+* echo -> done |<
+* edit (minimalistic text editor) -> done |<
 * find
 * grep
 * help -> done
