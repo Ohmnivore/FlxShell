@@ -73,24 +73,24 @@ It's not the best idea to leave saving entirely up to the user, so in your imple
 * Startup script
 
 ### Shell examples:
-cd bin
-cd ..
-ls
-help -b
-help -bin
-edit -s /bin/ls
-edit -s bin/ls
-bin/ls < edit
-pwd
-pwd > test
-pwd >> test
-pwd | echo
-pwd | echo | echo | echo | echo | echo | echo
-'I think you get the idea' | echo
-'Oh watch this' >> testfile
+* cd bin
+* cd ..
+* ls
+* help -b
+* help -bin
+* edit -s /bin/ls
+* edit -s bin/ls
+* bin/ls < edit
+* pwd
+* pwd > test
+* pwd >> test
+* pwd | echo
+* pwd | echo | echo | echo | echo | echo | echo
+* 'I think you get the idea' | echo
+* 'Oh watch this' >> testfile
 
 ### Script examples:
 Take a look at the scripts in the bin folder:
 * cd bin -> navigate to the bin directory which contains all the commands
 * ls -> list all available commands
-* bin/command name < edit -> open the command source code in the editor (notice how I use bin/ls, otherwise the shell would execute the ls command instead of opening the file)
+* bin/command name < edit -> open the command source code in the editor (notice how I use bin/command name, otherwise the shell would execute the command instead of opening the file)
