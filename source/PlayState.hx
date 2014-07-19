@@ -8,10 +8,6 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flxsys.FlxEditor;
 import flxsys.FlxShell;
-//import flash.text.Font;
-
-//Monaco font
-//@:font("assets/images/Monaco.ttf") private class ShellFont extends Font { }
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -27,12 +23,6 @@ class PlayState extends FlxState
 	{
 		super.create();
 		
-		//Font.registerFont(ShellFont);
-		//char = new CharWidthFinder(12);
-		//char.font = "assets/images/Monaco.ttf";
-		//add(char);
-		
-		//openSubState(new FlxShell("User"));
 		shell = new FlxShell("User");
 		add(shell);
 	}

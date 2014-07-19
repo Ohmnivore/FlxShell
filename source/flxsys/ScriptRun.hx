@@ -54,8 +54,8 @@ class ScriptRun
 		parser.allowTypes = true;
 		toImport = new Map<String, String>();
 		Script = popImports(Script);
-		//try
-		//{
+		try
+		{
 			var ast = parser.parseString(Script);
 			var interp = new hscript.Interp();
 			Args.shift();
@@ -65,16 +65,16 @@ class ScriptRun
 			interp.variables.set("input", Input);
 			interp.variables.set("fileInput", FileInput);
 			
-			//try
-			//{
+			try
+			{
 				parseImports(interp);
-			//}
-			//catch (E:Dynamic)
-			//{
-				//return [E, "", ""];
-			//}
-			//try 
-			//{
+			}
+			catch (E:Dynamic)
+			{
+				return [E, "", ""];
+			}
+			try 
+			{
 				var value:Dynamic = interp.execute(ast);
 				
 				if (interp.variables.get("update") != null)
@@ -92,20 +92,20 @@ class ScriptRun
 				{
 					return value;
 				}
-			//}
-			//catch (E:Dynamic)
-			//{
-				//return [E, "", ""];
-			//}
-		//}
-		//catch (E:Error)
-		//{
-			//return [
-				//"Error on line " + Std.string(parser.line) + 
-				//" [Index:" + Std.string(E.getIndex()) + 
-				//" Name:" + E.getName() + 
-				//" Params:" + Std.string(E.getParameters()) + "]", "", ""];
-		//}
+			}
+			catch (E:Dynamic)
+			{
+				return [E, "", ""];
+			}
+		}
+		catch (E:Error)
+		{
+			return [
+				"Error on line " + Std.string(parser.line) + 
+				" [Index:" + Std.string(E.getIndex()) + 
+				" Name:" + E.getName() + 
+				" Params:" + Std.string(E.getParameters()) + "]", "", ""];
+		}
 	}
 	
 	static private function popImports(Script:String):String

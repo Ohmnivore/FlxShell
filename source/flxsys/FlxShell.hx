@@ -409,15 +409,15 @@ class FlxShell extends FlxGroup
 	
 	public function parse(Line:String):Void
 	{
-		//try
-		//{
+		try
+		{
 			_parser.parseStringInput(Line);
-		//}
+		}
 		
-		//catch (E:Dynamic)
-		//{
-			//print(E, true);
-		//}
+		catch (E:Dynamic)
+		{
+			print(E, true);
+		}
 		
 		if (inScript)
 		{

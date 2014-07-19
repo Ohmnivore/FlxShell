@@ -126,8 +126,8 @@ class ScriptParser
 		var name:String = Path.withoutDirectory(path);
 		var parpath:String = Path.directory(path);
 		
-		//try
-		//{
+		try
+		{
 			var fold:Folder = shell.drive.readFolder(parpath, shell.curDir.path);
 			
 			if (fold.children.exists(name))
@@ -148,13 +148,13 @@ class ScriptParser
 				else
 					f.content += Std.string(val);
 			}
-		//}
+		}
 		
-		//catch (e:Dynamic)
-		//{
-			//stream = [VALUE(e)];
-			//i = 0;
-		//}
+		catch (e:Dynamic)
+		{
+			stream = [VALUE(e)];
+			i = 0;
+		}
 		
 		stream.remove(Left);
 		adjustStream(Operator, Left, Right);
@@ -162,8 +162,8 @@ class ScriptParser
 	
 	private function handleOpInput(Operator:Token, Left:Token, Right:Token):Void
 	{
-		//try
-		//{
+		try
+		{
 			var final:Dynamic = null;
 			
 			if (Left.getName() == "FILE")
@@ -182,13 +182,13 @@ class ScriptParser
 			
 			stream[i - 1] = VALUE(final);
 			adjustStream(Operator, Left, Right);
-		//}
+		}
 		
-		//catch (e:Dynamic)
-		//{
-			//stream = [VALUE(e)];
-			//i = 0;
-		//}
+		catch (e:Dynamic)
+		{
+			stream = [VALUE(e)];
+			i = 0;
+		}
 	}
 	
 	private function adjustStream(Operator:Token, Left:Token, Right:Token):Void
