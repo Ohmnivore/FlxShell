@@ -72,7 +72,7 @@ This save/load mechanism is not the same as the above export/load mechanism.
 It's not the best idea to leave saving entirely up to the user, so in your implementation call FlxShell object.save() when appropriate.
 
 ## TODO:
-* Startup script
+* Find something to do
 
 ### Shell examples:
 cd bin

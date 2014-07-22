@@ -126,6 +126,8 @@ class FlxShell extends FlxGroup
 		_cap = new FlxCaptureInput();
 		_parser = new FlxParser(this);
 		
+		parse("/boot/init < shell", false);
+		
 		prompt = new FlxPrompt(userName);
 		printPrompt(false);
 	}
@@ -183,7 +185,7 @@ class FlxShell extends FlxGroup
 		
 		device = Dev;
 		
-		var par:Folder = drive.readFolder("/dev/");
+		var par:Folder = drive.readFolder("/mnt/");
 		if (Dev != null)
 		{
 			for (c in device.drive.root.children.iterator())
@@ -204,7 +206,7 @@ class FlxShell extends FlxGroup
 	{
 		if (device != null)
 		{
-			var par:Folder = drive.readFolder("/dev/");
+			var par:Folder = drive.readFolder("/mnt/");
 			
 			for (c in par.children.iterator())
 			{
