@@ -15,9 +15,9 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * hscript
 
 ## Available commands (Not all commands support redirection operators yet, even if they are marked as done):
-## Commands marked with "|" support the | operator as input
-## Commands marked with "<" support the < operator as input
-## All commands can output to a file with the ">" operator
+**Commands marked with "|" support the | operator as input.**
+**Commands marked with "<" support the < operator as input.**
+**All commands can output to a file with the ">" operator.**
 * backup -> done
 * cat -> done |<
 * cd -> done |<
@@ -75,21 +75,21 @@ It's not the best idea to leave saving entirely up to the user, so in your imple
 * Find something to do
 
 ### Shell examples:
-cd bin
-cd ..
-ls
-help -b
-help -bin
-edit -s /bin/ls
-edit -s bin/ls
-bin/ls < edit
-pwd
-pwd > test
-pwd >> test
-pwd | echo
-pwd | echo | echo | echo | echo | echo | echo
-'I think you get the idea' | echo
-'Oh watch this' >> testfile
+* cd bin
+* cd ..
+* ls
+* help -b
+* help -bin
+* edit -s /bin/ls
+* edit -s bin/ls
+* bin/ls < edit
+* pwd
+* pwd > test
+* pwd >> test
+* pwd | echo
+* pwd | echo | echo | echo | echo | echo | echo
+* 'I think you get the idea' | echo
+* 'Oh watch this' >> testfile
 'ls;cd home;pwd' | shell
 'return ["This is some hscript", "", ""]' | script
 
@@ -97,4 +97,4 @@ pwd | echo | echo | echo | echo | echo | echo
 Take a look at the scripts in the bin folder:
 * cd bin -> navigate to the bin directory which contains all the commands
 * ls -> list all available commands
-* bin/<command name> < edit -> open the command source code in the editor (notice how I use bin/ls, otherwise the shell would execute the ls command instead of opening the file)
+* bin/command name < edit -> open the command source code in the editor (notice how I use bin/command name, otherwise the shell would execute the command instead of opening the file)
