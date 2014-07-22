@@ -27,7 +27,8 @@ class ScriptRun
 		System;
 	}
 	
-	static public function parseLine(Shell:FlxShell, Line:String, Input:Dynamic = null, FileInput = null):Dynamic
+	static public function parseLine(Shell:FlxShell, Line:String,
+		Input:Dynamic = null, FileInput = null):Dynamic
 	{
 		var args:Array<String> = Line.split(" ");
 		
@@ -48,8 +49,12 @@ class ScriptRun
 	static private function parseScript(Shell:FlxShell, Script:String, Args:Array<String>,
 		Input:Dynamic = null, FileInput = null):Dynamic
 	{
-		Script = Shell.drive.readFile(Script).content;
-		
+		return parseScriptString(Shell, Shell.drive.readFile(Script).content, Args, Input, FileInput);
+	}
+	
+	static private function parseScriptString(Shell:FlxShell, Script:String, Args:Array<String>,
+		Input:Dynamic = null, FileInput = null):Dynamic
+	{
 		var parser = new hscript.Parser();
 		parser.allowTypes = true;
 		toImport = new Map<String, String>();

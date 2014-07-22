@@ -36,7 +36,9 @@ Also the shell allows you to use strings (ex: 'this is a string'). They can be u
 * rename -> done
 * rm -> done
 * rmdir -> done
+* script (hscript interpreter) -> done |<
 * send -> done |<
+* shell (shell language interpreter) -> done |<
 * touch -> done
 
 ## Keyboard shortcuts for shell:
@@ -88,6 +90,8 @@ pwd | echo
 pwd | echo | echo | echo | echo | echo | echo
 'I think you get the idea' | echo
 'Oh watch this' >> testfile
+'ls;cd home;pwd' | shell
+'return ["This is some hscript", "", ""]' | script
 
 ### Script examples:
 Take a look at the scripts in the bin folder:

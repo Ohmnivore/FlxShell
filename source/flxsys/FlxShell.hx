@@ -427,7 +427,7 @@ class FlxShell extends FlxGroup
 		return ret;
 	}
 	
-	public function parse(Line:String):Void
+	public function parse(Line:String, Prompt:Bool = true):Void
 	{
 		try
 		{
@@ -439,9 +439,8 @@ class FlxShell extends FlxGroup
 			print(E, true);
 		}
 		
-		if (inScript)
+		if (!Prompt)
 		{
-			_realtext += Util.NEWLINE;
 			_inputTime = false;
 		}
 		else

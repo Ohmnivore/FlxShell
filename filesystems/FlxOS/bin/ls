@@ -4,6 +4,7 @@ import flxsys.FlxCmdLine;
 import flxsys.Folder;
 import StringTools;
 import Std;
+import flxsys.Folder;
 
 ignoreRequired = false;
 if (fileInput != null || input != null)
