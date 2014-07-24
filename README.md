@@ -90,8 +90,8 @@ It's not the best idea to leave saving entirely up to the user, so in your imple
 * pwd | echo | echo | echo | echo | echo | echo
 * 'I think you get the idea' | echo
 * 'Oh watch this' >> testfile
-'ls;cd home;pwd' | shell
-'return ["This is some hscript", "", ""]' | script
+* 'ls;cd home;pwd' | shell
+* 'return ["This is some hscript", "", ""]' | script
 
 ### Script examples:
 Take a look at the scripts in the bin folder:
