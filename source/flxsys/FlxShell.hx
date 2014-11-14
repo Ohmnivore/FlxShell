@@ -319,6 +319,9 @@ class FlxShell extends FlxGroup
 		
 		_cap.fetchFocus();
 		
+		if (_realtext.charAt(0) == "\n")
+			_realtext = _realtext.substr(1);
+		
 		if (_t.textField.textHeight/_textSize >= _textHeight/_textSize)
 		//if (_t.frameHeight + _t.y >= _frame.height - 40)
 		{
