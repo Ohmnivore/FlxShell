@@ -1,5 +1,10 @@
 package hxclap;
 
+/**
+ * ...
+ * @author Ohmnivore
+ */
+
 class UsageInfo
 {
 	/**

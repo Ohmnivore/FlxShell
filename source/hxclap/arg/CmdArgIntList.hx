@@ -1,13 +1,16 @@
-package hxclap.subarg;
+package hxclap.arg;
 
-import hxclap.CmdArg.CmdArgTypeList;
-import hxclap.E_CmdArgSyntax;
+import hxclap.CmdArgTypeList;
 
-//Definition of class CmdArgIntList
+/**
+ * ...
+ * @author Ohmnivore
+ */
+
 class CmdArgIntList extends CmdArgTypeList<Int>
 {
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = E_CmdArgSyntax.isDefault, minSize:Int = 1,
+		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ), minSize:Int = 1,
 		maxSize:Int = 100, delim:String = ",~/")
 	{
 		super(optChar, keyword, valueName, description, syntaxFlags, minSize, maxSize, delim);
@@ -21,7 +24,7 @@ class CmdArgIntList extends CmdArgTypeList<Int>
 		{
 			var tokens:String = argv[i];
 			
-			var tokens_arr:Array<String> = tokens.split(_delimiters.charAt(0));
+			var tokens_arr:Array<String> = tokens.split(delimiters.charAt(0));
 			
 			for (v in tokens_arr)
 			{

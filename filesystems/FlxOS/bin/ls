@@ -1,4 +1,4 @@
-import hxclap.subarg.CmdArgStr;
+import hxclap.arg.CmdTargStr;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
 import flxsys.Folder;
@@ -12,12 +12,11 @@ if (fileInput != null || input != null)
     ignoreRequired = true;
 }
 
-d = new CmdArgStr(
-        "d",
+d = new CmdTargStr(
         "directory",
         "Directory path (relative or absolute)",
         "Destination",
-        (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALREQ),
+        (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALOPT),
         Shell.curDir.path
         );
 
@@ -49,14 +48,26 @@ if (fileInput != null)
 if (fileInput == null && input == null)
 {
     dir = Shell.curDir;
-    if (StringTools.trim(d._v).length < 1)
+    if (StringTools.trim(d.value).length < 1)
     {
         dir = Shell.curDir;
     }
     else
     {
-        dir = Shell.drive.readFolder(d._v, Shell.curDir.path);
+        dir = Shell.drive.readFolder(d.value, Shell.curDir.path);
     }
 }
 
-return [dir.children, "name", "isDirectory"];
+ret = [];
+for (c in dir.children)
+{
+	if (c.isDirectory)
+		ret.push(c);
+}
+for (c in dir.children)
+{
+	if (!c.isDirectory)
+		ret.push(c);
+}
+
+return [ret, "name", "isDirectory"];

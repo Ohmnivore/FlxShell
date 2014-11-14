@@ -140,6 +140,7 @@ class Drive
 		var all:Dynamic = Json.parse(S);
 		
 		root = getFolder(all, null);
+		root.path = "/";
 	}
 	
 	static private function getItem(Item:Dynamic, Parent:Folder):FileBase

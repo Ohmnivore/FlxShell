@@ -19,6 +19,8 @@ if (fileInput != null)
 
 if (fileInput == null && input == null)
 {
+    if (Args.length == 0)
+        return usage;
     ret = Args[0];
 }
 

@@ -1,7 +1,8 @@
 import flxsys.Folder;
-import hxclap.subarg.CmdArgBool;
+import hxclap.arg.CmdArgBool;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
+import EReg;
 
 bin = new CmdArgBool(
         "b",
@@ -18,7 +19,7 @@ if (status != FlxCmdLine.OK)
     return [status, "", ""];
 }
 
-if (bin._v == true)
+if (bin.value == true)
 {
     arr = [];
     

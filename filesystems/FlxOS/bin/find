@@ -1,4 +1,5 @@
-import hxclap.subarg.CmdArgStr;
+import hxclap.arg.CmdTargStr;
+import hxclap.arg.CmdArgStr;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
 import StringTools;
@@ -12,8 +13,7 @@ d = new CmdArgStr(
         Shell.curDir.path
         );
 
-n = new CmdArgStr(
-        "n",
+n = new CmdTargStr(
         "name",
         "Name of file/folder",
         "Searches for file/folder",
@@ -30,13 +30,13 @@ if (status != FlxCmdLine.OK)
 }
 
 dir = Shell.curDir;
-if (StringTools.trim(d._v).length < 1)
+if (StringTools.trim(d.value).length < 1)
 {
     dir = Shell.curDir;
 }
 else
 {
-    dir = Shell.drive.readFolder(d._v, Shell.curDir.path);
+    dir = Shell.drive.readFolder(d.value, Shell.curDir.path);
 }
 
 function searchItem(arr, item, name)
@@ -73,6 +73,6 @@ function searchFolder(arr, item, name)
 };
 
 results = [];
-searchFolder(results, dir, n._v);
+searchFolder(results, dir, n.value);
 
 return [results, "name", "isDirectory"];

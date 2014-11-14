@@ -1,17 +1,15 @@
-import hxclap.subarg.CmdArgStrList;
+import hxclap.arg.CmdTargStrList;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
 import flxsys.File;
 import StringTools;
 
-p = new CmdArgStrList(
-        "p",
+p = new CmdTargStrList(
         "paths",
         "Path (relative or absolute)",
         "Paths to files to delete",
         (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
         );
-p._delimiters = ",";
 
 cmdline = new FlxCmdLine("rm", [p]);
 
@@ -22,9 +20,9 @@ if (status != FlxCmdLine.OK)
 }
 
 i = 0;
-while (i < p._list.length)
+while (i < p.list.length)
 {
-    file = Shell.drive.readFile(p._list[i], Shell.curDir.path);
+    file = Shell.drive.readFile(p.list[i], Shell.curDir.path);
     file.delete();
     i++;
 }

@@ -1,0 +1,66 @@
+import hxclap.arg.CmdTargStr;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+import flxsys.Folder;
+import StringTools;
+import Std;
+import flxsys.File;
+import flxsys.ScriptRun;
+import hxclap.arg.CmdArgStrList;
+
+ignoreRequired = false;
+if (fileInput != null || input != null)
+{
+    ignoreRequired = true;
+}
+
+s = new CmdTargStr(
+        "source",
+        "Source path (relative or absolute)",
+        "Source",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ),
+        Shell.curDir.path
+        );
+
+args = new CmdArgStrList(
+        "a",
+        "args",
+        "Argument",
+        "Arguments to pass to the commands",
+        (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALREQ)
+        );
+args.delimiters = ",";
+
+cmdline = new FlxCmdLine("ls", [s, args], ignoreRequired);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+if (input != null)
+{
+    if (Std.is(input[0], File))
+    {
+        script = input[0].content;
+    }
+    else
+    {
+        script = input[0];
+    }
+}
+
+if (fileInput != null)
+{
+    script = fileInput.content;
+}
+
+if (fileInput == null && input == null)
+{
+    script = Shell.drive.readFile(s.value, Shell.curDir.path).content;
+}
+
+res = ScriptRun.parseScriptString(Shell, script, [], null, null);
+
+return res;

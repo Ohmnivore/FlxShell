@@ -1,5 +1,5 @@
-import hxclap.subarg.CmdArgStr;
-import hxclap.subarg.CmdArgInt;
+import hxclap.arg.CmdArgStr;
+import hxclap.arg.CmdArgInt;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
 import flxsys.Folder;
@@ -62,9 +62,9 @@ if (input != null)
 }
 if (msg == null)
 {
-    msg = m._v;
+    msg = m.value;
 }
 
-Bus.sendMsg(new Msg(s._v, d._v, msg));
+Bus.sendMsg(new Msg(s.value, d.value, msg));
 
 return [null, "", ""];

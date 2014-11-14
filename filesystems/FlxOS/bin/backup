@@ -1,4 +1,4 @@
-import hxclap.subarg.CmdArgBool;
+import hxclap.arg.CmdArgBool;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
 
@@ -24,14 +24,19 @@ if (status != FlxCmdLine.OK)
     return [status, "", ""];
 }
 
-if (l._v == true)
+if (l.value == true)
 {
     Shell.importBackup();
 }
 
-if (s._v == true)
+if (s.value == true)
 {
     Shell.exportBackup();
+}
+
+if (l.value == false && s.value == false)
+{
+    return [cmdline.getUsageString(), "", ""];
 }
 
 return [null, "", ""];

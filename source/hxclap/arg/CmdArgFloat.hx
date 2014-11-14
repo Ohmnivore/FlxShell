@@ -1,20 +1,20 @@
-package hxclap.subarg;
+package hxclap.arg;
 
-import hxclap.ArgError;
-import hxclap.CmdArg;
-import hxclap.E_CmdArgSyntax;
+/**
+ * ...
+ * @author Ohmnivore
+ */
 
-//Definition of class CmdArgInt
-class CmdArgInt extends CmdArg
+class CmdArgFloat extends CmdArg
 {
-	public var _v:Int;
+	public var value:Float;
 	
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = E_CmdArgSyntax.isDefault, def:Int = 0)
+		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ), def:Float = 0)
 	{
 		super(optChar, keyword, valueName, description, syntaxFlags);
 		
-		_v = def;
+		value = def;
 	}
 	
 	override public function getValue(i:Int, argc:Int, argv:Array<String>):Bool
@@ -28,12 +28,12 @@ class CmdArgInt extends CmdArg
 			
 			try
 			{
-				_v = Std.parseInt(arg);
+				value = Std.parseFloat(arg);
 			}
 			
 			catch (e:Dynamic)
 			{
-				parseError(ArgError.INVALID_ARG, this, ArgType.ARG_INT, arg);
+				parseError(ArgError.INVALID_ARG, this, ArgType.ARG_FLOAT, arg);
 				return false;
 			}
 			
@@ -46,6 +46,4 @@ class CmdArgInt extends CmdArg
 			return false;
 		}
 	}
-	//operator int();
-	//friend ostream& operator<<(ostream&, const CmdArgInt&);
 }

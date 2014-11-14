@@ -58,6 +58,8 @@ class FlxEditor extends FlxGroup
 	{
 		super.update();
 		
+		_shell._inputTime = false;
+		
 		FlxG.stage.focus = _inp;
 	}
 	
@@ -116,6 +118,7 @@ class FlxEditor extends FlxGroup
 		_inp.visible = true;
 		_inp.type = TextFieldType.INPUT;
 		_inp.selectable = true;
+		FlxG.stage.focus = _inp;
 		
 		_open = true;
 	}

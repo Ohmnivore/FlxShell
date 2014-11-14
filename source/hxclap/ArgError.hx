@@ -1,5 +1,10 @@
 package hxclap;
 
+/**
+ * ...
+ * @author Ohmnivore
+ */
+
 class ArgError
 {
 	public static inline var OPT_CONFLICT_REQUIRED:Int = -1;

@@ -1,0 +1,70 @@
+import hxclap.arg.CmdTargStrList;
+import hxclap.E_CmdArgSyntax;
+import flxsys.FlxCmdLine;
+import flxsys.Folder;
+import StringTools;
+import Std;
+import flxsys.File;
+import flxsys.ScriptRun;
+
+ignoreRequired = false;
+if (fileInput != null || input != null)
+{
+    ignoreRequired = true;
+}
+
+s = new CmdTargStrList(
+        "source",
+        "Source path (relative or absolute)",
+        "Source",
+        (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
+        );
+
+cmdline = new FlxCmdLine("ls", [s], ignoreRequired);
+
+status = cmdline.getParseReturn(Args);
+if (status != FlxCmdLine.OK)
+{
+    return [status, "", ""];
+}
+
+scripts = [];
+if (input != null)
+{
+    if (Std.is(input[0], File))
+    {
+        scripts.push(input[0].content);
+    }
+    else
+    {
+        scripts.push(input[0]);
+    }
+}
+
+if (fileInput != null)
+{
+    scripts.push(fileInput.content);
+}
+
+if (fileInput == null && input == null)
+{
+	for (f in s.list)
+	{
+		scripts.push(Shell.drive.readFile(f, Shell.curDir.path).content);
+	}
+}
+
+for (script in scripts)
+{
+	for (line in script.split(";"))
+	{
+		line = StringTools.trim(line);
+		
+		if (line.length > 0)
+		{
+			Shell.parse(line, false);
+		}
+	}
+}
+
+return [null, "", ""];

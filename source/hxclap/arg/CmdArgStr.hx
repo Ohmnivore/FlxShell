@@ -1,19 +1,20 @@
-package hxclap.subarg;
+package hxclap.arg;
 
-import hxclap.ArgError;
-import hxclap.CmdArg;
+/**
+ * ...
+ * @author Ohmnivore
+ */
 
-//Definition of class CmdArgStr
 class CmdArgStr extends CmdArg
 {
-	public var _v:String;
+	public var value:String;
 	
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
-		syntaxFlags:Int = E_CmdArgSyntax.isDefault, def:String)
+		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ), def:String)
 	{
 		super(optChar, keyword, valueName, description, syntaxFlags);
 		
-		_v = def;
+		value = def;
 	}
 	
 	override public function getValue(i:Int, argc:Int, argv:Array<String>):Bool
@@ -25,7 +26,7 @@ class CmdArgStr extends CmdArg
 			var arg:String = argv[i];
 			
 			if (arg.charAt(0) == "-") return false;
-			_v = arg;
+			value = arg;
 			setParseOK();
 			return true;
 		}
@@ -33,6 +34,4 @@ class CmdArgStr extends CmdArg
 		else
 			return false;
 	}
-	//operator char*();
-	//friend ostream& operator<<(ostream&, const CmdArgStr&);
 }

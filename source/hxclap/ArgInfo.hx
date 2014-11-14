@@ -1,15 +1,11 @@
 package hxclap;
 
-import hxclap.subarg.CmdArgInt;
-import hxclap.subarg.CmdArgFloat;
-import hxclap.subarg.CmdArgBool;
-import hxclap.subarg.CmdArgStr;
-import hxclap.subarg.CmdArgChar;
+import hxclap.arg.*;
 
-import hxclap.subarg.CmdArgIntList;
-import hxclap.subarg.CmdArgFloatList;
-import hxclap.subarg.CmdArgStrList;
-import hxclap.subarg.CmdArgCharList;
+/**
+ * ...
+ * @author Ohmnivore
+ */
 
 class ArgInfo
 {
@@ -59,26 +55,26 @@ class ArgInfo
 	 */
 	public var isVALREQ:Bool = false;
 	
-	public function new(Arg:CmdArg)
+	public function new(Arg:CmdElem)
 	{
-		longName = Arg._keyword;
-		shortName = Arg._optChar;
-		description = Arg._description;
-		expects = Arg._valueName;
+		longName = Arg.keyword;
+		shortName = Arg.optChar;
+		description = Arg.description;
+		expects = Arg.valueName;
 		
-		if ((Arg._syntaxFlags & E_CmdArgSyntax.isOPT) > 0)
+		if ((Arg.syntaxFlags & E_CmdArgSyntax.isOPT) > 0)
 		{
 			isOPT = true;
 		}
-		if ((Arg._syntaxFlags & E_CmdArgSyntax.isREQ) > 0)
+		if ((Arg.syntaxFlags & E_CmdArgSyntax.isREQ) > 0)
 		{
 			isREQ = true;
 		}
-		if ((Arg._syntaxFlags & E_CmdArgSyntax.isVALOPT) > 0)
+		if ((Arg.syntaxFlags & E_CmdArgSyntax.isVALOPT) > 0)
 		{
 			isVALOPT = true;
 		}
-		if ((Arg._syntaxFlags & E_CmdArgSyntax.isVALREQ) > 0)
+		if ((Arg.syntaxFlags & E_CmdArgSyntax.isVALREQ) > 0)
 		{
 			isVALREQ = true;
 		}
@@ -126,9 +122,20 @@ class ArgInfo
 			type = ArgType.ARG_LIST_CHAR;
 			initList(Arg);
 		}
+		
+		//Other
+		if (Std.is(Arg, CmdTargStr))
+		{
+			type = ArgType.TARG_STRING;
+		}
+		if (Std.is(Arg, CmdTargStrList))
+		{
+			type = ArgType.TARG_LIST_STRING;
+			initList(Arg);
+		}
 	}
 	
-	private function initList(Arg:CmdArg):Void
+	private function initList(Arg:CmdElem):Void
 	{
 		min = Reflect.field(Arg, "_min");
 		max = Reflect.field(Arg, "_max");

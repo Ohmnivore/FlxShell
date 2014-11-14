@@ -7,6 +7,7 @@ import flixel.FlxSubState;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxSave;
+import flixel.util.FlxTimer;
 import flxsys.save.Stringer;
 import flxsys.wire.IWired;
 import openfl.Assets;
@@ -75,6 +76,8 @@ class FlxShell extends FlxGroup
 	public var allowInput(get, set):Bool;
 	public var inScript:Bool = false;
 	
+	private var enterTimer:FlxTimer;
+	
 	public function get_allowInput():Bool
 	{
 		return _inputTime;
@@ -104,7 +107,8 @@ class FlxShell extends FlxGroup
 		#if debug
 		drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
 		#else
-		loadSave();
+		//loadSave();
+		drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
 		#end
 		
 		curDir = drive.root;
@@ -130,6 +134,8 @@ class FlxShell extends FlxGroup
 		
 		prompt = new FlxPrompt(userName);
 		printPrompt(false);
+		
+		enterTimer = new FlxTimer(0.25);
 	}
 	
 	private var _open:Bool = true;
@@ -160,6 +166,7 @@ class FlxShell extends FlxGroup
 		_inputTime = true;
 		_cap.active = true;
 		_cap.resetText();
+		_cap.fetchFocus();
 		_open = true;
 	}
 	
@@ -310,9 +317,9 @@ class FlxShell extends FlxGroup
 		
 		_cap.fetchFocus();
 		
-		if (_t.frameHeight + _t.y >= _frame.height - 10)
+		if (_t.frameHeight + _t.y >= _frame.height - 36)
 		{
-			var ind:Int = _realtext.indexOf(Util.NEWLINE, 1);
+			var ind:Int = _realtext.indexOf(Util.NEWLINE, 1) + 1;
 			_realtext = _realtext.substr(ind, _realtext.length);
 			_cursorPos -= ind;
 			_eraseblock -= ind;
@@ -507,12 +514,14 @@ class FlxShell extends FlxGroup
 	//Key handler functions
 	private function handleEnter():Void
 	{
-		if (_inputTime)
+		if (_inputTime && enterTimer.finished)
 		{
 			var cmd:String = _realtext.substring(_eraseblock, _realtext.length);
 			_realtext += Util.NEWLINE;
 			//Thread.create(function(){parse(cmd);});
 			parse(cmd);
+			
+			enterTimer.reset();
 		}
 	}
 	

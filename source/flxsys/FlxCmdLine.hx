@@ -1,6 +1,7 @@
 package flxsys;
 
 import hxclap.CmdLine;
+import hxclap.CmdElem;
 import hxclap.CmdArg;
 import hxclap.UsageInfo;
 import hxclap.E_CmdArgSyntax;
@@ -18,21 +19,21 @@ class FlxCmdLine extends CmdLine
 	
 	private var status:String;
 	
-	public function new(progName:String, cmds:Array<CmdArg>, ignoreRequired:Bool = false) 
+	public function new(progName:String, cmds:Array<CmdElem>, ignoreRequired:Bool = false) 
 	{
 		if (ignoreRequired)
 		{
 			for (c in cmds)
 			{
-				c._syntaxFlags = c._syntaxFlags & ~E_CmdArgSyntax.isREQ;
-				c._syntaxFlags |= E_CmdArgSyntax.isOPT;
+				c.syntaxFlags = c.syntaxFlags & ~E_CmdArgSyntax.isREQ;
+				c.syntaxFlags |= E_CmdArgSyntax.isOPT;
 			}
 		}
 		
 		super(progName, cmds);
 	}
 	
-	override public function getUsageString():String 
+	public function getUsageString():String
 	{
 		var u:UsageInfo = usage();
 		var ret:String = "";
@@ -45,7 +46,7 @@ class FlxCmdLine extends CmdLine
 		
 		for (cmd in u.args)
 		{
-			if (cmd.type < 5)
+			if (cmd.type < 6)
 			{
 				ret += _traceSimple(cmd) + "\n";
 			}
@@ -55,6 +56,12 @@ class FlxCmdLine extends CmdLine
 			}
 		}
 		
+		var lastNL:Int = ret.lastIndexOf("\n");
+		if (lastNL > -1)
+		{
+			ret = ret.substr(0, lastNL);
+		}
+		
 		return ret;
 	}
 	
@@ -62,12 +69,12 @@ class FlxCmdLine extends CmdLine
 	{
 		status = OK;
 		
-		parse(Args.length, Args);
+		parse(Args);
 		
 		return status;
 	}
 	
-	override public function parse(argc:Int, argv:Array<String>):Void 
+	override public function parse(argv:Array<String>):Void 
 	{
 		if (argv != null)
 		{
@@ -81,26 +88,40 @@ class FlxCmdLine extends CmdLine
 			}
 		}
 		
-		super.parse(argc, argv);
+		super.parse(argv);
 	}
 	
-	override public function HandleArgNotFound(Cmd:CmdArg):Void 
+	override public function HandleArgNotFound(Cmd:CmdElem):Void
 	{
-		status = "Error: switch -" + Cmd.getKeyword() + " must take an argument";
+		if (Cmd.isArg)
+			status = "Error: switch -" + Cmd.keyword + " must take an argument";
+		else
+			status = "Error: target " + Cmd.keyword + " must take an argument";
 	}
 	
-	override public function HandleMissingArg(Cmd:CmdArg):Void 
+	override public function HandleMissingArg(Cmd:CmdElem):Void
 	{
-		status = "Error: the switch -" + Cmd.getKeyword() + " must take a value";
+		if (Cmd.isArg)
+			status = "Error: the switch -" + Cmd.keyword + " must take a value";
+		else
+			status = "Error: the target " + Cmd.keyword + " must take a value";
 	}
 	
-	override public function HandleMissingSwitch(Cmd:CmdArg):Void 
+	override public function HandleMissingSwitch(Cmd:CmdElem):Void
 	{
-		status = "Error: the switch -" + Cmd.getKeyword() + " must be supplied";
+		if (Cmd.isArg)
+			status = "Error: the switch -" + Cmd.keyword + " must be supplied";
+		else
+			status = "Error: the target " + Cmd.keyword + " must be supplied";
 	}
 	
-	override public function HandleSwitchNotFound(Switch:String):Void 
+	override public function HandleSwitchNotFound(Switch:String):Void
 	{
-		status = "Error: argument '" + Switch + "' looks strange";
+		status = "Warning: argument '" + Switch + "' looks strange, ignoring";
+	}
+	
+	override public function HandleNoArgsPassed():Void
+	{
+		status = getUsageString();
 	}
 }

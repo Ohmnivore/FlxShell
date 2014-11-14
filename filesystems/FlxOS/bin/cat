@@ -1,4 +1,4 @@
-import hxclap.subarg.CmdArgStr;
+import hxclap.arg.CmdTargStr;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
 import flxsys.Folder;
@@ -10,8 +10,7 @@ if (fileInput != null || input != null)
     ignoreRequired = true;
 }
 
-s = new CmdArgStr(
-        "s",
+s = new CmdTargStr(
         "source",
         "File path (relative or absolute)",
         "Source file to read",
@@ -40,13 +39,13 @@ if (fileInput != null)
 if (fileInput == null && input == null)
 {
     f = Shell.curDir;
-    if (StringTools.trim(s._v).length < 1)
+    if (StringTools.trim(s.value).length < 1)
     {
         f = Shell.curDir;
     }
     else
     {
-        f = Shell.drive.readFile(s._v, Shell.curDir.path);
+        f = Shell.drive.readFile(s.value, Shell.curDir.path);
     }
     
     ret = [f.content, "", ""];

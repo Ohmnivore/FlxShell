@@ -2,12 +2,7 @@ import flash.system.System;
 import flxsys.File;
 import Std;
 
-usage = ["clip usage: [filepath < clip] or [command | clip]", "", ""];
-
-if (fileInput == null && input == null)
-{
-    return usage;
-}
+usage = ["clip usage: [filepath < clip] or [command | clip] or [clip filename]", "", ""];
 
 if (Args.length > 0)
 {
@@ -17,11 +12,20 @@ if (Args.length > 0)
     }
 }
 
+if (fileInput == null && input == null)
+{
+    if (Args.length == 0)
+        return usage;
+    
+    f = Shell.drive.readFile(Args[0], Shell.curDir.path);
+    ret = f.content;
+}
+
 if (fileInput != null)
 {
     ret = fileInput.content;
 }
-else
+if (fileInput == null && input != null)
 {
     if (Std.is(input[0], File))
     {

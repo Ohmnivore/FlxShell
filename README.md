@@ -72,7 +72,13 @@ This save/load mechanism is not the same as the above export/load mechanism.
 It's not the best idea to leave saving entirely up to the user, so in your implementation call FlxShell object.save() when appropriate.
 
 ## TODO:
-* Find something to do
+* Parse arglists as such: "-d first second third" instead of "-d first,second,third"
+* Update README in accordance to newest version
+* Investigate 'Teststring' > file issue
+* Investigate cp command crash
+* Rewrite parsing and lexing code
+* Global variables (maybe), ex: $HOME
+* String interpolation for global variables (maybe), ex: "$HOME"
 
 ### Shell examples:
 * cd bin

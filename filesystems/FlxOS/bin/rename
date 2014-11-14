@@ -1,15 +1,14 @@
-import hxclap.subarg.CmdArgStrList;
+import hxclap.arg.CmdArgStrList;
+import hxclap.arg.CmdTargStrList;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
 
-s = new CmdArgStrList(
-        "s",
+s = new CmdTargStrList(
         "source",
         "Path (relative or absolute)",
         "Files/Directories to be renamed",
         (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
         );
-s._delimiters = ",";
 
 d = new CmdArgStrList(
         "n",
@@ -18,7 +17,7 @@ d = new CmdArgStrList(
         "New names to be assigned",
         (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
         );
-d._delimiters = ",";
+d.delimiters = ",";
 
 cmdline = new FlxCmdLine("rename", [s, d]);
 
@@ -29,10 +28,10 @@ if (status != FlxCmdLine.OK)
 }
 
 i = 0;
-while (i < s._list.length)
+while (i < s.list.length)
 {
-    f = Shell.drive.readItem(s._list[i], Shell.curDir.path);
-    f.rename(d._list[i]);
+    f = Shell.drive.readItem(s.list[i], Shell.curDir.path);
+    f.rename(d.list[i]);
     i++;
 }
 

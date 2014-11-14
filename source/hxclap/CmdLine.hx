@@ -1,17 +1,6 @@
 package hxclap;
 
-import hxclap.E_CmdArgSyntax;
-
-import hxclap.subarg.CmdArgBool;
-import hxclap.subarg.CmdArgInt;
-import hxclap.subarg.CmdArgFloat;
-import hxclap.subarg.CmdArgStr;
-import hxclap.subarg.CmdArgChar;
-
-import hxclap.subarg.CmdArgIntList;
-import hxclap.subarg.CmdArgFloatList;
-import hxclap.subarg.CmdArgStrList;
-import hxclap.subarg.CmdArgCharList;
+import hxclap.arg.*;
 
 /**
  * ...
@@ -23,9 +12,12 @@ import hxclap.subarg.CmdArgCharList;
  */
 class CmdLine
 {
-	private var _cmdList:Array<CmdArg>;
+	private var _cmdList:Array<CmdElem>;
+	private var _targList:Array<CmdTarget>;
 	private var _progName:String;
 	private var _maxLength:Int;
+	
+	private var _expectsAtLeastOne:Bool = false;
 	
 	//Callbacks
 	/**
@@ -35,59 +27,70 @@ class CmdLine
 	/**
 	 * Called when a required flag wasn't passed to the parser
 	 */
-	public var missingRequiredSwitch:CmdArg->Void;
+	public var missingRequiredSwitch:CmdElem->Void;
 	
 	/**
 	 * Called when a flag's argument couldn't be parsed
 	 */
-	public var argNotFound:CmdArg->Void;
+	public var argNotFound:CmdElem->Void;
 	/**
 	 * Called when a flag doesn't receive its required argument
 	 */
-	public var missingRequiredArg:CmdArg->Void;
+	public var missingRequiredArg:CmdElem->Void;
+	
+	/**
+	 * Called when a flag doesn't receive its required argument
+	 */
+	public var noArgsPassed:Void->Void;
 	
 	/**
 	 * @param ProgName	The program's name - typically the application's name
 	 * @param cmds		Flags available for this application
 	 */
-	public function new(progName:String, cmds:Array<CmdArg>) 
+	public function new(progName:String, cmds:Array<CmdElem>) 
 	{
 		_progName = progName;
 		_maxLength = 0;
 		_cmdList = [];
+		_targList = [];
 		
 		setUpDefaultCallbacks();
 		
 		for (cmd in cmds)
 		{
 			_cmdList.push(cmd);
-			_maxLength = Std.int(Math.max(_maxLength, cmd._valueName.length));
+			_maxLength = Std.int(Math.max(_maxLength, cmd.valueName.length));
+			
+			if (!cmd.isArg)
+			{
+				_targList.push(cast cmd);
+				
+				if (!cmd.isOpt())
+					_expectsAtLeastOne = true;
+			}
 		}
 	}
 	
 	/**
 	 * Traces this function's usage using default trace()
 	 */
-	public function getUsageString():String
+	public function defaultTraceUsage():Void
 	{
 		var u:UsageInfo = usage();
-		var ret:String = "";
 		
-		ret += "Usage: " + u.name + "\n";
+		trace("Usage: " + u.name);
 		
 		for (cmd in u.args)
 		{
-			if (cmd.type < 5)
+			if (cmd.type < 6)
 			{
-				ret += _traceSimple(cmd) + "\n";
+				_traceSimple(cmd);
 			}
 			else
 			{
-				ret += _traceList(cmd) + "\n";
+				_traceList(cmd);
 			}
 		}
-		
-		return ret;
 	}
 	
 	private function _traceSimple(cmd:ArgInfo):String
@@ -106,7 +109,10 @@ class CmdLine
 			expects = '[$expects]';
 		}
 		
-		return '-$longName (-$shortName) -> $description -> expects: $expects';
+		if (cmd.type == ArgType.TARG_STRING)
+			return '$longName -> $description -> expects: $expects';
+		else
+			return '-$longName (-$shortName) -> $description -> expects: $expects';
 	}
 	
 	private function _traceList(cmd:ArgInfo):String
@@ -125,7 +131,10 @@ class CmdLine
 			expects = '[$expects]';
 		}
 		
-		return '-$longName (-$shortName) -> $description -> expects: $expects';
+		if (cmd.type == ArgType.TARG_LIST_STRING)
+			return '$longName -> $description -> expects: $expects';
+		else
+			return '-$longName (-$shortName) -> $description -> expects: $expects';
 	}
 	
 	private function setUpDefaultCallbacks():Void
@@ -135,6 +144,8 @@ class CmdLine
 		
 		argNotFound = HandleArgNotFound;
 		missingRequiredArg = HandleMissingArg;
+		
+		noArgsPassed = HandleNoArgsPassed;
 	}
 	
 	public function HandleSwitchNotFound(Switch:String):Void
@@ -142,19 +153,33 @@ class CmdLine
 		trace("Warning: argument '" + Switch + "' looks strange, ignoring");
 	}
 	
-	public function HandleMissingSwitch(Cmd:CmdArg):Void
+	public function HandleMissingSwitch(Cmd:CmdElem):Void
 	{
-		trace("Error: the switch -" + Cmd.getKeyword() + " must be supplied");
+		if (Cmd.isArg)
+			trace("Error: the switch -" + Cmd.keyword + " must be supplied");
+		else
+			trace("Error: the target " + Cmd.keyword + " must be supplied");
 	}
 	
-	public function HandleArgNotFound(Cmd:CmdArg):Void
+	public function HandleArgNotFound(Cmd:CmdElem):Void
 	{
-		trace("Error: switch -" + Cmd.getKeyword() + " must take an argument");
+		if (Cmd.isArg)
+			trace("Error: switch -" + Cmd.keyword + " must take an argument");
+		else
+			trace("Error: target " + Cmd.keyword + " must take an argument");
 	}
 	
-	public function HandleMissingArg(Cmd:CmdArg):Void
+	public function HandleMissingArg(Cmd:CmdElem):Void
 	{
-		trace("Error: the switch -" + Cmd.getKeyword() + " must take a value");
+		if (Cmd.isArg)
+			trace("Error: the switch -" + Cmd.keyword + " must take a value");
+		else
+			trace("Error: the target " + Cmd.keyword + " must take a value");
+	}
+	
+	public function HandleNoArgsPassed():Void
+	{
+		trace("Error: " + _progName + " requires at least one argument");
 	}
 	
 	/**
@@ -167,7 +192,15 @@ class CmdLine
 		
 		for (cmd in _cmdList)
 		{
-			if (!cmd.isHidden())
+			if (!cmd.isHidden() && !cmd.isArg)
+			{
+				u.args.push(new ArgInfo(cmd));
+			}
+		}
+		
+		for (cmd in _cmdList)
+		{
+			if (!cmd.isHidden() && cmd.isArg)
 			{
 				u.args.push(new ArgInfo(cmd));
 			}
@@ -181,11 +214,93 @@ class CmdLine
 	 * @param argc		Amount of arguments you wish to pass to the parser
 	 * @param argv		List of arguments to parse, ex: ["-test-arg", "1", "-B"]
 	 */
-	public function parse(argc:Int, argv:Array<String>):Void
+	public function parse(argv:Array<String>):Void
 	{
-		var cmd:CmdArg;
+		var argc:Int = argv.length;
+		var cmd:CmdElem;
+		
+		if (argv.length == 0 && _expectsAtLeastOne && noArgsPassed != null)
+		{
+			noArgsPassed();
+			return;
+		}
+		if (argv.length == 0 && !_expectsAtLeastOne)
+		{
+			return;
+		}
 		
 		var i:Int = 0;
+		for (t in _targList)
+		{
+			if (Std.is(t, CmdTargStrList))
+			{
+				var tl:CmdTargStrList = cast t;
+				
+				while(true)
+				{
+					if (argv.length == 0)
+						break;
+					
+					var arg:String = argv[0];
+					
+					if (arg.charAt(0) == "-")
+					{
+						if (!tl.isValOpt() && tl.list.length == 0)
+						{
+							if (argNotFound != null)
+							{
+								argNotFound(tl);
+							}
+						}
+						
+						break;
+					}
+					else
+					{
+						tl.setFound();
+						tl.list.push(arg);
+						tl.setValFound();
+						
+						argv.shift();
+					}
+				}
+				
+				tl.validate();
+			}
+			else
+			{
+				var val:String = argv[i];
+				
+				if (val.charAt(0) == "-")
+				{
+					if (t.isValOpt())
+						continue;
+					else
+					{
+						if (argNotFound != null)
+						{
+							argNotFound(t);
+						}
+					}
+				}
+				
+				t.setFound();
+				if (!t.getValue(i, argc, argv))
+				{
+					if (argNotFound != null && !t.isValOpt())
+					{
+						argNotFound(t);
+					}
+				}
+				else
+				{
+					t.setValFound();
+				}
+				argv.shift();
+			}
+		}
+		
+		i = 0;
 		while (i < argv.length)
 		{
 			var arg:String = argv[i];
@@ -199,8 +314,8 @@ class CmdLine
 				var cmdWord:String = "";
 				var cmdChar:String = "";
 				
-				cmdWord = "-" + cmd.getKeyword();
-				cmdChar = "-" + cmd.getOptChar();
+				cmdWord = "-" + cmd.keyword;
+				cmdChar = "-" + cmd.optChar;
 				
 				if ((arg == cmdWord) || (arg == cmdChar))
 				{

@@ -1,18 +1,17 @@
-import hxclap.subarg.CmdArgStr;
+import hxclap.arg.CmdArgStr;
+import hxclap.arg.CmdTargStrList;
 import hxclap.E_CmdArgSyntax;
 import flxsys.FlxCmdLine;
 import StringTools;
-import hxclap.subarg.CmdArgStrList;
+import hxclap.arg.CmdArgStrList;
 import EReg;
 
-s = new CmdArgStrList(
-        "s",
+s = new CmdTargStrList(
         "source",
         "Path (relative or absolute)",
         "Files to search within",
         (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
         );
-s._delimiters = ",";
 
 f = new CmdArgStr(
         "f",
@@ -41,8 +40,8 @@ if (status != FlxCmdLine.OK)
 }
 
 ret = [];
-//ereg = new EReg(f._v, "m");
-word_search = w._v;
+//ereg = new EReg(f.value, "m");
+word_search = w.value;
 
 function findMatches(arr, regex, file)
 {
@@ -61,15 +60,15 @@ function findMatchesWord(arr, w, file)
     
     if (res > -1)
     {
-        interm = file.content.substrng(res, file.content.length);
-        arr.push(file.content.substring(res, interm.indexOf("/n")));
+        interm = file.content.substring(res, file.content.length);
+        arr.push(file.content.substring(res, res + interm.indexOf("\n")));
     }
 };
 
 i = 0;
-while (i < s._list.length)
+while (i < s.list.length)
 {
-    f = Shell.drive.readFile(s._list[i], Shell.curDir.path);
+    f = Shell.drive.readFile(s.list[i], Shell.curDir.path);
     findMatchesWord(ret, word_search, f);
     i++;
 }

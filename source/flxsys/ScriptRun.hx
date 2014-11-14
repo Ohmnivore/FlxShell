@@ -5,10 +5,12 @@ import hscript.Parser;
 import hscript.Interp;
 
 import flxsys.Drive;
-import openfl.system.System;
-import hxclap.subarg.CmdArgBool;
 import flxsys.FlxCmdLine;
 import flxsys.frontends.BusFront;
+
+import openfl.system.System;
+
+import hxclap.arg.*;
 
 /**
  * ...
