@@ -1,4 +1,3 @@
-# There are probably features I can add, but otherwise this is complete
 I'm planning to make a game that will allow players to interact with consoles/shells/command lines/whatever you wanna call them.
 So FlxShell is like a simulated Linux-like mini-OS where the sole interface is a shell and where the two scripting languages are an interpreted version of Haxe and a very basic implementation of the Linux shell language.
 
