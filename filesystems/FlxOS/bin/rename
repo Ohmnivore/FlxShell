@@ -17,7 +17,6 @@ d = new CmdArgStrList(
         "New names to be assigned",
         (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
         );
-d.delimiters = ",";
 
 cmdline = new FlxCmdLine("rename", [s, d]);
 

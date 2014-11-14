@@ -17,7 +17,6 @@ d = new CmdArgStrList(
         "New parent directories' paths",
         (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
         );
-d.delimiters = ",";
 
 cmdline = new FlxCmdLine("mv", [s, d]);
 

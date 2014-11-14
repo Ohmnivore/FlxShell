@@ -64,33 +64,42 @@ class CmdLine
 			if (!cmd.isArg)
 			{
 				_targList.push(cast cmd);
-				
-				if (!cmd.isOpt())
-					_expectsAtLeastOne = true;
 			}
+			
+			if (!cmd.isOpt())
+				_expectsAtLeastOne = true;
 		}
 	}
 	
 	/**
-	 * Traces this function's usage using default trace()
+	 * Returns this function's usage
 	 */
-	public function defaultTraceUsage():Void
+	public function defaultTraceUsage():String
 	{
 		var u:UsageInfo = usage();
+		var ret:String = "";
 		
-		trace("Usage: " + u.name);
+		ret += "Usage: " + u.name + "\n";
 		
 		for (cmd in u.args)
 		{
 			if (cmd.type < 6)
 			{
-				_traceSimple(cmd);
+				ret += _traceSimple(cmd) + "\n";
 			}
 			else
 			{
-				_traceList(cmd);
+				ret += _traceList(cmd) + "\n";
 			}
 		}
+		
+		var lastNL:Int = ret.lastIndexOf("\n");
+		if (lastNL > -1)
+		{
+			ret = ret.substr(0, lastNL);
+		}
+		
+		return ret;
 	}
 	
 	private function _traceSimple(cmd:ArgInfo):String
@@ -321,19 +330,64 @@ class CmdLine
 				{
 					cmd.setFound();
 					
-					if (!cmd.getValue(i, argc, argv))
+					if (cmd.isList)
 					{
-						if (argNotFound != null && !cmd.isValOpt())
+						var l:CmdArgTypeList<Dynamic> = cast cmd;
+						
+						var raw:Array<String> = [];
+						
+						while(true)
 						{
-							argNotFound(cmd);
+							if (argv.length < i + 2)
+								break;
+							
+							var arg:String = argv[i + 1];
+							
+							if (arg.charAt(0) == "-")
+							{
+								//if (!l.isValOpt() && l.list.length == 0)
+								//{
+									//if (argNotFound != null)
+									//{
+										//argNotFound(l);
+									//}
+								//}
+								
+								break;
+							}
+							else
+							{
+								raw.push(arg);
+								l.setValFound();
+								
+								argv.splice(i + 1, 1);
+							}
+						}
+						
+						if (!l.getList(raw))
+						{
+							if (argNotFound != null && !l.isValOpt())
+							{
+								argNotFound(l);
+							}
 						}
 					}
 					else
 					{
-						cmd.setValFound();
-						
-						if (!Std.is(cmd, CmdArgBool))
-							i++;
+						if (!cmd.getValue(i, argc, argv))
+						{
+							if (argNotFound != null && !cmd.isValOpt())
+							{
+								argNotFound(cmd);
+							}
+						}
+						else
+						{
+							cmd.setValFound();
+							
+							if (!Std.is(cmd, CmdArgBool))
+								i++;
+						}
 					}
 					
 					found = true;

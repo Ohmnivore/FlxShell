@@ -67,6 +67,8 @@ class FlxShell extends FlxGroup
 	private var _eraseblock:Int = 0;
 	private var _cap:FlxCaptureInput;
 	private var _frame:FlxSprite;
+	private var _textHeight:Float;
+	private var _textSize:Int;
 	
 	//Cursor vars
 	private var _cursorCharacter:String = "|";
@@ -317,7 +319,8 @@ class FlxShell extends FlxGroup
 		
 		_cap.fetchFocus();
 		
-		if (_t.frameHeight + _t.y >= _frame.height - 36)
+		if (_t.textField.textHeight/_textSize >= _textHeight/_textSize)
+		//if (_t.frameHeight + _t.y >= _frame.height - 40)
 		{
 			var ind:Int = _realtext.indexOf(Util.NEWLINE, 1) + 1;
 			_realtext = _realtext.substr(ind, _realtext.length);
@@ -752,7 +755,8 @@ class FlxShell extends FlxGroup
 		add(square);
 		add(effect);
 		
-		_t = new CharWrapText(square.x + 5, square.y + 5, square.width - 10, "", 12, false);
+		_textHeight = square.height - 6;
+		_t = new CharWrapText(_textHeight, square.x + 5, square.y + 3, square.width - 10, "", 12, false);
 		_t.font = "assets/images/Monaco.ttf";
 		_t.color = 0x8811EE11;
 		_t.textField.wordWrap = false;
@@ -760,6 +764,7 @@ class FlxShell extends FlxGroup
 		_t.widthLimit = square.width - 10;
 		_t.scrollFactor.set();
 		add(_t);
+		_textSize = Std.int(_t.textField.getTextFormat().size);
 		
 		_frame = square;
 	}

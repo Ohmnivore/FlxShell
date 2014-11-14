@@ -10,6 +10,7 @@ import hxclap.arg.*;
 class CmdElem
 {
 	public var isArg:Bool = true;
+	public var isList:Bool = false;
 	
 	public var optChar:String;
 	public var keyword:String;
@@ -159,6 +160,11 @@ class CmdElem
 	}
 	
 	public function getValue(i:Int, argc:Int, argv:Array<String>):Bool
+	{
+		return true;
+	}
+	
+	public function getList(argv:Array<String>):Bool
 	{
 		return true;
 	}

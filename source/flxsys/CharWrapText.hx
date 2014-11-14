@@ -1,5 +1,8 @@
 package flxsys;
+
 import flixel.text.FlxText;
+import flixel.FlxG;
+import flixel.util.FlxColor;
 
 /**
  * ...
@@ -10,10 +13,12 @@ class CharWrapText extends FlxText
 	public var charWidth:Float;
 	public var widthLimit:Float;
 	public var realText:String;
+	public var drawHeightCutoff:Float;
 	
-	public function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0,
+	public function new(DrawHeightCutoff:Float, X:Float = 0, Y:Float = 0, FieldWidth:Float = 0,
 		?Text:String, Size:Int = 8, EmbeddedFont:Bool = true)
 	{
+		drawHeightCutoff = DrawHeightCutoff;
 		realText = "";
 		if (Text != null)
 			realText = Text;
@@ -59,5 +64,43 @@ class CharWrapText extends FlxText
 		}
 		
 		return Inp;
+	}
+	
+	override function regenGraphics():Void 
+	{
+		var oldWidth:Float = cachedGraphics.bitmap.width;
+		var oldHeight:Float = cachedGraphics.bitmap.height;
+		
+		var newWidth:Float = _textField.width + _widthInc;
+		// Account for 2px gutter on top and bottom (that's why there is "+ 4")
+		//var newHeight:Float = _textField.textHeight + _heightInc + 4;
+		var newHeight:Float = drawHeightCutoff;
+		
+		// prevent text height from shrinking on flash if text == ""
+		if (_textField.textHeight == 0) 
+		{
+			newHeight = oldHeight;
+		}
+		
+		if ((oldWidth != newWidth) || (oldHeight != newHeight))
+		{
+			// Need to generate a new buffer to store the text graphic
+			height = newHeight - _heightInc;
+			var key:String = cachedGraphics.key;
+			FlxG.bitmap.remove(key);
+			
+			makeGraphic(Std.int(newWidth), Std.int(newHeight), FlxColor.TRANSPARENT, false, key);
+			frameHeight = Std.int(height);
+			_textField.height = height * 1.2;
+			_flashRect.x = 0;
+			_flashRect.y = 0;
+			_flashRect.width = newWidth;
+			_flashRect.height = newHeight;
+		}
+		// Else just clear the old buffer before redrawing the text
+		else
+		{
+			cachedGraphics.bitmap.fillRect(_flashRect, FlxColor.TRANSPARENT);
+		}
 	}
 }

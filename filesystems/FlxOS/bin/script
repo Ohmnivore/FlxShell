@@ -29,7 +29,6 @@ args = new CmdArgStrList(
         "Arguments to pass to the commands",
         (E_CmdArgSyntax.isOPT | E_CmdArgSyntax.isVALREQ)
         );
-args.delimiters = ",";
 
 cmdline = new FlxCmdLine("ls", [s, args], ignoreRequired);
 

@@ -72,13 +72,9 @@ This save/load mechanism is not the same as the above export/load mechanism.
 It's not the best idea to leave saving entirely up to the user, so in your implementation call FlxShell object.save() when appropriate.
 
 ## TODO:
-* Parse arglists as such: "-d first second third" instead of "-d first,second,third"
-* Update README in accordance to newest version
-* Investigate 'Teststring' > file issue
 * Investigate cp command crash
-* Rewrite parsing and lexing code
-* Global variables (maybe), ex: $HOME
-* String interpolation for global variables (maybe), ex: "$HOME"
+* Finish find and grep commands
+* Rethink the concept of returning objects instead of strings
 
 ### Shell examples:
 * cd bin
@@ -86,8 +82,9 @@ It's not the best idea to leave saving entirely up to the user, so in your imple
 * ls
 * help -b
 * help -bin
-* edit -s /bin/ls
-* edit -s bin/ls
+* edit /bin/ls
+* edit bin/ls
+* edit -h
 * bin/ls < edit
 * pwd
 * pwd > test
@@ -97,6 +94,7 @@ It's not the best idea to leave saving entirely up to the user, so in your imple
 * 'I think you get the idea' | echo
 * 'Oh watch this' >> testfile
 * 'ls;cd home;pwd' | shell
+* 'touch file1 file2 -d home;rename home/file1 home/file2 -n _f1 _f2' | shell
 * 'return ["This is some hscript", "", ""]' | script
 
 ### Script examples:

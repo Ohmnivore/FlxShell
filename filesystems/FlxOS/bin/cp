@@ -17,7 +17,6 @@ d = new CmdArgStrList(
         "Copy destinations",
         (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ)
         );
-d.delimiters = ",";
 
 cmdline = new FlxCmdLine("cp", [s, d]);
 

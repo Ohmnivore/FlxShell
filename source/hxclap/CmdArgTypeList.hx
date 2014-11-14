@@ -9,47 +9,39 @@ class CmdArgTypeList<T> extends CmdArg
 {
 	public var list:Array<T>;
 	public var index:Int;
-	public var delimiters:String;
 	public var max:Int;
 	public var min:Int;
 	
 	public function new(optChar:String, keyword:String, valueName:String, description:String,
 		syntaxFlags:Int = (E_CmdArgSyntax.isREQ | E_CmdArgSyntax.isVALREQ),
 		minSize:Int = 1,
-		maxSize:Int = 100,
-		delim:String = ",-~/.")
+		maxSize:Int = 100)
 	{
 		super(optChar, keyword, valueName, description, syntaxFlags);
 		
-		delimiters = delim;
 		min = minSize;
 		max = maxSize;
 		list = [];
+		isList = true;
 		
 		var buf:String = "";
 		buf = valueName;
 		if (buf.length == 0)
 			buf += " ";
-		buf += delimiters.charAt(0) + " ..." + delimiters.charAt(0) + " " + valueName + ' (Min: $min Max: $max)';
+		buf += " " + " ..." + " " + " " + valueName + ' (Min: $min Max: $max)';
 		valueName = buf;
 		
 		buf = "";
 		buf += '$description';
 		description = buf;
-		
-		var i:Int = 0;
-		while (i < delim.length)
-		{
-			if (delim.charAt(i) == ' ')
-			{
-				parseError(ArgError.SPACE_DELIMITER, this, ArgType.ARG_LIST_STRING, "");
-			}
-			
-			i++;
-		}
 	}
 	
 	override public function getValue(i:Int, argc:Int, argv:Array<String>):Bool
+	{
+		return true;
+	}
+	
+	override public function getList(argv:Array<String>):Bool 
 	{
 		return true;
 	}
