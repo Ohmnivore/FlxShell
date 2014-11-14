@@ -71,7 +71,6 @@ This save/load mechanism is not the same as the above export/load mechanism.
 It's not the best idea to leave saving entirely up to the user, so in your implementation call FlxShell object.save() when appropriate.
 
 ## TODO:
-* Investigate cp command crash
 * Finish find and grep commands
 * Rethink the concept of returning objects instead of strings
 * Add file viewer

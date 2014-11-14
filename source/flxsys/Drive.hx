@@ -35,6 +35,9 @@ class Drive
 	
 	public function readFolder(P:String, Relative:String = null):Folder
 	{
+		if (P == "/")
+			return root;
+		
 		var item:FileBase = readItem(P, Relative);
 		
 		if (!item.isDirectory)

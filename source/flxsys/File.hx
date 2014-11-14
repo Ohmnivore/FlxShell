@@ -24,6 +24,10 @@ class File extends FileBase
 		
 		var newName:String = Path.withoutDirectory(NewPath);
 		var par:String = Path.directory(NewPath);
+		if (par == "")
+		{
+			par = "/";
+		}
 		
 		var folder:Folder;
 		if (Source == null)
