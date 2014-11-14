@@ -75,6 +75,7 @@ It's not the best idea to leave saving entirely up to the user, so in your imple
 * Investigate cp command crash
 * Finish find and grep commands
 * Rethink the concept of returning objects instead of strings
+* Add file viewer
 
 ### Shell examples:
 * cd bin
