@@ -44,27 +44,47 @@ class ScriptRun
 		{
 			ret = parseScript(Shell, "/bin/" + name, args, Input, FileInput); //Must get file content from bin
 		}
+		else
+		{
+			ret = parseScript(Shell, Shell.curDir.path + "/" + name, args, Input, FileInput); //Must get file content from bin
+		}
 		
 		return ret;
 	}
 	
-	static private function parseScript(Shell:FlxShell, Script:String, Args:Array<String>,
+	static public function parseScript(Shell:FlxShell, Script:String, Args:Array<String>,
 		Input:Dynamic = null, FileInput = null):Dynamic
 	{
-		return parseScriptString(Shell, Shell.drive.readFile(Script).content, Args, Input, FileInput);
+		var f:File = Shell.drive.readFile(Script);
+		if (checkIfShellRun(f.content))
+			return parseLine(Shell, "shell " + f.path);
+		else
+			return parseScriptString(Shell, Shell.drive.readFile(Script).content, Args, Input, FileInput);
 	}
 	
-	static private function parseScriptString(Shell:FlxShell, Script:String, Args:Array<String>,
+	static private function checkIfShellRun(Script:String):Bool
+	{
+		if (Script.indexOf("#!/bin/sh;") > -1 || Script.indexOf("#!/bin/shell;") > -1)
+			return true;
+		
+		return false;
+	}
+	
+	static public function parseScriptString(Shell:FlxShell, Script:String, Args:Array<String>,
 		Input:Dynamic = null, FileInput = null):Dynamic
 	{
 		var parser = new hscript.Parser();
 		parser.allowTypes = true;
 		toImport = new Map<String, String>();
 		Script = popImports(Script);
+		//#if cpp
+		//Script = replaceStaticHXCLAP(Script);
+		//#end
 		try
 		{
 			var ast = parser.parseString(Script);
-			var interp = new hscript.Interp();
+			//var interp = new hscript.Interp();
+			var interp = new MyInterp();
 			Args.shift();
 			interp.variables.set("Args", Args);
 			interp.variables.set("Shell", Shell);
@@ -127,7 +147,11 @@ class ScriptRun
 			{
 				var className:String = l.substring(7, l.length);
 				var name = className.split(".").pop();
-				toImport.set(name, className);
+				
+				if (!BlockedClasses.has(className))
+				{
+					toImport.set(name, className);
+				}
 				
 				Script = StringTools.replace(Script, l + ";", "");
 			}
@@ -136,7 +160,8 @@ class ScriptRun
 		return Script;
 	}
 	
-	static private function parseImports(interp:Interp):Void
+	//static private function parseImports(interp:Interp):Void
+	static private function parseImports(interp:MyInterp):Void
 	{
 		for (name in toImport.keys())
 		{
@@ -173,5 +198,16 @@ class ScriptRun
 				throw 'Import of class $path failed.';
 			}
 		}
+	}
+	
+	static public function replaceStaticHXCLAP(Script:String):String
+	{
+		var ret:String = StringTools.replace(Script, "E_CmdArgSyntax.isOPT", "1");
+		ret = StringTools.replace(ret, "E_CmdArgSyntax.isREQ", "2");
+		ret = StringTools.replace(ret, "E_CmdArgSyntax.isVALOPT", "4");
+		ret = StringTools.replace(ret, "E_CmdArgSyntax.isVALREQ", "8");
+		ret = StringTools.replace(ret, "E_CmdArgSyntax.isHIDDEN", "16");
+		
+		return ret;
 	}
 }

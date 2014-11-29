@@ -6,8 +6,8 @@ package flxsys;
  */
 class FlxPrompt
 {
-	static private inline var NAME_SYS_SEP:String = "@";
-	static private inline var SYS_PATH_SEP:String = " ~ ";
+	static private var NAME_SYS_SEP:String = "@";
+	static private var SYS_PATH_SEP:String = " ~ ";
 	
 	public var userName:String;
 	public var prefix:String;
@@ -22,6 +22,9 @@ class FlxPrompt
 	
 	public function getPrompt(CurDir:String):String
 	{
+		if (CurDir.substr(0, 2) == "//")
+			CurDir = CurDir.substr(1);
+		
 		return(userName + NAME_SYS_SEP + sysName + SYS_PATH_SEP + CurDir + Util.NEWLINE + prefix + " ");
 	}
 	

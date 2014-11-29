@@ -21,7 +21,7 @@ import flash.events.KeyboardEvent;
  * ...
  * @author Ohmnivore
  */
-class FlxEditor extends FlxGroup
+class FlxViewer extends FlxGroup
 {
 	static public var charWidth:Float = 7.2727;
 	
@@ -29,8 +29,6 @@ class FlxEditor extends FlxGroup
 	private var _inp:TextField;
 	private var _file:File;
 	private var _shell:FlxShell;
-	
-	private var _buff:Int = 0; //To get rid of the annoying extra newline
 	
 	public function new(F:File, Shell:FlxShell) 
 	{
@@ -43,11 +41,6 @@ class FlxEditor extends FlxGroup
 		
 		// Set a background color
 		FlxG.cameras.bgColor = 0x00000000;
-		//Hide cursor
-		#if (!FLX_NO_MOUSE || !mobile)
-		//FlxG.mouse.visible = true;
-		//FlxG.mouse.load("assets/images/cursor.png", 1, 1, -8);
-		#end
 		//Register font
 		Font.registerFont(ShellFont);
 		
@@ -60,54 +53,48 @@ class FlxEditor extends FlxGroup
 	
 	override public function update():Void 
 	{
-		//To get rid of the annoying extra newline
-		if (_buff > 2 && _buff > 0)
-		{
-			_inp.text = _inp.text.substr(1);
-			_buff = -1;
-		}
-		else if (_buff >= 0)
-		{
-			_buff++;
-		}
-		
 		super.update();
 		
 		_shell._inputTime = false;
+		
+		if (FlxG.keys.justPressed.Z)
+			nextScreen();
+		if (FlxG.keys.justPressed.B)
+			lastScreen();
 	}
 	
 	private function handleInput(event)
 	{
-		if (event.ctrlKey)
+		switch(event.keyCode)
 		{
-			switch(event.keyCode)
-			{
-				case 68: //D
-					handleCtrlD();
-				case 83: //S
-					handleCtrlS();
-			}
+			case 81: //Q
+				handleQ();
+			case 66: //B
+				//handleCtrlS();
+			case 90: //Z
+				//nextScreen();
 		}
 	}
 	
-	private function handleCtrlD():Void
+	private function handleQ():Void
 	{
 		_shell.allowInput = true;
 		_inp.visible = false;
 		
-		#if (!FLX_NO_MOUSE || !mobile)
-		FlxG.mouse.visible = false;
-		#end
-		
-		_shell.editor = null;
+		_shell.viewer = null;
 		_shell.open();
 		
 		destroy();
 	}
 	
-	private function handleCtrlS():Void
+	private function nextScreen():Void
 	{
-		_file.content = _inp.text;
+		_inp.scrollV += 30;
+	}
+	
+	private function lastScreen():Void
+	{
+		_inp.scrollV += 30;
 	}
 	
 	public var _open:Bool = true;
@@ -129,7 +116,7 @@ class FlxEditor extends FlxGroup
 		active = true;
 		visible = true;
 		_inp.visible = true;
-		_inp.type = TextFieldType.INPUT;
+		_inp.type = TextFieldType.DYNAMIC;
 		_inp.selectable = true;
 		FlxG.stage.focus = _inp;
 		
@@ -163,7 +150,7 @@ class FlxEditor extends FlxGroup
 		#if flash
 		_inp.mouseWheelEnabled = true;
 		#end
-		_inp.type = TextFieldType.INPUT;
+		_inp.type = TextFieldType.DYNAMIC;
 		
 		_inp.embedFonts = true;
 		_inp.defaultTextFormat = new TextFormat(Assets.getFont("assets/images/Monaco.ttf").fontName,

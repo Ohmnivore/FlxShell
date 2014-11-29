@@ -32,6 +32,9 @@ class Folder extends FileBase
 		C.parent = this;
 		
 		children.set(C.name, C);
+		
+		if (C.path.substr(0, 2) == "//")
+			C.path = C.path.substr(1);
 	}
 	
 	override public function copy(NewPath:String, Shell:FlxShell, ?Source:Drive):Void

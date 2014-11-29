@@ -60,9 +60,22 @@ class Drive
 		return cast (item, File);
 	}
 	
+	private function replaceDot(S:String):String
+	{
+		if (S.substr(0, 2) == "./")
+			S = S.substr(2);
+		S = StringTools.replace(S, "/./", "/");
+		
+		return S;
+	}
+	
 	public function readItem(P:String, Relative:String = null):FileBase
 	{
 		var par:Folder = root;
+		
+		P = replaceDot(P);
+		if (Relative != null)
+			Relative = replaceDot(Relative);
 		
 		if (P == "/")
 			return root;
@@ -103,7 +116,7 @@ class Drive
 		{
 			var subpath:String = paths[i];
 			
-			if (i < paths.length - 1 && paths[i + 1] != "..")
+			if (i < paths.length && subpath != "..")
 			{
 				if (par.children.exists(subpath))
 				{
@@ -121,14 +134,30 @@ class Drive
 			}
 			else
 			{
-				if (i == paths.length - 2)
+				par = par.parent;
+				if (i == paths.length - 1)
 					return par;
+				//par = par.parent;
 			}
 			
 			i++;
 		}
 		
 		var name:String = paths.pop();
+		if (name == "..")
+		{
+			if (par.parent == null)
+				throw(Error.INCORRECT_PATH);
+			else
+				return par.parent;
+		}
+		if (name == ".")
+		{
+			if (par == null)
+				throw(Error.INCORRECT_PATH);
+			else
+				return par;
+		}
 		if (!par.children.exists(name))
 		{
 			throw(Error.INCORRECT_PATH);
@@ -138,12 +167,46 @@ class Drive
 	}
 	
 	//Loading functions
-	public function loadJSON(S:String):Void
+	public function loadJSON(S:String, Sub:String = null, AddTo:Folder = null, Merge:Bool = true):Void
 	{
 		var all:Dynamic = Json.parse(S);
 		
-		root = getFolder(all, null);
-		root.path = "/";
+		if (Sub == null)
+		{
+			root = getFolder(all, null);
+			root.path = "/";
+		}
+		else
+		{
+			var subJSON:Dynamic = null;
+			var tocheck:Array<Dynamic> = all.children;
+			var i:Int = 0;
+			while (i < tocheck.length)
+			{
+				if (tocheck[i].name == Sub)
+				{
+					subJSON = tocheck[i];
+					break;
+				}
+			}
+			if (subJSON == null)
+				return;
+			var subDir:Folder = getFolder(subJSON, null);
+			
+			if (Merge)
+			{
+				for (c in subDir.children.keys())
+				{
+					var realSubDir:Folder = cast AddTo.children.get(Sub);
+					realSubDir.addChild(subDir.children.get(c));
+				}
+			}
+			else
+			{
+				AddTo.addChild(subDir);
+				
+			}
+		}
 	}
 	
 	static private function getItem(Item:Dynamic, Parent:Folder):FileBase
@@ -165,6 +228,8 @@ class Drive
 		ret.write = Reflect.field(F, "write");
 		ret.name = Reflect.field(F, "name");
 		ret.path = Reflect.field(F, "path");
+		if (ret.path.substr(0, 1) == "//")
+			ret.path = ret.path.substr(1);
 		
 		for (c in cast (Reflect.field(F, "children"), Array<Dynamic>).iterator())
 		{
@@ -197,6 +262,8 @@ class Drive
 		ret.write = Reflect.field(F, "write");
 		ret.name = Reflect.field(F, "name");
 		ret.path = Reflect.field(F, "path");
+		if (ret.path.substr(0, 1) == "//")
+			ret.path = ret.path.substr(1);
 		
 		ret.content = Reflect.field(F, "content");
 		

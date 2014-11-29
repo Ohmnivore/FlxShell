@@ -17,15 +17,16 @@ import flash.display.BitmapData;
 import flash.text.Font;
 import openfl.events.KeyboardEvent;
 import openfl.system.System;
+import flash.events.Event;
 
 #if flash
 import flash.desktop.Clipboard;
 import flash.desktop.ClipboardFormats;
 import flash.net.FileReference;
 import flash.net.FileReferenceList;
-import flash.events.Event;
 import flash.net.FileFilter;
-#else
+#end
+#if desktop
 import systools.Dialogs;
 import sys.FileStat;
 import sys.FileSystem;
@@ -44,9 +45,10 @@ import haxe.io.Path;
  */
 class FlxShell extends FlxGroup
 {
-	static public inline var charWidth:Float = 7.2727;
+	static public var charWidth:Float = 7.2727;
 	
 	public var editor:FlxEditor;
+	public var viewer:FlxViewer;
 	
 	public var device:IWired;
 	public var drive:Drive;
@@ -69,6 +71,7 @@ class FlxShell extends FlxGroup
 	private var _frame:FlxSprite;
 	private var _textHeight:Float;
 	private var _textSize:Int;
+	public var numLines:Int;
 	
 	//Cursor vars
 	private var _cursorCharacter:String = "|";
@@ -97,21 +100,29 @@ class FlxShell extends FlxGroup
 		return _inputTime;
 	}
 	
-	public function new(UserName:String, SysName:String = "SYS")
+	public function new(UserName:String, SysName:String = "SYS", D:Drive = null)
 	{
 		userName = UserName;
 		sysName = SysName;
 		
 		editor = null;
+		viewer = null;
 		
-		drive = new Drive();
-		
-		#if debug
-		drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
-		#else
-		//loadSave();
-		drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
-		#end
+		if (D == null)
+		{
+			drive = new Drive();
+			
+			#if debug
+			drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"));
+			#else
+			loadSave();
+			drive.loadJSON(Assets.getText("assets/data/FlxOS.txt"), "bin", drive.root);
+			#end
+		}
+		else
+		{
+			drive = D;
+		}
 		
 		curDir = drive.root;
 		
@@ -127,24 +138,32 @@ class FlxShell extends FlxGroup
 		Font.registerFont(ShellFont);
 
 		makeScreen();
-		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
+		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput, false, 10);
 		
 		_cap = new FlxCaptureInput();
 		_parser = new FlxParser(this);
 		
-		parse("/boot/init < shell", false);
+		preBoot();
 		
-		prompt = new FlxPrompt(userName);
+		parse("/boot/init < shell", false);
+		_parser.clear();
+		
+		prompt = new FlxPrompt(userName, "$", sysName);
 		printPrompt(false);
 		
 		enterTimer = new FlxTimer(0.25);
+	}
+	
+	private function preBoot():Void
+	{
+		
 	}
 	
 	private var _open:Bool = true;
 	
 	public function toggle():Void
 	{
-		if (editor == null)
+		if (editor == null && viewer == null)
 		{
 			if (_open)
 			{
@@ -155,37 +174,71 @@ class FlxShell extends FlxGroup
 				open();
 			}
 		}
-		else
+		if (editor != null)
 		{
 			editor.toggle();
+		}
+		if (viewer != null)
+		{
+			viewer.toggle();
 		}
 	}
 	
 	public function open():Void
 	{
-		active = true;
-		visible = true;
-		_inputTime = true;
-		_cap.active = true;
-		_cap.resetText();
-		_cap.fetchFocus();
-		_open = true;
+		if (editor == null && viewer == null)
+		{
+			active = true;
+			visible = true;
+			_inputTime = true;
+			_cap.active = true;
+			_cap.resetText();
+			_cap.fetchFocus();
+			_open = true;
+		}
+		
+		if (editor != null && !editor._open)
+		{
+			editor.toggle();
+		}
+		if (viewer != null && !viewer._open)
+		{
+			viewer.toggle();
+		}
 	}
 	
 	public function close():Void
 	{
-		active = false;
-		visible = false;
-		_inputTime = false;
-		_cap.active = false;
-		_open = false;
+		if (editor == null && viewer == null)
+		{
+			active = false;
+			visible = false;
+			_inputTime = false;
+			_cap.active = false;
+			_open = false;
+		}
+		if (editor != null && editor._open)
+		{
+			editor.toggle();
+		}
+		if (viewer != null && viewer._open)
+		{
+			viewer.toggle();
+		}
 	}
 	
-	public function openEditor(F:File):Void
+	public function openEditor(F:flxsys.File):Void
 	{
 		toggle();
 		editor = new FlxEditor(F, this);
 		FlxG.state.add(editor);
+	}
+	
+	public function openViewer(F:flxsys.File):Void
+	{
+		toggle();
+		viewer = new FlxViewer(F, this);
+		FlxG.state.add(viewer);
 	}
 	
 	public function connectDevice(?Dev:IWired, ?D:Drive):Void
@@ -259,6 +312,8 @@ class FlxShell extends FlxGroup
 	{
 		save();
 		
+		_cap.destroy();
+		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		super.destroy();
 	}
 	
@@ -267,7 +322,8 @@ class FlxShell extends FlxGroup
 		#if flash
 		var ref:FileReference = new FileReference();
 		ref.save(Stringer.stringify(drive.root), "FlxOS.json");
-		#else
+		#end
+		#if desktop
 		var opts:FILEFILTERS = { count: 1, descriptions: ["FlxOS backup"], extensions: ["*.json"] };
 		var path:String = Path.withExtension(Dialogs.saveFile("Backup your drive", "", "", opts), "json");
 		File.saveContent(path, Stringer.stringify(drive.root));
@@ -276,12 +332,12 @@ class FlxShell extends FlxGroup
 	
 	public function importBackup():Void
 	{
-		var FileRef:FileReference = new FileReference();
-		
 		#if flash
+		var FileRef:FileReference = new FileReference();
 		FileRef.addEventListener(Event.SELECT, onSelect);
 		FileRef.browse([new FileFilter("FlxOS backup", "*.*")]);
-		#else
+		#end
+		#if desktop
 		var opts:FILEFILTERS = { count: 1, descriptions: ["FlxOS backup"], extensions: ["*.*"] };
 		var selected:Array<String> = Dialogs.openFile("Open backup file", "", opts);
 		if (selected.length > 0)
@@ -448,16 +504,17 @@ class FlxShell extends FlxGroup
 		return ret;
 	}
 	
-	public function parse(Line:String, Prompt:Bool = true):Void
+	public function parse(Line:String, Prompt:Bool = true, DoPrint:Bool = true):Void
 	{
 		try
 		{
-			_parser.parseStringInput(Line);
+			_parser.parseStringInput(Line, DoPrint);
 		}
 		
 		catch (E:Dynamic)
 		{
-			print(E, true);
+			if (DoPrint)
+				print(E, true);
 		}
 		
 		if (!Prompt)
@@ -472,7 +529,12 @@ class FlxShell extends FlxGroup
 		inScript = false;
 	}
 	
-	private function handleInput(event)
+	public function parseString(S:String, DoPrint:Bool = true):Dynamic
+	{
+		return _parser.parseStringInput(S, DoPrint);
+	}
+	
+	private function handleInput(event:KeyboardEvent)
 	{
 		if (event.ctrlKey)
 		{
@@ -497,6 +559,10 @@ class FlxShell extends FlxGroup
 			{
 				case 13: //enter
 					handleEnter();
+					#if !web
+					event.stopImmediatePropagation();
+					event.stopPropagation();
+					#end
 				case 9: //tab
 					handleTab();
 				case 8: //backspace
@@ -526,6 +592,15 @@ class FlxShell extends FlxGroup
 	//Key handler functions
 	private function handleEnter():Void
 	{
+		//if (_inputTime)
+		//{
+			//var between:String = _realtext.substr(_eraseblock, _cursorPos);
+			//if (StringTools.trim(between).length == 0)
+			//{
+				//_realtext = _realtext.substr(0, _eraseblock);
+			//}
+		//}
+		
 		if (_inputTime && enterTimer.finished)
 		{
 			var cmd:String = _realtext.substring(_eraseblock, _realtext.length);
@@ -773,7 +848,12 @@ class FlxShell extends FlxGroup
 		_t.widthLimit = square.width - 10;
 		_t.scrollFactor.set();
 		add(_t);
+		#if (flash || desktop)
 		_textSize = Std.int(_t.textField.getTextFormat().size);
+		#else
+		_textSize = Std.int(_t.size);
+		#end
+		numLines = Std.int(_textHeight / _textSize);
 		
 		_frame = square;
 	}

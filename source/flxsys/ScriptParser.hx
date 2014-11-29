@@ -12,13 +12,16 @@ class ScriptParser
 {
 	public var shell:FlxShell;
 	public var stream:Array<Token>;
+	public var doPrint:Bool;
+	public var ret:Dynamic;
 	
 	private var i:Int;
 	
-	public function new(Stream:Array<Token>, Shell:FlxShell) 
+	public function new(Stream:Array<Token>, Shell:FlxShell, DoPrint:Bool = true) 
 	{
 		stream = Stream;
 		shell = Shell;
+		doPrint = DoPrint;
 		
 		i = 0;
 		
@@ -64,13 +67,17 @@ class ScriptParser
 	public function parseSimpleCmd(C:Token):Void
 	{
 		var params:Array<Dynamic> = cast ScriptRun.parseLine(shell, StringTools.trim(C.getParameters()[0]));
-		shell.print(params[0], true, params[1], params[2]);
+		if (doPrint)
+			shell.print(params[0], true, params[1], params[2]);
+		ret = params;
 	}
 	
 	private function printValue(C:Token):Void
 	{
 		var params:Array<Dynamic> = cast C.getParameters()[0];
-		shell.print(params[0], true, params[1], params[2]);
+		if (doPrint)
+			shell.print(params[0], true, params[1], params[2]);
+		ret = params;
 	}
 	
 	private function parseOperator(Operator:Token, Left:Token, Right:Token):Void
@@ -124,15 +131,31 @@ class ScriptParser
 		
 		var path:String = Right.getParameters()[0];
 		var name:String = Path.withoutDirectory(path);
-		var parpath:String = "/";
-		if (StringTools.trim(Path.directory(path)).length > 0)
+		//var parpath:String = Path.directory(path);
+		
+		//var path:String = Right.getParameters()[0];
+		var pathArr:Array<String> = path.split("/");
+		//var name:String = pathArr[pathArr.length - 1];
+		var parpath:String = "";
+		var i:Int = 0;
+		while (i < pathArr.length - 1)
 		{
-			parpath= Path.directory(path);
+			parpath += pathArr[i];
+			if (i != pathArr.length - 2)
+			{
+				parpath += "/";
+			}
+			
+			i++;
 		}
 		
 		try
 		{
-			var fold:Folder = shell.drive.readFolder(parpath, shell.curDir.path);
+			var fold:Folder = shell.curDir;
+			if (parpath.length > 0)
+			{
+				fold = shell.drive.readFolder(parpath, shell.curDir.path);
+			}
 			
 			if (fold.children.exists(name))
 			{

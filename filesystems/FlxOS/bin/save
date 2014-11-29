@@ -1,0 +1,10 @@
+usage = ["save usage: save will store your files in memory, so that they will load the next time you boot.", "", ""];
+
+if (Args.length > 0)
+{
+    return usage;
+}
+
+Shell.save();
+
+return ["Saved!", "", ""];

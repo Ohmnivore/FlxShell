@@ -19,6 +19,12 @@ class FlxParser
 	{
 		shell = Shell;
 		
+		clear();
+	}
+	
+	public function clear():Void
+	{
+		_hist_index = 0;
 		_history = [""];
 	}
 	
@@ -52,13 +58,15 @@ class FlxParser
 		return _history[_history.length - 1];
 	}
 
-	public function parseStringInput(Input:String):Void
+	public function parseStringInput(Input:String, DoPrint:Bool = true):Dynamic
 	{
 		_history.push(Input);
 		_hist_index = _history.length;
 		
 		var stream = new ScriptLexer(Input, shell).stream;
-		new ScriptParser(stream, shell);
+		var sp:ScriptParser = new ScriptParser(stream, shell, DoPrint);
+		
+		return sp.ret;
 	}
 	
 	public function tabComplete(Shell:FlxShell, Word:String):String

@@ -12,7 +12,6 @@ import flash.desktop.ClipboardFormats;
 #end
 
 import flash.events.TextEvent;
-//import flash.events.KeyboardEvent;
 
 class FlxCaptureInput
 {
@@ -40,6 +39,11 @@ class FlxCaptureInput
 			_t.text = StringTools.replace(_t.text, "\r", "");
 		}
 		);
+	}
+	
+	public function destroy():Void
+	{
+		FlxG.stage.removeChild(_t);
 	}
 	
 	public function fetchFocus():Void
